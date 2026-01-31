@@ -1,19 +1,30 @@
+import { selectInitError, selectIsAppReady } from '@/src/state/slices/appSlice';
+import { useAppSelector } from '@/src/utils/hooks';
 import { useRouter } from 'expo-router';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Text, View } from 'react-native';
 import { SPLASH_CONSTANTS } from './constants';
 import { splashStyles } from './styles';
 
 export default function SplashScreen() {
   const router = useRouter();
+  const isReady = useAppSelector(selectIsAppReady);
+  const initError = useAppSelector(selectInitError);
+  const [minTimeElapsed, setMinTimeElapsed] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      router.replace('/(tabs)');
+      setMinTimeElapsed(true);
     }, SPLASH_CONSTANTS.DISPLAY_DURATION);
 
     return () => clearTimeout(timer);
-  }, [router]);
+  }, []);
+
+  useEffect(() => {
+    if (isReady && minTimeElapsed) {
+      router.replace('/(tabs)');
+    }
+  }, [isReady, minTimeElapsed, router]);
 
   return (
     <View style={splashStyles.container}>
@@ -37,6 +48,11 @@ export default function SplashScreen() {
         >
           {SPLASH_CONSTANTS.TAGLINE}
         </Text>
+        {initError ? (
+          <Text style={{ color: 'red', marginTop: 20, textAlign: 'center' }}>
+            {initError}
+          </Text>
+        ) : null}
       </View>
     </View>
   );

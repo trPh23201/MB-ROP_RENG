@@ -5,7 +5,6 @@ import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
-import { ActivityIndicator, StyleSheet, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
@@ -23,26 +22,17 @@ function AppInitializer({ children, fontsLoaded }: { children: React.ReactNode; 
   const { isReady, error } = useAppInitialization();
 
   useEffect(() => {
-    if (fontsLoaded && isReady) {
-      console.log('[AppInitializer] Fonts and data ready, hiding splash');
+    if (fontsLoaded) {
+      console.log('[AppInitializer] Fonts ready, hiding native splash');
       SplashScreen.hideAsync();
     }
-  }, [fontsLoaded, isReady]);
+  }, [fontsLoaded]);
 
   useEffect(() => {
     if (error) {
       console.error('[AppInitializer] Init error:', error);
-      SplashScreen.hideAsync();
     }
   }, [error]);
-
-  if (!isReady && !error) {
-    return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#4A6741" />
-      </View>
-    );
-  }
 
   return <>{children}</>;
 }
@@ -62,7 +52,7 @@ export default function RootLayout() {
   }
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
+    <GestureHandlerRootView style={{ flex: 1 }} >
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
           <NetworkGuard>
@@ -93,15 +83,6 @@ export default function RootLayout() {
           </NetworkGuard>
         </PersistGate>
       </Provider>
-    </GestureHandlerRootView>
+    </GestureHandlerRootView >
   );
 }
-
-const styles = StyleSheet.create({
-  loadingContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5F0EB',
-  },
-});
