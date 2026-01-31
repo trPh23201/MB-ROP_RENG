@@ -5,7 +5,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { StyleSheet } from 'react-native';
 import { OrderType, PaymentMethod } from '../../../domain/shared';
 import { clearCart } from '../../../state/slices/orderCartSlice';
-import { selectPreOrderType, setOrderType } from '../../../state/slices/preOrderSlice';
+import { selectLastOrder, selectPreOrderType, setOrderType } from '../../../state/slices/preOrderSlice';
 import { useAppDispatch, useAppSelector } from '../../../utils/hooks';
 import { OrderAddressCard } from '../../components/order/OrderAddressCard';
 import { OrderFooter } from '../../components/order/OrderFooter';
@@ -36,7 +36,7 @@ export default function PreOrderBottomSheet({ visible, onClose, onOrderSuccess }
   const deliveryAddress = useAppSelector(selectSelectedAddress);
   const user = useAppSelector((state) => state.auth.user);
   const cartItems = useAppSelector((state) => state.orderCart.items);
-  const { confirmedOrder } = useAppSelector((state) => state.confirmOrder);
+  const lastOrder = useAppSelector(selectLastOrder);
   const globalOrderType = useAppSelector(selectPreOrderType);
 
   const [preOrderState, setPreOrderState] = useState<PreOrderState>({
@@ -46,20 +46,22 @@ export default function PreOrderBottomSheet({ visible, onClose, onOrderSuccess }
   });
 
   useEffect(() => {
-    if (confirmedOrder) {
+    if (lastOrder) {
       setPreOrderState(prev => ({
         ...prev,
-        shippingFee: confirmedOrder.deliveryFee
+        shippingFee: lastOrder.deliveryFee
       }));
     }
-  }, [confirmedOrder]);
+  }, [lastOrder]);
 
   useEffect(() => {
     setPreOrderState(prev => ({ ...prev, orderType: globalOrderType }));
   }, [globalOrderType]);
 
   const [isNavigatingToAddress, setIsNavigatingToAddress] = useState(false);
-  const finalTotal = confirmedOrder ? confirmedOrder.finalAmount : PreOrderService.calculateTotalPrice(totalPrice, preOrderState.shippingFee);
+  const serverSubtotal = lastOrder?.subtotal ?? totalPrice;
+  const serverShippingFee = lastOrder?.deliveryFee ?? 0;
+  const serverFinalTotal = lastOrder?.finalAmount ?? totalPrice;
   const displayItems = useMemo(() => OrderMapper.mapCartItemsToDisplayItems(cartItems), [cartItems]);
 
   const snapPoints = useMemo(() => ['90%'], []);
@@ -187,12 +189,12 @@ export default function PreOrderBottomSheet({ visible, onClose, onOrderSuccess }
         {...props}
         orderType={preOrderState.orderType}
         totalItems={totalItems}
-        totalPrice={finalTotal}
+        totalPrice={serverFinalTotal}
         buttonText={PREORDER_TEXT.PLACE_ORDER_BUTTON}
         onButtonPress={handlePlaceOrder}
       />
     );
-  }, [preOrderState.orderType, totalItems, finalTotal, handlePlaceOrder]);
+  }, [preOrderState.orderType, totalItems, serverFinalTotal, handlePlaceOrder]);
 
   return (
     <>
@@ -235,8 +237,8 @@ export default function PreOrderBottomSheet({ visible, onClose, onOrderSuccess }
           />
 
           <OrderPriceSection
-            subtotal={totalPrice}
-            shippingFee={preOrderState.shippingFee}
+            subtotal={serverSubtotal}
+            shippingFee={serverShippingFee}
             onPromotionPress={handlePromotionPress}
             showPromotionButton={true}
           />
