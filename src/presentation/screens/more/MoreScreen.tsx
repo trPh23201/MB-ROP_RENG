@@ -50,8 +50,6 @@ export default function MoreScreen() {
 
     dispatch(logout());
 
-    // 3. Navigation (Optional: redirect to welcome or stay here)
-    // router.replace('/');
   }, [dispatch, user?.uuid, db]);
 
   const handleMenuPress = useCallback((id: string) => {
@@ -83,7 +81,9 @@ export default function MoreScreen() {
 
       case 'profile':
         if (isAuthenticated) {
-          console.log('Navigate to Profile');
+          router.push('../profile');
+        } else {
+          router.push('../(auth)/login');
         }
         break;
 
@@ -93,6 +93,10 @@ export default function MoreScreen() {
         } else {
           router.push('../(auth)/login');
         }
+        break;
+
+      case 'scan-qr':
+        popupService.alert('Feature is comming soon');
         break;
 
       default:

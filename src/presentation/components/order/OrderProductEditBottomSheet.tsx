@@ -3,8 +3,9 @@ import { BottomSheetBackdrop, BottomSheetModal, BottomSheetScrollView } from '@g
 import React, { forwardRef, useCallback, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { selectToppings } from '../../../state/slices/homeSlice';
 import { removeCartItem, updateCartItem } from '../../../state/slices/orderCartSlice';
-import { useAppDispatch } from '../../../utils/hooks';
+import { useAppDispatch, useAppSelector } from '../../../utils/hooks';
 import { BRAND_COLORS } from '../../theme/colors';
 import { TYPOGRAPHY } from '../../theme/typography';
 import { AddToppingBottomSheet, AddToppingRef } from './AddToppingBottomSheet';
@@ -19,6 +20,7 @@ export interface OrderProductEditRef {
 
 export const OrderProductEditBottomSheet = forwardRef<OrderProductEditRef>((props, ref) => {
     const dispatch = useAppDispatch();
+    const availableToppings = useAppSelector(selectToppings);
     const insets = useSafeAreaInsets();
     const sheetRef = useRef<BottomSheetModal>(null);
     const toppingModalRef = useRef<AddToppingRef>(null);
@@ -221,7 +223,7 @@ export const OrderProductEditBottomSheet = forwardRef<OrderProductEditRef>((prop
                 ) : null}
             </BottomSheetModal>
 
-            <AddToppingBottomSheet ref={toppingModalRef} onApply={handleToppingsSelected} />
+            <AddToppingBottomSheet ref={toppingModalRef} onApply={handleToppingsSelected} availableToppings={availableToppings} />
         </>
     );
 });

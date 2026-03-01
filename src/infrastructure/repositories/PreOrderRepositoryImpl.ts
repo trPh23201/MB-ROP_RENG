@@ -47,7 +47,6 @@ export class PreOrderRepositoryImpl implements PreOrderRepository {
     try {
       const requestDTO = PreOrderMapper.toRequestDTO(params);
 
-      // Same payload, different endpoint and response handling
       const response = await httpClient.post<ConfirmOrderResponseDTO>(
         PREORDER_ENDPOINTS.CONFIRM,
         requestDTO

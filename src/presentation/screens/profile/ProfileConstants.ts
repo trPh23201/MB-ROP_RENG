@@ -1,0 +1,18 @@
+export const PROFILE_STRINGS = {
+    TITLE: 'Tài khoản',
+    PHONE: 'Số điện thoại',
+    EMAIL: 'Email',
+    NAME: 'Tên hiển thị',
+    ROLE: 'Vai trò',
+    LOYALTY_POINT: 'Điểm tích lũy',
+    AVAILABLE_POINT: 'Điểm khả dụng',
+    CREATED_AT: 'Ngày tham gia',
+    UPDATE_PROFILE: 'Cập nhật thông tin',
+    LOGIN_REQUIRED: 'Vui lòng đăng nhập để xem thông tin tài khoản',
+    LOGIN: 'Đăng nhập',
+    LOGOUT: 'Đăng xuất',
+    LOGOUT_CONFIRM_TITLE: 'Đăng xuất',
+    LOGOUT_CONFIRM_MSG: 'Bạn có chắc chắn muốn đăng xuất?',
+    CANCEL: 'Hủy',
+    AGREE: 'Đồng ý',
+};

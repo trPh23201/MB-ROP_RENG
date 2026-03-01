@@ -6,6 +6,7 @@ import { OrderType, PaymentMethod, PreOrderState } from '../../../domain/shared'
 import { clearConfirmedOrder, SerializableConfirmOrderItem, submitOrder } from '../../../state/slices/confirmOrderSlice';
 import { selectSelectedAddress } from '../../../state/slices/deliverySlice';
 import { clearCart } from '../../../state/slices/orderCartSlice';
+import { selectSelectedVouchers } from '../../../state/slices/preOrderSlice';
 import { useAppDispatch, useAppSelector } from '../../../utils/hooks';
 import { OrderAddressCard, OrderDisplayItem, OrderFooter, OrderPriceSection, OrderProductEditBottomSheet, OrderProductEditRef, OrderProductList, OrderTypeSelector } from '../../components/order';
 import { AppIcon } from '../../components/shared/AppIcon';
@@ -25,6 +26,7 @@ export default function ConfirmOrderScreen() {
     const { confirmedOrder, error } = useAppSelector((state) => state.confirmOrder);
     const deliveryAddress = useAppSelector(selectSelectedAddress);
     const cartItems = useAppSelector((state) => state.orderCart.items);
+    const selectedVouchers = useAppSelector(selectSelectedVouchers);
 
     const user = useAppSelector(state => state.auth.user);
     const selectedStore = useAppSelector(state => state.home.store);
@@ -116,7 +118,8 @@ export default function ConfirmOrderScreen() {
                 selectedStore,
                 deliveryAddress,
                 cartItems,
-                currentPreOrderState
+                currentPreOrderState,
+                selectedVouchers
             );
 
             await dispatch(submitOrder(payload)).unwrap();
@@ -137,11 +140,7 @@ export default function ConfirmOrderScreen() {
                 type: 'error'
             });
         }
-    }, [confirmedOrder, dispatch, user, selectedStore, deliveryAddress, cartItems, orderType]);
-
-
-
-
+    }, [confirmedOrder, dispatch, user, selectedStore, deliveryAddress, cartItems, orderType, selectedVouchers]);
 
     if (!confirmedOrder || error) {
         return (

@@ -1,11 +1,28 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AuthMapper, SerializableUser } from '../../application/mappers/AuthMapper';
+import { GetProfileUseCase } from '../../application/usecases/GetProfileUseCase';
 import { LoginUseCase } from '../../application/usecases/LoginUseCase';
 import { RegisterUseCase } from '../../application/usecases/RegisterUseCase';
 import { AppError } from '../../core/errors/AppErrors';
 import { PendingAuthAction } from '../../domain/services/AuthActionService';
 import { authRepository } from '../../infrastructure/repositories/AuthRepositoryImpl';
 import { TokenStorage } from '../../infrastructure/storage/tokenStorage';
+
+export const fetchProfile = createAsyncThunk<SerializableUser, string, { rejectValue: string }>(
+  'auth/fetchProfile',
+  async (userId, { rejectWithValue }) => {
+    try {
+      const useCase = new GetProfileUseCase();
+      const user = await useCase.execute(userId);
+      return AuthMapper.toSerializable(user);
+    } catch (error) {
+      if (error instanceof AppError) {
+        return rejectWithValue(error.message);
+      }
+      return rejectWithValue('Không thể tải thông tin người dùng');
+    }
+  }
+);
 
 interface AuthState {
   isAuthenticated: boolean;
@@ -144,6 +161,21 @@ const authSlice = createSlice({
       .addCase(loginWithOtp.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload ?? 'Đã có lỗi xảy ra';
+      });
+
+    builder
+      .addCase(fetchProfile.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(fetchProfile.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.user = action.payload;
+        state.error = null;
+      })
+      .addCase(fetchProfile.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload ?? 'Không thể tải thông tin người dùng';
       });
 
     builder

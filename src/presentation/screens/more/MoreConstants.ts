@@ -9,7 +9,6 @@ export const MORE_STRINGS = {
   AGREE: 'Đồng ý',
 };
 
-// Danh sách tiện ích (Grid 4 cột)
 export const UTILITIES: UtilityItemData[] = [
   { id: 'rewards', label: 'RopReng\nRewards', icon: 'gift-outline' },
   { id: 'vouchers', label: 'Phiếu ưu đãi', icon: 'ticket-outline', badge: 3 },
@@ -19,21 +18,20 @@ export const UTILITIES: UtilityItemData[] = [
   { id: 'rating', label: 'Góp ý', icon: 'chatbox-ellipses-outline' },
 ];
 
-// Menu Hỗ trợ
 export const SUPPORT_MENU: MenuSectionData = {
-  title: 'Hỗ trợ',
+  title: 'Tiện ích',
   items: [
+    { id: 'profile', label: 'Tài khoản', icon: 'person-outline' },
+    { id: 'scan-qr', label: 'Scan QR', icon: 'qr-code-outline' },
+    { id: 'settings', label: 'Cài đặt', icon: 'settings-outline' },
     { id: 'help', label: 'Gửi yêu cầu hỗ trợ', icon: 'help-circle-outline' },
     { id: 'terms', label: 'Điều khoản & Chính sách', icon: 'document-text-outline' },
-    { id: 'settings', label: 'Cài đặt', icon: 'settings-outline' },
   ],
 };
 
-// Menu Tài khoản
 export const ACCOUNT_MENU: MenuSectionData = {
   title: 'Tài khoản',
   items: [
-    { id: 'profile', label: 'Thông tin tài khoản', icon: 'person-outline' },
     { id: 'payment', label: 'Phương thức thanh toán', icon: 'card-outline' },
     { id: 'logout', label: 'Đăng xuất', icon: 'log-out-outline', isDestructive: true },
   ],

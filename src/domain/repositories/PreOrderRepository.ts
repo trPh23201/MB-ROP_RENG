@@ -8,7 +8,7 @@ export interface CreatePreOrderParams {
   paymentMethod: string;
   items: PreOrderItem[];
   promotions: { promotionId: string }[];
-  vouchers: number[];
+  vouchers: { voucher_code: string }[];
 }
 
 export interface PreOrderRepository {

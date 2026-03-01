@@ -14,6 +14,8 @@ export interface User {
   readonly availablePoint: number;
   readonly currentLevelId: number | null;
   readonly nextLevelId: number | null;
+  readonly otp?: string;
+  readonly store?: any | null;
   readonly createdAt: Date;
   readonly updatedAt: Date | null;
 }

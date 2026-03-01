@@ -1,3 +1,29 @@
+export interface MenuAPIProductDTO {
+  id: number;
+  sku: string;
+  name: string;
+  description: string;
+  category_id: number;
+  image_url: string;
+  base_price: string;
+  is_active: number;
+  product_type: string;
+  points_required: number;
+  created_at: string;
+}
+
+export interface MenuAPIItemDTO {
+  id: number;
+  menu_id: number;
+  product_id: number;
+  display_name: string;
+  price: string;
+  available: number;
+  sort_order: number;
+  meta: Record<string, unknown> | null;
+  product: MenuAPIProductDTO;
+}
+
 export interface ProductDTO {
   menu_item_id: number;
   product_id: number;
@@ -32,10 +58,16 @@ export interface HomeMenuResponseDTO {
   code: number;
   message: string;
   data: {
-    store_id: number;
-    store: StoreDTO;
-    menu_id: number;
-    products: ProductDTO[];
+    store_id?: number;
+    store?: StoreDTO;
+    menu_id?: number;
+    products?: ProductDTO[];
+    menu?: {
+      id: number;
+      store_id: number;
+      items: MenuAPIItemDTO[];
+      toppings: MenuAPIItemDTO[];
+    };
   };
 }
 

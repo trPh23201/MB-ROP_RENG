@@ -26,6 +26,7 @@ export interface UserResponseDTO {
   created_at: string;
   updated_at: string | null;
   deleted_at: string | null;
+  store?: any | null;
 }
 
 export interface RegisterResponseDTO {

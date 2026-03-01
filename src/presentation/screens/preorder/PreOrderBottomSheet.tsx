@@ -5,7 +5,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { StyleSheet } from 'react-native';
 import { OrderType, PaymentMethod } from '../../../domain/shared';
 import { clearCart } from '../../../state/slices/orderCartSlice';
-import { selectLastOrder, selectPreOrderType, setOrderType } from '../../../state/slices/preOrderSlice';
+import { selectLastOrder, selectPreOrderType, selectSelectedVouchers, setOrderType, setSelectedVouchers } from '../../../state/slices/preOrderSlice';
 import { useAppDispatch, useAppSelector } from '../../../utils/hooks';
 import { OrderAddressCard } from '../../components/order/OrderAddressCard';
 import { OrderFooter } from '../../components/order/OrderFooter';
@@ -25,6 +25,7 @@ import { PreOrderService } from './PreOrderService';
 import { OrderTypeModal } from './components/OrderTypeModal';
 import { PaymentTypeModal } from './components/PaymentTypeModal';
 import { PaymentTypeSelector } from './components/PaymentTypeSelector';
+import { VoucherSelectionModal } from './components/VoucherSelectionModal';
 
 export default function PreOrderBottomSheet({ visible, onClose, onOrderSuccess }: PreOrderBottomSheetProps) {
   const dispatch = useAppDispatch();
@@ -32,12 +33,14 @@ export default function PreOrderBottomSheet({ visible, onClose, onOrderSuccess }
   const orderTypeModalRef = useRef<BottomSheetModal>(null);
   const paymentModalRef = useRef<BottomSheetModal>(null);
   const editProductModalRef = useRef<OrderProductEditRef>(null);
+  const voucherModalRef = useRef<BottomSheetModal>(null);
   const { totalItems, totalPrice, selectedStore } = useAppSelector((state) => state.orderCart);
   const deliveryAddress = useAppSelector(selectSelectedAddress);
   const user = useAppSelector((state) => state.auth.user);
   const cartItems = useAppSelector((state) => state.orderCart.items);
   const lastOrder = useAppSelector(selectLastOrder);
   const globalOrderType = useAppSelector(selectPreOrderType);
+  const selectedVouchers = useAppSelector(selectSelectedVouchers);
 
   const [preOrderState, setPreOrderState] = useState<PreOrderState>({
     orderType: globalOrderType,
@@ -61,6 +64,7 @@ export default function PreOrderBottomSheet({ visible, onClose, onOrderSuccess }
   const [isNavigatingToAddress, setIsNavigatingToAddress] = useState(false);
   const serverSubtotal = lastOrder?.subtotal ?? totalPrice;
   const serverShippingFee = lastOrder?.deliveryFee ?? 0;
+  const serverDiscountAmount = lastOrder?.discountAmount ?? 0;
   const serverFinalTotal = lastOrder?.finalAmount ?? totalPrice;
   const displayItems = useMemo(() => OrderMapper.mapCartItemsToDisplayItems(cartItems), [cartItems]);
 
@@ -135,8 +139,13 @@ export default function PreOrderBottomSheet({ visible, onClose, onOrderSuccess }
   }, [dispatch]);
 
   const handlePromotionPress = useCallback(() => {
-    popupService.alert(PREORDER_TEXT.COMING_SOON_MESSAGE, { title: 'Coming Soon' });
+    voucherModalRef.current?.present();
   }, []);
+
+  const handleApplyVouchers = useCallback(async (newSelectedVouchers: { code: string }[]) => {
+    voucherModalRef.current?.dismiss();
+    dispatch(setSelectedVouchers(newSelectedVouchers));
+  }, [dispatch]);
 
   const handlePlaceOrder = useCallback(async () => {
     if (preOrderState.orderType === OrderType.DELIVERY && !deliveryAddress) {
@@ -239,6 +248,7 @@ export default function PreOrderBottomSheet({ visible, onClose, onOrderSuccess }
           <OrderPriceSection
             subtotal={serverSubtotal}
             shippingFee={serverShippingFee}
+            discountAmount={serverDiscountAmount}
             onPromotionPress={handlePromotionPress}
             showPromotionButton={true}
           />
@@ -250,6 +260,13 @@ export default function PreOrderBottomSheet({ visible, onClose, onOrderSuccess }
       <OrderTypeModal ref={orderTypeModalRef} selectedType={preOrderState.orderType} onSelectType={handleOrderTypeChange} />
 
       <PaymentTypeModal ref={paymentModalRef} selectedMethod={preOrderState.paymentMethod} onSelectMethod={handlePaymentMethodChange} />
+
+      <VoucherSelectionModal
+        ref={voucherModalRef}
+        availableVouchers={lastOrder?.availableVouchers || []}
+        initialSelectedVouchers={selectedVouchers}
+        onApply={handleApplyVouchers}
+      />
 
       <OrderProductEditBottomSheet ref={editProductModalRef} />
     </>

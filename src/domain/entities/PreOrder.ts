@@ -5,6 +5,15 @@ export interface PreOrder {
   readonly deliveryFee: number;
   readonly finalAmount: number;
   readonly createdAt: Date;
+  readonly availableVouchers?: AvailableVoucher[];
+}
+
+export interface AvailableVoucher {
+  code: string;
+  name: string;
+  description: string | null;
+  discountAmount: number;
+  type: string;
 }
 
 export interface PreOrderItem {

@@ -22,6 +22,7 @@ export interface BaseBottomSheetLayoutProps {
     clearButtonText?: string;
     onClose?: () => void;
     onClear?: () => void;
+    headerRightComponent?: React.ReactNode;
 
     // Sheet configuration
     snapPoints?: (string | number)[];
@@ -57,6 +58,7 @@ export const BaseBottomSheetLayout = forwardRef<BottomSheetModal, BaseBottomShee
             clearButtonText = 'Xóa',
             onClose,
             onClear,
+            headerRightComponent,
             snapPoints = ['90%'],
             initialSnapIndex = 0,
             enablePanDownToClose = true,
@@ -147,7 +149,9 @@ export const BaseBottomSheetLayout = forwardRef<BottomSheetModal, BaseBottomShee
 
                     {title && <Text style={styles.title}>{title}</Text>}
 
-                    {showCloseButton ? (
+                    {headerRightComponent ? (
+                        headerRightComponent
+                    ) : showCloseButton ? (
                         <TouchableOpacity onPress={onClose} hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }} style={styles.closeButton}>
                             <AppIcon name="close" size={HEADER_ICON_SIZE} color={BRAND_COLORS.text.secondary} />
                         </TouchableOpacity>

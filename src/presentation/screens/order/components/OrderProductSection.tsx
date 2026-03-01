@@ -1,6 +1,6 @@
 import React from 'react';
 import { Image, Text, TouchableOpacity, View } from 'react-native';
-import { Product } from '../../../../data/mockProducts';
+import { Product } from '../../../../domain/entities/Product';
 import { AppIcon } from '../../../components/shared/AppIcon';
 import { ORDER_TEXT } from '../OrderConstants';
 import { orderStyles } from '../styles';

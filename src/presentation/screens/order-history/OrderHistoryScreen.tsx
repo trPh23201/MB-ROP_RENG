@@ -174,11 +174,14 @@ export default function OrderHistoryScreen() {
       {renderStatusChips()}
       <FlatList
         data={filteredOrders}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={(item, index) => `${item.id}-${index}`}
         renderItem={({ item }) => <OrderHistoryItem order={item} onPress={() => handleOrderPress(item)} />}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={handleRefresh} colors={["#606A37"]} />}
         onEndReached={handleLoadMore}
         onEndReachedThreshold={0.5}
+        initialNumToRender={10}
+        maxToRenderPerBatch={10}
+        windowSize={5}
         ListEmptyComponent={renderEmpty}
         ListFooterComponent={renderFooter}
         contentContainerStyle={filteredOrders.length === 0 ? styles.emptyList : undefined}

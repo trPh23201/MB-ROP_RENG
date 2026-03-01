@@ -1,5 +1,5 @@
 import { useRouter } from 'expo-router';
-import { Product } from '../../data/mockProducts';
+import { Product } from '../../domain/entities/Product';
 import { AuthActionService } from '../../domain/services/AuthActionService';
 import { setPendingAction } from '../../state/slices/authSlice';
 import { addToCart } from '../../state/slices/orderCartSlice';

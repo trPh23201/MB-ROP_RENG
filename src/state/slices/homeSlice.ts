@@ -22,6 +22,7 @@ interface HomeState {
   vouchers: Voucher[];
   vouchersLoading: boolean;
   vouchersError: string | null;
+  toppings: Product[];
 }
 
 interface FetchParams {
@@ -39,6 +40,7 @@ export const fetchHomeMenu = createAsyncThunk("home/fetchMenu", async (params: F
       store: result.store,
       menuId: result.menuId,
       products: result.products,
+      toppings: result.toppings,
       page: params.page ?? 0,
       hasMore: result.products.length === (params.limit ?? 10),
     };
@@ -88,6 +90,7 @@ const initialState: HomeState = {
   vouchers: [],
   vouchersLoading: false,
   vouchersError: null,
+  toppings: [],
 };
 
 const homeSlice = createSlice({
@@ -117,6 +120,7 @@ const homeSlice = createSlice({
         state.store = action.payload.store;
         state.menuId = action.payload.menuId;
         state.products = action.payload.products;
+        state.toppings = action.payload.toppings;
         state.currentPage = action.payload.page;
         state.hasMore = action.payload.hasMore;
       })
@@ -171,3 +175,4 @@ export const selectHasMoreProducts = (state: { home: HomeState }) => state.home.
 export const selectVouchers = (state: { home: HomeState }) => state.home.vouchers;
 export const selectVouchersLoading = (state: { home: HomeState }) => state.home.vouchersLoading;
 export const selectStoreId = (state: { home: HomeState }) => state.home.storeId;
+export const selectToppings = (state: { home: HomeState }) => state.home.toppings;

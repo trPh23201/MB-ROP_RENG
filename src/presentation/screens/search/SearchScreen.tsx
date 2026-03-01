@@ -22,7 +22,7 @@ export default function SearchScreen() {
 
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredProducts, setFilteredProducts] = useState<Product[]>(MOCK_PRODUCTS);
-  
+
   const filterMode: SearchFilterMode = params.categoryId ? SearchFilterMode.CATEGORY : SearchFilterMode.ALL;
 
   const debouncedSearch = useMemo(
@@ -81,7 +81,19 @@ export default function SearchScreen() {
         <Text style={styles.productName}>{item.name}</Text>
         <Text style={styles.productPrice}>{item.price.toLocaleString('vi-VN')}đ</Text>
       </View>
-      <TouchableOpacity style={styles.addButton} onPress={() => handleAddToCart(item)}>
+      <TouchableOpacity style={styles.addButton} onPress={() => handleAddToCart({
+        id: item.id,
+        menuItemId: 0,
+        productId: parseInt(item.id) || 0,
+        name: item.name,
+        price: item.price,
+        imageUrl: item.imageUrl || '',
+        categoryId: item.categoryId || '',
+        originalPrice: item.originalPrice,
+        badge: item.badge,
+        discount: item.discount,
+        status: 'AVAILABLE'
+      })}>
         <Text style={styles.addIcon}>+</Text>
       </TouchableOpacity>
     </View>
@@ -100,7 +112,7 @@ export default function SearchScreen() {
             autoFocus
           />
         </View>
-        
+
         <TouchableOpacity onPress={handleCancel}>
           <Text style={styles.cancelButton}>{SEARCH_TEXT.CANCEL_BUTTON}</Text>
         </TouchableOpacity>

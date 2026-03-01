@@ -3,7 +3,7 @@ import { BottomSheetBackdrop, BottomSheetModal, BottomSheetScrollView } from '@g
 import React, { forwardRef, useCallback, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { MOCK_TOPPINGS } from '../../../data/mockToppings';
+import { Product } from '../../../domain/entities/Product';
 import { BRAND_COLORS } from '../../theme/colors';
 import { TYPOGRAPHY } from '../../theme/typography';
 import { TOPPING_TEXT } from './OrderConstants';
@@ -17,9 +17,10 @@ export interface AddToppingRef {
 
 interface AddToppingBottomSheetProps {
     onApply: (toppings: Topping[]) => void;
+    availableToppings?: Product[];
 }
 
-export const AddToppingBottomSheet = forwardRef<AddToppingRef, AddToppingBottomSheetProps>(({ onApply }, ref) => {
+export const AddToppingBottomSheet = forwardRef<AddToppingRef, AddToppingBottomSheetProps>(({ onApply, availableToppings = [] }, ref) => {
     const insets = useSafeAreaInsets();
     const sheetRef = useRef<BottomSheetModal>(null);
     const [selectedToppings, setSelectedToppings] = useState<Topping[]>([]);
@@ -85,13 +86,14 @@ export const AddToppingBottomSheet = forwardRef<AddToppingRef, AddToppingBottomS
             </View>
 
             <BottomSheetScrollView contentContainerStyle={[styles.contentWrapper, { paddingBottom: insets.bottom }]}>
-                {MOCK_TOPPINGS.map((topping) => {
-                    const isSelected = selectedToppings.some((t) => t.id === topping.id);
+                {availableToppings.map((topping) => {
+                    const mappedTopping: Topping = { id: topping.menuItemId?.toString() || topping.id, name: topping.name, price: topping.price };
+                    const isSelected = selectedToppings.some((t) => t.id === mappedTopping.id);
                     return (
                         <TouchableOpacity
-                            key={topping.id}
+                            key={mappedTopping.id}
                             style={styles.toppingItem}
-                            onPress={() => handleToggleTopping(topping)}
+                            onPress={() => handleToggleTopping(mappedTopping)}
                             disabled={!isSelected && selectedToppings.length >= 3}
                         >
                             <View style={[styles.checkbox, isSelected && styles.checkboxSelected]}>

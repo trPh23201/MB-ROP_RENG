@@ -1,6 +1,6 @@
 import { Order } from '@/src/domain/entities/Order';
 import { Ionicons } from '@expo/vector-icons';
-import React from 'react';
+import React, { memo } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { ORDER_STATUS_LABELS, PAYMENT_STATUS_LABELS, STATUS_COLORS } from '../OrderHistoryConstants';
 import { OrderHistoryService } from '../OrderHistoryService';
@@ -10,7 +10,7 @@ interface OrderHistoryItemProps {
   onPress: () => void;
 }
 
-export function OrderHistoryItem({ order, onPress }: OrderHistoryItemProps) {
+export const OrderHistoryItem = memo(function OrderHistoryItem({ order, onPress }: OrderHistoryItemProps) {
   const service = new OrderHistoryService();
 
   return (
@@ -57,7 +57,7 @@ export function OrderHistoryItem({ order, onPress }: OrderHistoryItemProps) {
       </View>
     </TouchableOpacity>
   );
-}
+});
 
 const styles = StyleSheet.create({
   container: {

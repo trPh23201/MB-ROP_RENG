@@ -83,13 +83,16 @@ export default function HomeScreen() {
 
     const productForCart = {
       id: product.id,
+      menuItemId: 0,
+      productId: parseInt(product.id) || 0,
       name: product.name,
       price: product.price,
-      imageUrl: product.imageUrl,
-      categoryId: product.categoryId,
+      imageUrl: product.imageUrl || '',
+      categoryId: product.categoryId || '',
       originalPrice: product.originalPrice,
       badge: product.badge,
       discount: product.discount,
+      status: 'AVAILABLE' as const,
     };
 
     handleAddToCart(productForCart);

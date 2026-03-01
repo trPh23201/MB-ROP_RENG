@@ -137,7 +137,19 @@ export default function OrderScreen() {
             title={combo.title}
             expiresAt={combo.expiresAt}
             products={combo.products}
-            onProductPress={handleAddToCart}
+            onProductPress={(product) => handleAddToCart({
+              id: product.id,
+              menuItemId: 0,
+              productId: parseInt(product.id) || 0,
+              name: product.name,
+              price: product.price,
+              imageUrl: product.imageUrl || '',
+              categoryId: '',
+              originalPrice: product.originalPrice,
+              badge: product.badge,
+              discount: undefined,
+              status: 'AVAILABLE'
+            })}
           />
         ))}
 

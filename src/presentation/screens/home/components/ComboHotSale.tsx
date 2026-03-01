@@ -18,7 +18,7 @@ const ComboItem = ({ combo }: { combo: Combo }) => {
 
   useEffect(() => {
     if (!combo.expiresAt) return;
-    
+
     const calculateTime = () => {
       const now = new Date().getTime();
       const distance = combo.expiresAt.getTime() - now;
@@ -56,12 +56,24 @@ const ComboItem = ({ combo }: { combo: Combo }) => {
           <TouchableOpacity
             key={product.id}
             style={styles.productCard}
-            onPress={() => handleAddToCart(product)}
+            onPress={() => handleAddToCart({
+              id: product.id,
+              menuItemId: 0,
+              productId: parseInt(product.id) || 0,
+              name: product.name,
+              price: product.price,
+              imageUrl: product.imageUrl || '',
+              categoryId: '',
+              originalPrice: product.originalPrice,
+              badge: product.badge,
+              discount: undefined,
+              status: 'AVAILABLE'
+            })}
             activeOpacity={0.9}
           >
             <View style={styles.imageContainer}>
               <Image source={{ uri: product.imageUrl }} style={styles.productImage} />
-              
+
               {(product.discountAmount ?? 0) > 0 && (
                 <View style={styles.discountBadge}>
                   <Text style={styles.discountText}>
@@ -88,7 +100,19 @@ const ComboItem = ({ combo }: { combo: Combo }) => {
               </Text>
               <TouchableOpacity
                 style={styles.chooseButton}
-                onPress={() => handleAddToCart(product)}
+                onPress={() => handleAddToCart({
+                  id: product.id,
+                  menuItemId: 0,
+                  productId: parseInt(product.id) || 0,
+                  name: product.name,
+                  price: product.price,
+                  imageUrl: product.imageUrl || '',
+                  categoryId: '',
+                  originalPrice: product.originalPrice,
+                  badge: product.badge,
+                  discount: undefined,
+                  status: 'AVAILABLE'
+                })}
               >
                 <Text style={styles.chooseButtonText}>{HOME_TEXT.COMBO_SECTION.CHOOSE_BUTTON}</Text>
               </TouchableOpacity>

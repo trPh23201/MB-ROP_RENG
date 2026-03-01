@@ -14,6 +14,7 @@ export interface HomeMenuResult {
   store: Store;
   menuId: number;
   products: Product[];
+  toppings: Product[];
 }
 
 export interface VouchersParams {

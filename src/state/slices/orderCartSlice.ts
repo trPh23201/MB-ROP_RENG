@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { randomUUID } from 'expo-crypto';
-import { Product } from '../../data/mockProducts';
 import { Store } from '../../data/mockStores';
+import { Product } from '../../domain/entities/Product';
 import { CART_DEFAULTS, CartItem, CartItemCustomization } from '../../presentation/screens/order/OrderInterfaces';
 import { logoutUser } from './authSlice';
 
