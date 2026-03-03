@@ -83,12 +83,12 @@ export default function SearchScreen() {
       </View>
       <TouchableOpacity style={styles.addButton} onPress={() => handleAddToCart({
         id: item.id,
-        menuItemId: 0,
-        productId: parseInt(item.id) || 0,
+        menuItemId: item.menuItemId,
+        productId: item.productId,
         name: item.name,
         price: item.price,
-        imageUrl: item.imageUrl || '',
-        categoryId: item.categoryId || '',
+        imageUrl: item.imageUrl,
+        categoryId: item.categoryId,
         originalPrice: item.originalPrice,
         badge: item.badge,
         discount: item.discount,

@@ -5,7 +5,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { StyleSheet } from 'react-native';
 import { OrderType, PaymentMethod } from '../../../domain/shared';
 import { clearCart } from '../../../state/slices/orderCartSlice';
-import { selectLastOrder, selectPreOrderType, selectSelectedVouchers, setOrderType, setSelectedVouchers } from '../../../state/slices/preOrderSlice';
+import { resetPreOrder, selectLastOrder, selectPreOrderType, selectSelectedVouchers, setOrderType, setSelectedVouchers } from '../../../state/slices/preOrderSlice';
 import { useAppDispatch, useAppSelector } from '../../../utils/hooks';
 import { OrderAddressCard } from '../../components/order/OrderAddressCard';
 import { OrderFooter } from '../../components/order/OrderFooter';
@@ -134,8 +134,14 @@ export default function PreOrderBottomSheet({ visible, onClose, onOrderSuccess }
 
     if (confirmed) {
       dispatch(clearCart());
+      dispatch(resetPreOrder());
       bottomSheetRef.current?.dismiss();
     }
+  }, [dispatch]);
+
+  const handleCartEmpty = useCallback(() => {
+    dispatch(resetPreOrder());
+    bottomSheetRef.current?.dismiss();
   }, [dispatch]);
 
   const handlePromotionPress = useCallback(() => {
@@ -268,7 +274,7 @@ export default function PreOrderBottomSheet({ visible, onClose, onOrderSuccess }
         onApply={handleApplyVouchers}
       />
 
-      <OrderProductEditBottomSheet ref={editProductModalRef} />
+      <OrderProductEditBottomSheet ref={editProductModalRef} onCartEmpty={handleCartEmpty} />
     </>
   );
 }

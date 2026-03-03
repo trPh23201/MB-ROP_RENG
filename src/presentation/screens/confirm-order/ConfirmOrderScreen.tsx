@@ -6,7 +6,7 @@ import { OrderType, PaymentMethod, PreOrderState } from '../../../domain/shared'
 import { clearConfirmedOrder, SerializableConfirmOrderItem, submitOrder } from '../../../state/slices/confirmOrderSlice';
 import { selectSelectedAddress } from '../../../state/slices/deliverySlice';
 import { clearCart } from '../../../state/slices/orderCartSlice';
-import { selectSelectedVouchers } from '../../../state/slices/preOrderSlice';
+import { resetPreOrder, selectSelectedVouchers } from '../../../state/slices/preOrderSlice';
 import { useAppDispatch, useAppSelector } from '../../../utils/hooks';
 import { OrderAddressCard, OrderDisplayItem, OrderFooter, OrderPriceSection, OrderProductEditBottomSheet, OrderProductEditRef, OrderProductList, OrderTypeSelector } from '../../components/order';
 import { AppIcon } from '../../components/shared/AppIcon';
@@ -43,7 +43,7 @@ export default function ConfirmOrderScreen() {
 
         return confirmedOrder.items.map((item: SerializableConfirmOrderItem) => ({
             id: item.id,
-            name: item.name || `Sản phẩm #${item.menuItemId}`,
+            name: item.name,
             quantity: item.quantity,
             unitPrice: item.unitPrice,
             totalPrice: item.totalPrice,
@@ -131,6 +131,7 @@ export default function ConfirmOrderScreen() {
 
             dispatch(clearCart());
             dispatch(clearConfirmedOrder());
+            dispatch(resetPreOrder());
             router.replace('/order-history');
 
         } catch (err) {

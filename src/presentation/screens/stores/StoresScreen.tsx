@@ -6,6 +6,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { ActivityIndicator, Alert, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Store } from '../../../data/mockStores';
+import { fetchMenuByStore } from '../../../state/slices/homeSlice';
 import { clearStoresError, fetchStores, fetchStoresByProduct } from '../../../state/slices/storesSlice';
 import { useAppDispatch, useAppSelector } from '../../../utils/hooks';
 import { BRAND_COLORS } from '../../theme/colors';
@@ -87,6 +88,7 @@ export default function StoresScreen() {
             onPress: () => {
               console.log('[StoresScreen] User confirmed, clearing cart and switching store');
               dispatch(setSelectedStore(store));
+              dispatch(fetchMenuByStore(Number(store.id)));
 
               if (params.mode === 'select') {
                 router.replace('/(tabs)/order');
@@ -101,6 +103,7 @@ export default function StoresScreen() {
     if (params.mode === 'select') {
       console.log('[StoresScreen] Setting store and navigating to Order');
       dispatch(setSelectedStore(store));
+      dispatch(fetchMenuByStore(Number(store.id)));
       router.replace('/(tabs)/order');
     }
   }, [selectedStore, totalItems, dispatch, router, params.mode]);

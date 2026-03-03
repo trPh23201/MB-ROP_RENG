@@ -9,6 +9,8 @@ const CARD_WIDTH = (width - 48) / 2;
 
 export interface ProductCardData {
   id: string;
+  menuItemId: number;
+  productId: number;
   name: string;
   price: number;
   imageUrl: string;

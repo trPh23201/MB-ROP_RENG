@@ -77,6 +77,24 @@ export const fetchVouchers = createAsyncThunk(
   },
 );
 
+export const fetchMenuByStore = createAsyncThunk("home/fetchMenuByStore", async (storeId: number, { rejectWithValue }) => {
+    try {
+      console.log(`[fetchMenuByStore] Fetching menu for store_id: ${storeId}`);
+      const result = await homeRepository.getMenuByStore(storeId);
+      console.log(`[fetchMenuByStore] Received ${result.products.length} products, ${result.toppings.length} toppings from store_id: ${storeId}`);
+      return {
+        storeId: result.storeId,
+        menuId: result.menuId,
+        products: result.products,
+        toppings: result.toppings,
+      };
+    } catch (error) {
+      console.error(`[fetchMenuByStore] Error fetching menu for store_id: ${storeId}`, error);
+      return rejectWithValue(error instanceof Error ? error.message : "Không thể tải menu cửa hàng");
+    }
+  },
+);
+
 const initialState: HomeState = {
   storeId: null,
   store: null,
@@ -158,6 +176,34 @@ const homeSlice = createSlice({
       .addCase(fetchVouchers.rejected, (state, action) => {
         state.vouchersLoading = false;
         state.vouchersError = action.payload as string;
+      });
+
+    builder
+      .addCase(fetchMenuByStore.pending, (state) => {
+        console.log(`[homeSlice] fetchMenuByStore PENDING — current products: ${state.products.length}, toppings: ${state.toppings.length}`);
+        state.productsLoading = true;
+        state.productsError = null;
+      })
+      .addCase(fetchMenuByStore.fulfilled, (state, action) => {
+        const oldProductCount = state.products.length;
+        const oldToppingCount = state.toppings.length;
+        state.productsLoading = false;
+        state.storeId = action.payload.storeId;
+        state.menuId = action.payload.menuId;
+        state.products = action.payload.products;
+        state.toppings = action.payload.toppings;
+        state.currentPage = 0;
+        state.hasMore = false;
+        console.log(`[homeSlice] fetchMenuByStore FULFILLED — menu REPLACED!`);
+        console.log(`[homeSlice]   storeId: ${action.payload.storeId}, menuId: ${action.payload.menuId}`);
+        console.log(`[homeSlice]   products: ${oldProductCount} → ${action.payload.products.length}`);
+        console.log(`[homeSlice]   toppings: ${oldToppingCount} → ${action.payload.toppings.length}`);
+        console.log(`[homeSlice]   product names: ${action.payload.products.map(p => p.name).join(', ')}`);
+      })
+      .addCase(fetchMenuByStore.rejected, (state, action) => {
+        console.error(`[homeSlice] fetchMenuByStore REJECTED — error: ${action.payload}`);
+        state.productsLoading = false;
+        state.productsError = action.payload as string;
       });
   },
 });

@@ -1,51 +1,35 @@
-import React, { useContext, useEffect, useRef } from 'react';
-import { ActivityIndicator, Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { IS_ANDROID, IS_IOS } from '../../../utils/platform';
+import React, { useContext, useEffect } from 'react';
+import { ActivityIndicator, BackHandler, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { BRAND_COLORS } from '../../theme/colors';
 import { TYPOGRAPHY } from '../../theme/typography';
 import { PopupContext } from './PopupContext';
 import { popupService } from './PopupService';
 
-const MODAL_ANIMATION_DURATION = 300;
-
 export function PopupRenderer() {
     const { state, dispatch } = useContext(PopupContext);
     const { current, isVisible, isAnimating } = state;
-    const animationTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
     useEffect(() => {
         if (isAnimating && !isVisible) {
-            if (animationTimeoutRef.current) {
-                clearTimeout(animationTimeoutRef.current);
-            }
-
-            if (IS_ANDROID) {
-                animationTimeoutRef.current = setTimeout(() => {
-                    dispatch({ type: 'ANIMATION_COMPLETE' });
-                }, MODAL_ANIMATION_DURATION);
-            }
-        }
-
-        return () => {
-            if (animationTimeoutRef.current) {
-                clearTimeout(animationTimeoutRef.current);
-            }
-        };
-    }, [isAnimating, isVisible, dispatch]);
-
-    const handleAnimationComplete = () => {
-        if (isAnimating && IS_IOS) {
             dispatch({ type: 'ANIMATION_COMPLETE' });
         }
-    };
+    }, [isAnimating, isVisible, dispatch]);
 
-    if (!current) return null;
+    useEffect(() => {
+        if (!current || !isVisible) return;
+
+        const onBackPress = () => {
+            popupService.dismiss(current.id);
+            return true;
+        };
+
+        const subscription = BackHandler.addEventListener('hardwareBackPress', onBackPress);
+        return () => subscription.remove();
+    }, [current, isVisible]);
+
+    if (!current || !isVisible) return null;
 
     const { id, config } = current;
-
-    const handleDismiss = () => {
-        popupService.dismiss(id);
-    };
 
     const handleConfirm = () => {
         popupService.resolve(id, true);
@@ -56,10 +40,6 @@ export function PopupRenderer() {
     };
 
     const renderContent = () => {
-        if (!isVisible && isAnimating) {
-            return null;
-        }
-
         switch (config.type) {
             case 'loading':
                 return (
@@ -110,27 +90,21 @@ export function PopupRenderer() {
     };
 
     return (
-        <Modal
-            visible={isVisible}
-            transparent
-            animationType="fade"
-            onRequestClose={handleDismiss}
-            onDismiss={handleAnimationComplete}
-        >
-            <View style={styles.overlay}>
-                {renderContent()}
-            </View>
-        </Modal>
+        <View style={styles.overlay} pointerEvents="auto">
+            {renderContent()}
+        </View>
     );
 }
 
 const styles = StyleSheet.create({
     overlay: {
-        flex: 1,
+        ...StyleSheet.absoluteFillObject,
         backgroundColor: 'rgba(0,0,0,0.5)',
         justifyContent: 'center',
         alignItems: 'center',
         padding: 24,
+        zIndex: 9999,
+        elevation: 9999,
     },
     card: {
         backgroundColor: 'white',
@@ -143,7 +117,7 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.25,
         shadowRadius: 4,
-        elevation: 5,
+        elevation: 10000,
     },
     title: {
         fontSize: TYPOGRAPHY.fontSize.lg,
@@ -202,3 +176,6 @@ const styles = StyleSheet.create({
         fontSize: TYPOGRAPHY.fontSize.md,
     },
 });
+
+
+

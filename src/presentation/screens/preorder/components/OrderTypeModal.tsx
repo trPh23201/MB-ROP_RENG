@@ -5,9 +5,10 @@ import { BottomSheetDefaultBackdropProps } from '@gorhom/bottom-sheet/lib/typesc
 import React, { forwardRef, useCallback, useMemo } from 'react';
 import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { OrderType } from '../../../../domain/shared';
+import { ORDER_TYPE_LABELS } from '../../../components/order/OrderConstants';
 import { BRAND_COLORS } from '../../../theme/colors';
 import { TYPOGRAPHY } from '../../../theme/typography';
-import { ORDER_TYPE_LABELS, PREORDER_TEXT } from '../PreOrderConstants';
+import { PREORDER_TEXT } from '../PreOrderConstants';
 import { PREORDER_LAYOUT } from '../PreOrderLayout';
 import { PreOrderService } from '../PreOrderService';
 

@@ -1,11 +1,12 @@
 import { Ionicons } from '@expo/vector-icons';
 import { BottomSheetBackdrop, BottomSheetModal, BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import React, { forwardRef, useCallback, useImperativeHandle, useMemo, useRef, useState } from 'react';
-import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { selectToppings } from '../../../state/slices/homeSlice';
 import { removeCartItem, updateCartItem } from '../../../state/slices/orderCartSlice';
 import { useAppDispatch, useAppSelector } from '../../../utils/hooks';
+import { popupService } from '../../layouts/popup/PopupService';
 import { BRAND_COLORS } from '../../theme/colors';
 import { TYPOGRAPHY } from '../../theme/typography';
 import { AddToppingBottomSheet, AddToppingRef } from './AddToppingBottomSheet';
@@ -18,9 +19,11 @@ export interface OrderProductEditRef {
     dismiss: () => void;
 }
 
-export const OrderProductEditBottomSheet = forwardRef<OrderProductEditRef>((props, ref) => {
+export const OrderProductEditBottomSheet = forwardRef<OrderProductEditRef, { onCartEmpty?: () => void }>((props, ref) => {
+    const { onCartEmpty } = props;
     const dispatch = useAppDispatch();
     const availableToppings = useAppSelector(selectToppings);
+    const cartItems = useAppSelector((state) => state.orderCart.items);
     const insets = useSafeAreaInsets();
     const sheetRef = useRef<BottomSheetModal>(null);
     const toppingModalRef = useRef<AddToppingRef>(null);
@@ -56,21 +59,26 @@ export const OrderProductEditBottomSheet = forwardRef<OrderProductEditRef>((prop
         return (editingItem.product.price + sizeAdjust + toppingTotal) * quantity;
     }, [editingItem, selectedSize, selectedToppings, quantity]);
 
-    const handleQuantityChange = (delta: number) => {
+    const handleQuantityChange = async (delta: number) => {
         const newQty = quantity + delta;
         if (newQty === 0) {
-            Alert.alert(EDIT_PRODUCT_TEXT.DELETE_CONFIRM_TITLE, EDIT_PRODUCT_TEXT.DELETE_CONFIRM_MESSAGE, [
-                { text: EDIT_PRODUCT_TEXT.DELETE_CONFIRM_CANCEL, style: 'cancel' },
+            const confirmed = await popupService.confirm(
+                EDIT_PRODUCT_TEXT.DELETE_CONFIRM_MESSAGE,
                 {
-                    text: EDIT_PRODUCT_TEXT.DELETE_CONFIRM_OK,
-                    onPress: () => {
-                        if (editingItem) {
-                            dispatch(removeCartItem(editingItem.id));
-                            sheetRef.current?.dismiss();
-                        }
-                    },
-                },
-            ]);
+                    title: EDIT_PRODUCT_TEXT.DELETE_CONFIRM_TITLE,
+                    confirmText: EDIT_PRODUCT_TEXT.DELETE_CONFIRM_OK,
+                    cancelText: EDIT_PRODUCT_TEXT.DELETE_CONFIRM_CANCEL,
+                    confirmStyle: 'destructive',
+                }
+            );
+            if (confirmed && editingItem) {
+                const isLastItem = cartItems.length === 1;
+                dispatch(removeCartItem(editingItem.id));
+                sheetRef.current?.dismiss();
+                if (isLastItem && onCartEmpty) {
+                    onCartEmpty();
+                }
+            }
         } else if (newQty > 0) {
             setQuantity(newQty);
         }

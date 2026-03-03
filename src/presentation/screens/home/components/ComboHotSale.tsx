@@ -58,8 +58,8 @@ const ComboItem = ({ combo }: { combo: Combo }) => {
             style={styles.productCard}
             onPress={() => handleAddToCart({
               id: product.id,
-              menuItemId: 0,
-              productId: parseInt(product.id) || 0,
+              menuItemId: product.menuItemId || 0,
+              productId: product.productId || parseInt(product.id) || 0,
               name: product.name,
               price: product.price,
               imageUrl: product.imageUrl || '',
@@ -100,14 +100,14 @@ const ComboItem = ({ combo }: { combo: Combo }) => {
               </Text>
               <TouchableOpacity
                 style={styles.chooseButton}
-                onPress={() => handleAddToCart({
+                onPress={() => ({
                   id: product.id,
-                  menuItemId: 0,
-                  productId: parseInt(product.id) || 0,
+                  menuItemId: product.menuItemId,
+                  productId: product.productId,
                   name: product.name,
                   price: product.price,
-                  imageUrl: product.imageUrl || '',
-                  categoryId: '',
+                  imageUrl: product.imageUrl,
+                  categoryId: product.categoryId,
                   originalPrice: product.originalPrice,
                   badge: product.badge,
                   discount: undefined,

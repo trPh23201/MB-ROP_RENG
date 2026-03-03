@@ -139,12 +139,12 @@ export default function OrderScreen() {
             products={combo.products}
             onProductPress={(product) => handleAddToCart({
               id: product.id,
-              menuItemId: 0,
-              productId: parseInt(product.id) || 0,
+              menuItemId: product.menuItemId,
+              productId: product.productId,
               name: product.name,
               price: product.price,
-              imageUrl: product.imageUrl || '',
-              categoryId: '',
+              imageUrl: product.imageUrl,
+              categoryId: product.categoryId,
               originalPrice: product.originalPrice,
               badge: product.badge,
               discount: undefined,

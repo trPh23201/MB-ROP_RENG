@@ -71,13 +71,6 @@ const orderCartSlice = createSlice({
       }
 
       state.selectedStore = action.payload;
-
-      // TODO: Persist selected store to AsyncStorage for app restart
-      // Implementation: AsyncStorage.setItem('selected_store', JSON.stringify(action.payload))
-
-      // TODO: Re-fetch menu if new store is outside current lat/lng range
-      // Check if new store coordinates differ significantly from current menu fetch
-      // If difference > threshold, dispatch fetchHomeMenu with new coordinates
     },
 
     addToCart: (state, action: PayloadAction<Product>) => {
@@ -112,23 +105,19 @@ const orderCartSlice = createSlice({
       const index = state.items.findIndex((item) => item.id === updatedItem.id);
       if (index === -1) return;
 
-      // Check for duplicate item with same customizations (excluding self)
       const duplicateItem = findDuplicateItem(
         state.items,
         updatedItem.product.id,
         updatedItem.customizations,
-        updatedItem.id // Exclude self
+        updatedItem.id
       );
 
       if (duplicateItem) {
-        // MERGE: Combine quantities into duplicate item
         duplicateItem.quantity += updatedItem.quantity;
         duplicateItem.finalPrice = calculateFinalPrice(duplicateItem);
 
-        // Remove the original item
         state.items = state.items.filter(item => item.id !== updatedItem.id);
       } else {
-        // UPDATE IN PLACE: No duplicate found
         const updated = { ...updatedItem };
         updated.finalPrice = calculateFinalPrice(updated);
         state.items[index] = updated;

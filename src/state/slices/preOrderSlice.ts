@@ -51,6 +51,12 @@ const preOrderSlice = createSlice({
     setSelectedVouchers: (state, action: PayloadAction<{ code: string }[]>) => {
       state.selectedVouchers = action.payload;
     },
+    resetPreOrder: (state) => {
+      state.lastOrder = null;
+      state.selectedVouchers = [];
+      state.error = null;
+      state.orderType = OrderType.TAKEAWAY;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -69,7 +75,7 @@ const preOrderSlice = createSlice({
   },
 });
 
-export const { clearPreOrderError, setOrderType, setSelectedVouchers } = preOrderSlice.actions;
+export const { clearPreOrderError, setOrderType, setSelectedVouchers, resetPreOrder } = preOrderSlice.actions;
 export default preOrderSlice.reducer;
 
 export const selectIsLoading = (state: { preOrder: PreOrderState }) => state.preOrder.isLoading;

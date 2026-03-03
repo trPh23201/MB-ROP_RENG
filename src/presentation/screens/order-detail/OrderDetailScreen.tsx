@@ -150,7 +150,9 @@ export default function OrderDetailScreen() {
           {order.address && (
             <View style={styles.infoRow}>
               <Text style={styles.infoLabel}>{ORDER_DETAIL_STRINGS.ADDRESS}</Text>
-              <Text style={styles.infoValue}>{order.address}</Text>
+              <Text style={styles.infoValue}>
+                {typeof order.address === 'string' ? order.address : (order.address as any)?.text}
+              </Text>
             </View>
           )}
           {order.note && (
