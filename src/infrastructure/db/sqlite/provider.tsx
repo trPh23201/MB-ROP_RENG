@@ -15,7 +15,6 @@ export async function migrateDbIfNeeded(db: SQLite.SQLiteDatabase) {
       product_id INTEGER NOT NULL,
       menu_item_id INTEGER DEFAULT 0,
       quantity INTEGER NOT NULL DEFAULT 1,
-      quantity INTEGER NOT NULL DEFAULT 1,
       created_at INTEGER NOT NULL,
       UNIQUE(user_id, store_id, product_id)
     );
