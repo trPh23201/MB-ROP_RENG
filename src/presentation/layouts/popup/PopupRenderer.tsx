@@ -84,6 +84,18 @@ export function PopupRenderer() {
                     </View>
                 );
 
+            case 'custom': {
+                const CustomComponent = config.component;
+                const customProps = config.props || {};
+                return (
+                    <CustomComponent
+                        {...customProps}
+                        onResolve={(value: any) => popupService.resolve(id, value)}
+                        onDismiss={() => popupService.dismiss(id)}
+                    />
+                );
+            }
+
             default:
                 return null;
         }

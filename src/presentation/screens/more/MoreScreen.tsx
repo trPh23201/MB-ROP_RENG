@@ -12,6 +12,7 @@ import { ACCOUNT_MENU, MORE_STRINGS, SUPPORT_MENU } from './MoreConstants';
 import { MenuSectionData } from './MoreInterfaces';
 import { MenuSection } from './components/MenuSection';
 import { MoreHeader } from './components/MoreHeader';
+import { QRCodePopup } from './components/QRCodePopup';
 import { UtilityGrid } from './components/UtilityGrid';
 import { VersionFooter } from './components/VersionFooter';
 
@@ -97,7 +98,11 @@ export default function MoreScreen() {
         break;
 
       case 'scan-qr':
-        popupService.alert('Feature is comming soon');
+        if (isAuthenticated && user?.uuid) {
+          popupService.custom(QRCodePopup as any, { uuid: user.uuid });
+        } else {
+          router.push('../(auth)/login');
+        }
         break;
 
       default:

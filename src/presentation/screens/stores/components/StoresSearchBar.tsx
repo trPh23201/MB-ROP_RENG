@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, TextInput, View } from 'react-native';
 import { AppIcon } from '../../../components/shared/AppIcon';
 import { BRAND_COLORS } from '../../../theme/colors';
 import { HEADER_ICONS } from '../../../theme/iconConstants';
@@ -25,10 +25,6 @@ export function StoresSearchBar({ value, onChangeText }: StoresSearchBarProps) {
           onChangeText={onChangeText}
         />
       </View>
-      <TouchableOpacity style={styles.mapButton} onPress={handleMapPress} activeOpacity={0.7}>
-        <AppIcon name="map-outline" size="sm" />
-        <Text style={styles.mapButtonText}>{STORES_TEXT.MAP_BUTTON}</Text>
-      </TouchableOpacity>
     </View>
   );
 }
