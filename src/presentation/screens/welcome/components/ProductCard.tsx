@@ -80,7 +80,7 @@ export function ProductCard({ product, onPress }: ProductCardProps) {
 const styles = StyleSheet.create({
   container: {
     width: CARD_WIDTH,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: BRAND_COLORS.primary.beSua,
     borderRadius: WELCOME_LAYOUT.PRODUCT_CARD_BORDER_RADIUS,
     marginBottom: WELCOME_LAYOUT.PRODUCT_CARD_MARGIN_BOTTOM,
     shadowColor: '#000',
@@ -167,6 +167,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   addIcon: {
-    color: '#FFFFFF',
+    color: BRAND_COLORS.primary.beSua,
   },
 });

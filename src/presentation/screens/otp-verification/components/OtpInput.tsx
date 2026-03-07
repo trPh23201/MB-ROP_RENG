@@ -89,9 +89,9 @@ const styles = StyleSheet.create({
     width: OTP_LAYOUT.OTP_BOX_SIZE,
     height: OTP_LAYOUT.OTP_BOX_SIZE,
     borderWidth: OTP_LAYOUT.OTP_BOX_BORDER_WIDTH,
-    borderColor: BRAND_COLORS.secondary.camNhat,
+    borderColor: BRAND_COLORS.secondary.nauCaramel,
     borderRadius: OTP_LAYOUT.OTP_BOX_BORDER_RADIUS,
-    backgroundColor: BRAND_COLORS.background.default,
+    backgroundColor: BRAND_COLORS.primary.beSua,
     fontSize: OTP_LAYOUT.OTP_BOX_FONT_SIZE,
     fontFamily: 'Phudu-Bold',
     color: BRAND_COLORS.primary.xanhReu,
@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
   },
   inputFilled: {
     borderColor: BRAND_COLORS.secondary.nauEspresso,
-    backgroundColor: BRAND_COLORS.background.default,
+    backgroundColor: BRAND_COLORS.primary.beSua,
   },
   inputDisabled: {
     opacity: 0.5,

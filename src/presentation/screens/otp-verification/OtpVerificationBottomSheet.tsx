@@ -265,7 +265,7 @@ OtpVerificationBottomSheet.displayName = 'OtpVerificationBottomSheet';
 
 const styles = StyleSheet.create({
   bottomSheetBackground: {
-    backgroundColor: BRAND_COLORS.background.default,
+    backgroundColor: BRAND_COLORS.screenBg.warm,
     borderTopLeftRadius: OTP_LAYOUT.MODAL_BORDER_RADIUS,
     borderTopRightRadius: OTP_LAYOUT.MODAL_BORDER_RADIUS,
   },
@@ -335,7 +335,7 @@ const styles = StyleSheet.create({
   },
   okButton: {
     marginTop: OTP_LAYOUT.OK_BUTTON_MARGIN_TOP,
-    backgroundColor: BRAND_COLORS.secondary.nauEspresso,
+    backgroundColor: BRAND_COLORS.primary.xanhReu,
     borderRadius: OTP_LAYOUT.OK_BUTTON_BORDER_RADIUS,
     paddingVertical: OTP_LAYOUT.OK_BUTTON_PADDING_VERTICAL,
     alignItems: 'center',
@@ -343,6 +343,6 @@ const styles = StyleSheet.create({
   okButtonText: {
     fontSize: OTP_LAYOUT.OK_BUTTON_FONT_SIZE,
     fontFamily: 'Phudu-Bold',
-    color: BRAND_COLORS.background.default,
+    color: BRAND_COLORS.primary.beSua,
   },
 });

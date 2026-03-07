@@ -38,22 +38,22 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: BRAND_COLORS.background.default,
+    backgroundColor: '#FFFFFF',
     borderWidth: LOGIN_LAYOUT.INPUT_BORDER_WIDTH,
-    borderColor: '#E5E5E5',
+    borderColor: BRAND_COLORS.ui.placeholder,
     borderRadius: LOGIN_LAYOUT.BUTTON_BORDER_RADIUS,
     paddingVertical: LOGIN_LAYOUT.INPUT_PADDING_VERTICAL,
     marginBottom: LOGIN_LAYOUT.SOCIAL_BUTTON_MARGIN_BOTTOM,
     gap: LOGIN_LAYOUT.SOCIAL_BUTTON_GAP,
   },
   buttonFacebook: {
-    backgroundColor: BRAND_COLORS.primary.xanhReu,
-    borderColor: BRAND_COLORS.primary.xanhReu,
+    backgroundColor: BRAND_COLORS.bta.primaryBg,
+    borderColor: BRAND_COLORS.bta.primaryBg,
   },
   facebookIcon: {
     fontSize: LOGIN_LAYOUT.SOCIAL_ICON_FONT_SIZE,
     fontFamily: 'Phudu-Bold',
-    color: BRAND_COLORS.background.default,
+    color: BRAND_COLORS.bta.primaryText,
   },
   googleIcon: {
     fontSize: LOGIN_LAYOUT.SOCIAL_ICON_FONT_SIZE,
@@ -63,9 +63,9 @@ const styles = StyleSheet.create({
   label: {
     fontSize: LOGIN_LAYOUT.BUTTON_FONT_SIZE,
     fontFamily: 'SpaceGrotesk-Medium',
-    color: BRAND_COLORS.primary.xanhReu,
+    color: BRAND_COLORS.ui.heading,
   },
   labelFacebook: {
-    color: BRAND_COLORS.background.default,
+    color: BRAND_COLORS.bta.primaryText,
   },
 });

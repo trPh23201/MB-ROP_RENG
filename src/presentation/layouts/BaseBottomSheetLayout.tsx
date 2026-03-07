@@ -106,7 +106,7 @@ export const BaseBottomSheetLayout = forwardRef<BottomSheetModal, BaseBottomShee
         // Default handle styles
         const backgroundStyle = useMemo(
             () => ({
-                backgroundColor: BRAND_COLORS.background.default,
+                backgroundColor: BRAND_COLORS.screenBg.warm,
                 borderTopLeftRadius: 16,
                 borderTopRightRadius: 16,
             }),
@@ -115,7 +115,7 @@ export const BaseBottomSheetLayout = forwardRef<BottomSheetModal, BaseBottomShee
 
         const indicatorStyle = useMemo(
             () => ({
-                backgroundColor: BRAND_COLORS.border.medium,
+                backgroundColor: BRAND_COLORS.ui.placeholder,
                 width: 40,
                 height: 4,
             }), []
@@ -153,7 +153,7 @@ export const BaseBottomSheetLayout = forwardRef<BottomSheetModal, BaseBottomShee
                         headerRightComponent
                     ) : showCloseButton ? (
                         <TouchableOpacity onPress={onClose} hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }} style={styles.closeButton}>
-                            <AppIcon name="close" size={HEADER_ICON_SIZE} color={BRAND_COLORS.text.secondary} />
+                            <AppIcon name="close" size={HEADER_ICON_SIZE} color={BRAND_COLORS.ui.subtitle} />
                         </TouchableOpacity>
                     ) : (
                         <View style={{ width: 30 }} />
@@ -173,19 +173,19 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         height: HEADER_HEIGHT,
         paddingHorizontal: 16,
-        borderBottomColor: BRAND_COLORS.border.light,
+        borderBottomColor: BRAND_COLORS.ui.placeholder,
     },
     title: {
         fontSize: TYPOGRAPHY.fontSize.md,
         fontFamily: TYPOGRAPHY.fontFamily.bodyBold,
-        color: BRAND_COLORS.text.primary,
+        color: BRAND_COLORS.ui.heading,
         flex: 1,
         textAlign: 'center',
     },
     clearText: {
         fontSize: TYPOGRAPHY.fontSize.md,
         fontFamily: TYPOGRAPHY.fontFamily.bodyMedium,
-        color: BRAND_COLORS.text.secondary,
+        color: BRAND_COLORS.ui.subtitle,
     },
     closeButton: {
         width: 30,

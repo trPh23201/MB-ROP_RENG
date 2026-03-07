@@ -5,15 +5,14 @@ import { MORE_LAYOUT } from './MoreLayout';
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: BRAND_COLORS.background.paper,
+    backgroundColor: BRAND_COLORS.screenBg.fresh,
   },
-  // Header
   headerContainer: {
-    backgroundColor: BRAND_COLORS.primary.xanhReu,
+    backgroundColor: BRAND_COLORS.screenBg.bold,
     paddingHorizontal: 16,
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: BRAND_COLORS.primary.xanhBo,
+    borderBottomColor: BRAND_COLORS.screenBg.fresh,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -23,21 +22,27 @@ export const styles = StyleSheet.create({
     color: BRAND_COLORS.text.inverse,
   },
 
-  // Sections Wrapper
   sectionContainer: {
-    backgroundColor: BRAND_COLORS.background.default,
+    backgroundColor: BRAND_COLORS.screenBg.warm,
     marginBottom: MORE_LAYOUT.SECTION_SPACING,
+    marginHorizontal: 16,
+    marginTop: 16,
     paddingVertical: 16,
+    borderRadius: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
   },
   sectionTitle: {
     fontFamily: 'Phudu-Bold',
     fontSize: 16,
-    color: '#333',
+    color: BRAND_COLORS.ui.heading,
     marginLeft: 16,
     marginBottom: 8,
   },
 
-  // Utility Grid
   gridContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
@@ -56,14 +61,14 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 8,
-    backgroundColor: BRAND_COLORS.primary.xanhBo,
-    borderColor: BRAND_COLORS.primary.xanhReu,
+    backgroundColor: BRAND_COLORS.ui.iconFill,
+    borderColor: BRAND_COLORS.bta.primaryBg,
     borderWidth: 2,
   },
   gridLabel: {
     fontFamily: 'SpaceGrotesk-Regular',
     fontSize: 11,
-    color: '#333',
+    color: BRAND_COLORS.ui.heading,
     textAlign: 'center',
     lineHeight: 14,
   },
@@ -86,18 +91,17 @@ export const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 
-  // Menu List
   menuItem: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 16,
     height: MORE_LAYOUT.MENU_ITEM_HEIGHT,
-    backgroundColor: BRAND_COLORS.background.default,
+    backgroundColor: BRAND_COLORS.screenBg.warm,
   },
   menuItemBorder: {
     borderBottomWidth: 1,
-    borderBottomColor: '#F5F5F5',
-    marginLeft: 56, // Thụt vào thẳng hàng với text
+    borderBottomColor: BRAND_COLORS.ui.placeholder,
+    marginLeft: 56,
   },
   menuIcon: {
     width: 24,
@@ -107,13 +111,12 @@ export const styles = StyleSheet.create({
     flex: 1,
     fontFamily: 'SpaceGrotesk-Medium',
     fontSize: 15,
-    color: '#333',
+    color: BRAND_COLORS.ui.heading,
   },
   destructiveText: {
-    color: '#D32F2F', // Màu đỏ cho logout
+    color: '#D32F2F',
   },
 
-  // Footer
   footerContainer: {
     paddingVertical: 24,
     alignItems: 'center',
@@ -121,6 +124,6 @@ export const styles = StyleSheet.create({
   versionText: {
     fontFamily: 'SpaceMono-Regular',
     fontSize: 12,
-    color: '#999',
+    color: BRAND_COLORS.ui.placeholder,
   },
 });

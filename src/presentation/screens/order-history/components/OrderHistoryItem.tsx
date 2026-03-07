@@ -2,6 +2,7 @@ import { Order } from '@/src/domain/entities/Order';
 import { Ionicons } from '@expo/vector-icons';
 import React, { memo } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { BRAND_COLORS } from '../../../theme/colors';
 import { ORDER_STATUS_LABELS, PAYMENT_STATUS_LABELS, STATUS_COLORS } from '../OrderHistoryConstants';
 import { OrderHistoryService } from '../OrderHistoryService';
 
@@ -30,12 +31,12 @@ export const OrderHistoryItem = memo(function OrderHistoryItem({ order, onPress 
       </View>
 
       <View style={styles.infoRow}>
-        <Ionicons name="storefront-outline" size={16} color="#666666" />
+        <Ionicons name="storefront-outline" size={16} color={BRAND_COLORS.ui.subtitle} />
         <Text style={styles.infoText}>{service.getStoreLabel(order.storeId)}</Text>
       </View>
 
       <View style={styles.infoRow}>
-        <Ionicons name="time-outline" size={16} color="#666666" />
+        <Ionicons name="time-outline" size={16} color={BRAND_COLORS.ui.subtitle} />
         <Text style={styles.infoText}>{service.formatDate(order.createdAt)}</Text>
       </View>
 
@@ -53,7 +54,7 @@ export const OrderHistoryItem = memo(function OrderHistoryItem({ order, onPress 
       </View>
 
       <View style={styles.chevron}>
-        <Ionicons name="chevron-forward" size={20} color="#999999" />
+        <Ionicons name="chevron-forward" size={20} color={BRAND_COLORS.ui.placeholder} />
       </View>
     </TouchableOpacity>
   );
@@ -61,13 +62,13 @@ export const OrderHistoryItem = memo(function OrderHistoryItem({ order, onPress 
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: BRAND_COLORS.screenBg.warm,
     marginHorizontal: 16,
     marginVertical: 8,
     padding: 16,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#E0E0E0',
+    borderColor: BRAND_COLORS.ui.placeholder,
     shadowColor: '#000000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.05,
@@ -83,7 +84,7 @@ const styles = StyleSheet.create({
   orderCode: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#333333',
+    color: BRAND_COLORS.ui.heading,
   },
   statusBadge: {
     paddingHorizontal: 12,
@@ -93,7 +94,7 @@ const styles = StyleSheet.create({
   statusText: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: BRAND_COLORS.bta.primaryText,
   },
   infoRow: {
     flexDirection: 'row',
@@ -102,12 +103,12 @@ const styles = StyleSheet.create({
   },
   infoText: {
     fontSize: 14,
-    color: '#666666',
+    color: BRAND_COLORS.ui.subtitle,
     marginLeft: 8,
   },
   divider: {
     height: 1,
-    backgroundColor: '#E0E0E0',
+    backgroundColor: BRAND_COLORS.ui.placeholder,
     marginVertical: 12,
   },
   itemsContainer: {
@@ -115,7 +116,7 @@ const styles = StyleSheet.create({
   },
   itemsLabel: {
     fontSize: 14,
-    color: '#666666',
+    color: BRAND_COLORS.ui.subtitle,
   },
   footer: {
     flexDirection: 'row',
@@ -124,12 +125,12 @@ const styles = StyleSheet.create({
   },
   totalLabel: {
     fontSize: 14,
-    color: '#666666',
+    color: BRAND_COLORS.ui.subtitle,
   },
   totalAmount: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#606A37',
+    color: BRAND_COLORS.ui.heading,
   },
   chevron: {
     position: 'absolute',

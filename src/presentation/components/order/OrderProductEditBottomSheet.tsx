@@ -137,7 +137,7 @@ export const OrderProductEditBottomSheet = forwardRef<OrderProductEditRef, { onC
                             <View style={styles.header}>
                                 <Text style={styles.title}>{editingItem.product.name}</Text>
                                 <TouchableOpacity onPress={() => sheetRef.current?.dismiss()} style={styles.closeButton}>
-                                    <Ionicons name="close" size={24} color={BRAND_COLORS.text.primary} />
+                                    <Ionicons name="close" size={24} color={BRAND_COLORS.ui.subtitle} />
                                 </TouchableOpacity>
                             </View>
 
@@ -205,7 +205,7 @@ export const OrderProductEditBottomSheet = forwardRef<OrderProductEditRef, { onC
                             </TouchableOpacity>
 
                             <TouchableOpacity style={styles.noteSection}>
-                                <Ionicons name="document-text-outline" size={20} color={BRAND_COLORS.text.secondary} />
+                                <Ionicons name="document-text-outline" size={20} color={BRAND_COLORS.ui.subtitle} />
                                 <Text style={styles.noteText}>{EDIT_PRODUCT_TEXT.NOTE_LABEL}</Text>
                             </TouchableOpacity>
                         </BottomSheetScrollView>
@@ -240,12 +240,12 @@ OrderProductEditBottomSheet.displayName = 'OrderProductEditBottomSheet';
 
 const styles = StyleSheet.create({
     bottomSheetBackground: {
-        backgroundColor: BRAND_COLORS.background.default,
+        backgroundColor: BRAND_COLORS.primary.beSua,
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20,
     },
     indicator: {
-        backgroundColor: '#DDDDDD',
+        backgroundColor: BRAND_COLORS.secondary.nauEspresso,
         width: 40,
     },
     contentWrapper: {
@@ -261,7 +261,7 @@ const styles = StyleSheet.create({
     title: {
         fontSize: TYPOGRAPHY.fontSize.xl,
         fontFamily: TYPOGRAPHY.fontFamily.heading,
-        color: BRAND_COLORS.text.primary,
+        color: BRAND_COLORS.ui.heading,
     },
     closeButton: {
         padding: 4,
@@ -272,7 +272,7 @@ const styles = StyleSheet.create({
     sectionTitle: {
         fontSize: TYPOGRAPHY.fontSize.base,
         fontFamily: TYPOGRAPHY.fontFamily.bodyBold,
-        color: BRAND_COLORS.text.primary,
+        color: BRAND_COLORS.ui.heading,
         marginBottom: 4,
     },
     required: {
@@ -281,7 +281,7 @@ const styles = StyleSheet.create({
     sectionHint: {
         fontSize: TYPOGRAPHY.fontSize.sm,
         fontFamily: TYPOGRAPHY.fontFamily.bodyRegular,
-        color: BRAND_COLORS.text.tertiary,
+        color: BRAND_COLORS.ui.subtitle,
         marginBottom: 12,
     },
     optionRow: {
@@ -294,17 +294,17 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
         borderRadius: 20,
         borderWidth: 1.5,
-        borderColor: BRAND_COLORS.text.tertiary,
-        backgroundColor: BRAND_COLORS.background.default,
+        borderColor: BRAND_COLORS.ui.placeholder,
+        backgroundColor: BRAND_COLORS.screenBg.warm,
     },
     optionButtonSelected: {
         borderColor: BRAND_COLORS.secondary.nauEspresso,
-        backgroundColor: 'rgba(188, 108, 37, 0.1)',
+        backgroundColor: `${BRAND_COLORS.secondary.nauEspresso}18`,
     },
     optionText: {
         fontSize: TYPOGRAPHY.fontSize.sm,
         fontFamily: TYPOGRAPHY.fontFamily.bodyMedium,
-        color: BRAND_COLORS.text.primary,
+        color: BRAND_COLORS.ui.heading,
     },
     optionTextSelected: {
         color: BRAND_COLORS.secondary.nauEspresso,
@@ -324,7 +324,7 @@ const styles = StyleSheet.create({
         width: 40,
         height: 40,
         borderRadius: 8,
-        backgroundColor: 'rgba(188, 108, 37, 0.1)',
+        backgroundColor: `${BRAND_COLORS.secondary.nauEspresso}18`,
         justifyContent: 'center',
         alignItems: 'center',
     },
@@ -334,13 +334,13 @@ const styles = StyleSheet.create({
     toppingTitle: {
         fontSize: TYPOGRAPHY.fontSize.sm,
         fontFamily: TYPOGRAPHY.fontFamily.bodyBold,
-        color: BRAND_COLORS.text.primary,
+        color: BRAND_COLORS.ui.heading,
         marginBottom: 4,
     },
     toppingHint: {
         fontSize: TYPOGRAPHY.fontSize.xs,
         fontFamily: TYPOGRAPHY.fontFamily.bodyRegular,
-        color: BRAND_COLORS.text.tertiary,
+        color: BRAND_COLORS.ui.subtitle,
     },
     noteSection: {
         flexDirection: 'row',
@@ -351,16 +351,16 @@ const styles = StyleSheet.create({
     noteText: {
         fontSize: TYPOGRAPHY.fontSize.base,
         fontFamily: TYPOGRAPHY.fontFamily.bodyRegular,
-        color: BRAND_COLORS.text.secondary,
+        color: BRAND_COLORS.ui.subtitle,
     },
     footer: {
         flexDirection: 'row',
         alignItems: 'center',
         paddingHorizontal: 16,
         paddingTop: 16,
-        backgroundColor: BRAND_COLORS.background.default,
+        backgroundColor: BRAND_COLORS.screenBg.warm,
         borderTopWidth: 1,
-        borderTopColor: BRAND_COLORS.border.light,
+        borderTopColor: BRAND_COLORS.ui.placeholder,
         gap: 12,
     },
     quantityControls: {
@@ -372,14 +372,14 @@ const styles = StyleSheet.create({
         width: 36,
         height: 36,
         borderRadius: 18,
-        backgroundColor: BRAND_COLORS.background.secondary,
+        backgroundColor: `${BRAND_COLORS.secondary.nauEspresso}20`,
         justifyContent: 'center',
         alignItems: 'center',
     },
     quantityValue: {
         fontSize: TYPOGRAPHY.fontSize.lg,
         fontFamily: TYPOGRAPHY.fontFamily.bodyBold,
-        color: BRAND_COLORS.text.primary,
+        color: BRAND_COLORS.ui.heading,
         minWidth: 24,
         textAlign: 'center',
     },
@@ -393,6 +393,6 @@ const styles = StyleSheet.create({
     applyButtonText: {
         fontSize: TYPOGRAPHY.fontSize.base,
         fontFamily: TYPOGRAPHY.fontFamily.heading,
-        color: BRAND_COLORS.text.inverse,
+        color: BRAND_COLORS.bta.primaryText,
     },
 });

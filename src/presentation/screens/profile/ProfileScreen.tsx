@@ -65,7 +65,7 @@ export default function ProfileScreen() {
 
     if (!isAuthenticated || !user) {
         return (
-            <BaseFullScreenLayout backgroundColor={BRAND_COLORS.background.default} safeAreaEdges={['left', 'right', 'bottom']}>
+            <BaseFullScreenLayout backgroundColor={BRAND_COLORS.screenBg.fresh} safeAreaEdges={['top', 'left', 'right', 'bottom']}>
                 <View style={styles.unauthContainer}>
                     <Ionicons name="person-circle-outline" size={80} color={BRAND_COLORS.text.disabled} />
                     <Text style={styles.unauthText}>{PROFILE_STRINGS.LOGIN_REQUIRED}</Text>
@@ -78,18 +78,18 @@ export default function ProfileScreen() {
     }
 
     return (
-        <BaseFullScreenLayout backgroundColor={BRAND_COLORS.background.default} safeAreaEdges={['left', 'right', 'bottom']}>
+        <BaseFullScreenLayout backgroundColor={BRAND_COLORS.screenBg.fresh} safeAreaEdges={['top', 'left', 'right', 'bottom']}>
             <ScrollView
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={styles.scrollContent}
                 refreshControl={
-                    <RefreshControl refreshing={isLoading} onRefresh={handleRefresh} colors={[BRAND_COLORS.primary.xanhReu]} />
+                    <RefreshControl refreshing={isLoading} onRefresh={handleRefresh} colors={[BRAND_COLORS.bta.primaryBg]} />
                 }
             >
 
                 <View style={styles.headerSection}>
                     <View style={styles.avatarContainer}>
-                        <Ionicons name="person" size={40} color={BRAND_COLORS.primary.xanhReu} />
+                        <Ionicons name="person" size={40} color={BRAND_COLORS.bta.primaryBg} />
                     </View>
                     <Text style={styles.nameText}>{user.displayName || user.phone}</Text>
                     <Text style={styles.roleText}>{user.role === 'end_user' ? 'Khách hàng' : user.role}</Text>
@@ -133,13 +133,13 @@ const styles = StyleSheet.create({
     },
     unauthText: {
         fontSize: 16,
-        color: BRAND_COLORS.text.secondary,
+        color: BRAND_COLORS.ui.subtitle,
         textAlign: 'center',
         marginVertical: 24,
         lineHeight: 24,
     },
     primaryButton: {
-        backgroundColor: BRAND_COLORS.primary.xanhReu,
+        backgroundColor: BRAND_COLORS.bta.primaryBg,
         paddingHorizontal: 32,
         paddingVertical: 12,
         borderRadius: 8,
@@ -147,7 +147,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     primaryButtonText: {
-        color: BRAND_COLORS.text.inverse,
+        color: BRAND_COLORS.bta.primaryText,
         fontSize: 16,
         fontWeight: '600',
     },
@@ -160,7 +160,7 @@ const styles = StyleSheet.create({
         width: 80,
         height: 80,
         borderRadius: 40,
-        backgroundColor: BRAND_COLORS.primary.beSua,
+        backgroundColor: BRAND_COLORS.screenBg.warm,
         justifyContent: 'center',
         alignItems: 'center',
         marginBottom: 16,
@@ -168,15 +168,15 @@ const styles = StyleSheet.create({
     nameText: {
         fontSize: 20,
         fontWeight: '700',
-        color: BRAND_COLORS.text.primary,
+        color: BRAND_COLORS.ui.heading,
         marginBottom: 4,
     },
     roleText: {
         fontSize: 14,
-        color: BRAND_COLORS.text.secondary,
+        color: BRAND_COLORS.ui.subtitle,
     },
     cardSection: {
-        backgroundColor: BRAND_COLORS.background.paper,
+        backgroundColor: BRAND_COLORS.screenBg.warm,
         borderRadius: 12,
         padding: 16,
         marginBottom: 16,
@@ -192,7 +192,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingVertical: 12,
         borderBottomWidth: 1,
-        borderBottomColor: BRAND_COLORS.border.light,
+        borderBottomColor: BRAND_COLORS.ui.placeholder,
     },
     noBorder: {
         borderBottomWidth: 0,
@@ -206,12 +206,12 @@ const styles = StyleSheet.create({
     },
     infoLabel: {
         fontSize: 15,
-        color: BRAND_COLORS.text.secondary,
+        color: BRAND_COLORS.ui.subtitle,
     },
     infoValue: {
         fontSize: 15,
         fontWeight: '500',
-        color: BRAND_COLORS.text.primary,
+        color: BRAND_COLORS.ui.heading,
     },
     pointRow: {
         flexDirection: 'row',
@@ -225,21 +225,21 @@ const styles = StyleSheet.create({
     },
     pointLabel: {
         fontSize: 13,
-        color: BRAND_COLORS.text.secondary,
+        color: BRAND_COLORS.ui.subtitle,
         marginBottom: 8,
     },
     pointValue: {
         fontSize: 24,
         fontWeight: '700',
-        color: BRAND_COLORS.primary.xanhReu,
+        color: BRAND_COLORS.ui.heading,
     },
     divider: {
         width: 1,
         height: 40,
-        backgroundColor: BRAND_COLORS.border.light,
+        backgroundColor: BRAND_COLORS.ui.placeholder,
     },
     logoutButton: {
-        backgroundColor: BRAND_COLORS.background.paper,
+        backgroundColor: BRAND_COLORS.screenBg.warm,
         paddingVertical: 14,
         borderRadius: 12,
         alignItems: 'center',

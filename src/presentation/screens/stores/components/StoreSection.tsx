@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: STORES_LAYOUT.SECTION_TITLE_SIZE,
     fontFamily: 'Phudu-Bold',
-    color: BRAND_COLORS.primary.xanhReu,
+    color: BRAND_COLORS.secondary.reuDam,
     marginBottom: STORES_LAYOUT.SECTION_TITLE_MARGIN_BOTTOM,
   },
 });

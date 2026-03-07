@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
     zIndex: 999,
   },
   background: {
-    backgroundColor: BRAND_COLORS.background.default,
+    backgroundColor: BRAND_COLORS.screenBg.warm,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
   },
@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
   description: {
     fontSize: 16,
     fontFamily: 'SpaceGrotesk-Medium',
-    color: BRAND_COLORS.primary.xanhReu,
+    color: BRAND_COLORS.secondary.nauEspresso,
     lineHeight: 24,
     marginBottom: 16,
   },

@@ -37,7 +37,7 @@ export function QuickActions() {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    backgroundColor: BRAND_COLORS.background.default,
+    backgroundColor: BRAND_COLORS.primary.beSua,
     borderRadius: 16,
     padding: 16,
     justifyContent: 'space-around',
@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
   iconContainer: {
     width: 60,
     height: 60,
-    backgroundColor: BRAND_COLORS.primary.beSua,
+    backgroundColor: BRAND_COLORS.primary.xanhBo,
     borderRadius: 30,
     justifyContent: 'center',
     alignItems: 'center',

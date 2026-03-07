@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 14,
     fontFamily: 'SpaceGrotesk-Medium',
-    color: BRAND_COLORS.background.default,
+    color: BRAND_COLORS.primary.beSua,
     textAlign: 'center',
   },
 });

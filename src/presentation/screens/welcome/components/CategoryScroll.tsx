@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
   iconContainer: {
     width: WELCOME_LAYOUT.CATEGORY_ICON_SIZE,
     height: WELCOME_LAYOUT.CATEGORY_ICON_SIZE,
-    backgroundColor: BRAND_COLORS.primary.beSua,
+    backgroundColor: BRAND_COLORS.primary.xanhBo,
     borderRadius: WELCOME_LAYOUT.CATEGORY_ICON_BORDER_RADIUS,
     justifyContent: 'center',
     alignItems: 'center',
@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
   label: {
     fontSize: WELCOME_LAYOUT.CATEGORY_LABEL_SIZE,
     fontFamily: 'SpaceGrotesk-Medium',
-    color: BRAND_COLORS.primary.xanhReu,
+    color: BRAND_COLORS.secondary.nauEspresso,
     textAlign: 'center',
   },
   labelSelected: {

@@ -15,7 +15,7 @@ export function HomeSearchBar() {
 
   return (
     <TouchableOpacity style={styles.container} onPress={handleSearchPress} activeOpacity={0.8}>
-      <AppIcon name={HEADER_ICONS.SEARCH} size="sm" color="#999999" />
+      <AppIcon name={HEADER_ICONS.SEARCH} size="sm" color={BRAND_COLORS.secondary.nauCaramel} />
       <Text style={styles.placeholder}>Tìm kiếm</Text>
     </TouchableOpacity>
   );
@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     width: '100%',
-    backgroundColor: BRAND_COLORS.background.default,
+    backgroundColor: BRAND_COLORS.primary.beSua,
     borderRadius: HOME_LAYOUT.HOME_SEARCH_BAR_BORDER_RADIUS,
     paddingHorizontal: HOME_LAYOUT.HOME_SEARCH_BAR_PADDING_HORIZONTAL,
     paddingVertical: HOME_LAYOUT.HOME_SEARCH_BAR_PADDING_VERTICAL,
@@ -40,6 +40,6 @@ const styles = StyleSheet.create({
   placeholder: {
     fontSize: HOME_LAYOUT.HOME_SEARCH_BAR_FONT_SIZE,
     fontFamily: 'SpaceGrotesk-Medium',
-    color: '#999999',
+    color: BRAND_COLORS.secondary.nauCaramel,
   },
 });

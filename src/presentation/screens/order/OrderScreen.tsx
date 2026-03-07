@@ -117,7 +117,7 @@ export default function OrderScreen() {
 
 
   const renderHeader = useCallback(() => (
-    <View style={{ paddingTop: insets.top, backgroundColor: BRAND_COLORS.background.default }}>
+    <View style={{ paddingTop: insets.top, backgroundColor: BRAND_COLORS.screenBg.fresh }}>
       <OrderHeader />
     </View>
   ), [insets.top]);
@@ -126,6 +126,7 @@ export default function OrderScreen() {
     <BaseFullScreenLayout
       renderHeader={renderHeader}
       testID="order-screen"
+      backgroundColor={BRAND_COLORS.screenBg.fresh}
       safeAreaEdges={['left', 'right']}
     >
       <ScrollView showsVerticalScrollIndicator={false}>

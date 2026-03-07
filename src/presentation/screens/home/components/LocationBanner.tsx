@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     padding: 12,
-    backgroundColor: BRAND_COLORS.background.default,
+    backgroundColor: BRAND_COLORS.primary.beSua,
     borderRadius: 12,
     marginBottom: 16,
     shadowColor: '#000',

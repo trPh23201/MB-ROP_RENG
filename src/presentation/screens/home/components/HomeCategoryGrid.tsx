@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
   label: {
     fontSize: HOME_LAYOUT.HOME_CATEGORY_LABEL_SIZE,
     fontFamily: 'SpaceGrotesk-Medium',
-    color: BRAND_COLORS.primary.xanhReu,
+    color: BRAND_COLORS.secondary.nauEspresso,
     textAlign: 'center',
   },
 });

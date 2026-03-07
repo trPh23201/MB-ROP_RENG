@@ -5,7 +5,7 @@ import { ORDER_LAYOUT } from './OrderLayout';
 export const orderStyles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: BRAND_COLORS.background.default,
+    backgroundColor: BRAND_COLORS.screenBg.fresh,
   },
 
   header: {
@@ -14,7 +14,7 @@ export const orderStyles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: ORDER_LAYOUT.HEADER_PADDING_HORIZONTAL,
     paddingVertical: ORDER_LAYOUT.HEADER_PADDING_VERTICAL,
-    backgroundColor: BRAND_COLORS.background.default,
+    backgroundColor: BRAND_COLORS.screenBg.fresh,
   },
   headerLeft: {
     flexDirection: 'row',
@@ -24,7 +24,7 @@ export const orderStyles = StyleSheet.create({
   headerTitle: {
     fontSize: ORDER_LAYOUT.HEADER_TITLE_SIZE,
     fontFamily: 'Phudu-Bold',
-    color: BRAND_COLORS.primary.xanhReu,
+    color: BRAND_COLORS.ui.heading,
   },
   headerRight: {
     flexDirection: 'row',
@@ -40,7 +40,7 @@ export const orderStyles = StyleSheet.create({
   promoTitle: {
     fontSize: ORDER_LAYOUT.PROMO_TITLE_SIZE,
     fontFamily: 'Phudu-Bold',
-    color: BRAND_COLORS.primary.xanhReu,
+    color: BRAND_COLORS.ui.heading,
     marginBottom: 8,
   },
   promoCountdown: {
@@ -51,12 +51,12 @@ export const orderStyles = StyleSheet.create({
   promoCountdownLabel: {
     fontSize: ORDER_LAYOUT.PROMO_COUNTDOWN_SIZE,
     fontFamily: 'SpaceGrotesk-Medium',
-    color: '#666666',
+    color: BRAND_COLORS.ui.subtitle,
   },
   promoCountdownValue: {
     fontSize: ORDER_LAYOUT.PROMO_COUNTDOWN_SIZE,
     fontFamily: 'SpaceMono-Bold',
-    color: BRAND_COLORS.primary.xanhReu,
+    color: BRAND_COLORS.ui.heading,
   },
   promoScroll: {
     paddingHorizontal: ORDER_LAYOUT.PROMO_SECTION_PADDING,
@@ -66,7 +66,7 @@ export const orderStyles = StyleSheet.create({
   promoCard: {
     width: ORDER_LAYOUT.PROMO_CARD_WIDTH,
     marginRight: ORDER_LAYOUT.PROMO_CARD_GAP,
-    backgroundColor: BRAND_COLORS.background.default,
+    backgroundColor: BRAND_COLORS.primary.beSua,
     borderRadius: 12,
     borderWidth: 0.05,
     overflow: 'hidden',
@@ -97,7 +97,7 @@ export const orderStyles = StyleSheet.create({
   discountText: {
     fontSize: ORDER_LAYOUT.PROMO_DISCOUNT_BADGE_SIZE,
     fontFamily: 'Phudu-Bold',
-    color: BRAND_COLORS.background.default,
+    color: BRAND_COLORS.bta.primaryText,
   },
   percentBadge: {
     position: 'absolute',
@@ -113,7 +113,7 @@ export const orderStyles = StyleSheet.create({
   percentText: {
     fontSize: 11,
     fontFamily: 'Phudu-Bold',
-    color: BRAND_COLORS.background.default,
+    color: BRAND_COLORS.bta.primaryText,
   },
   promoInfo: {
     padding: 12,
@@ -121,7 +121,7 @@ export const orderStyles = StyleSheet.create({
   promoProductName: {
     fontSize: 14,
     fontFamily: 'SpaceGrotesk-Medium',
-    color: BRAND_COLORS.primary.xanhReu,
+    color: BRAND_COLORS.ui.heading,
     marginBottom: 8,
     minHeight: 40,
   },
@@ -134,16 +134,16 @@ export const orderStyles = StyleSheet.create({
   promoPrice: {
     fontSize: 16,
     fontFamily: 'Phudu-Bold',
-    color: BRAND_COLORS.primary.xanhReu,
+    color: BRAND_COLORS.ui.heading,
   },
   promoOriginalPrice: {
     fontSize: 12,
     fontFamily: 'SpaceGrotesk-Medium',
-    color: '#999999',
+    color: BRAND_COLORS.ui.placeholder,
     textDecorationLine: 'line-through',
   },
   chooseButton: {
-    backgroundColor: BRAND_COLORS.primary.beSua,
+    backgroundColor: BRAND_COLORS.bta.primaryBg,
     paddingVertical: 12,
     borderRadius: 24,
     alignItems: 'center',
@@ -151,7 +151,7 @@ export const orderStyles = StyleSheet.create({
   chooseButtonText: {
     fontSize: 16,
     fontFamily: 'Phudu-Bold',
-    color: BRAND_COLORS.primary.xanhReu,
+    color: BRAND_COLORS.bta.primaryText,
   },
   productSection: {
     paddingHorizontal: ORDER_LAYOUT.SECTION_PADDING,
@@ -160,7 +160,7 @@ export const orderStyles = StyleSheet.create({
   sectionTitle: {
     fontSize: ORDER_LAYOUT.SECTION_TITLE_SIZE,
     fontFamily: 'Phudu-Bold',
-    color: BRAND_COLORS.primary.xanhReu,
+    color: BRAND_COLORS.ui.heading,
     marginBottom: 16,
   },
   productItem: {
@@ -187,23 +187,23 @@ export const orderStyles = StyleSheet.create({
   productName: {
     fontSize: ORDER_LAYOUT.PRODUCT_NAME_SIZE,
     fontFamily: 'SpaceGrotesk-Medium',
-    color: BRAND_COLORS.primary.xanhReu,
+    color: BRAND_COLORS.ui.heading,
     marginBottom: 8,
   },
   productPrice: {
     fontSize: ORDER_LAYOUT.PRODUCT_PRICE_SIZE,
     fontFamily: 'Phudu-Bold',
-    color: BRAND_COLORS.primary.xanhReu,
+    color: BRAND_COLORS.ui.heading,
   },
   productAddButton: {
     width: ORDER_LAYOUT.ADD_BUTTON_SIZE,
     height: ORDER_LAYOUT.ADD_BUTTON_SIZE,
     borderRadius: ORDER_LAYOUT.ADD_BUTTON_SIZE,
-    backgroundColor: BRAND_COLORS.secondary.nauEspresso,
+    backgroundColor: BRAND_COLORS.bta.primaryBg,
     justifyContent: 'center',
     alignItems: 'center',
   },
   productAddText: {
-    color: BRAND_COLORS.background.default,
+    color: BRAND_COLORS.bta.primaryText,
   },
 });

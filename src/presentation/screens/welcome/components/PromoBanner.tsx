@@ -113,12 +113,12 @@ const styles = StyleSheet.create({
   bannerTitle: {
     fontSize: WELCOME_LAYOUT.PROMO_BANNER_TITLE_SIZE,
     fontFamily: 'Phudu-Bold',
-    color: BRAND_COLORS.primary.xanhReu,
+    color: BRAND_COLORS.secondary.reuDam,
   },
   bannerSubtitle: {
     fontSize: WELCOME_LAYOUT.PROMO_BANNER_SUBTITLE_SIZE,
     fontFamily: 'SpaceGrotesk-Medium',
-    color: BRAND_COLORS.primary.xanhReu,
+    color: BRAND_COLORS.secondary.nauEspresso,
     lineHeight: WELCOME_LAYOUT.PROMO_BANNER_SUBTITLE_LINE_HEIGHT,
   },
 

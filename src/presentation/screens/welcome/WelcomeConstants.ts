@@ -1,4 +1,5 @@
 import { IoniconsName } from '../../../infrastructure/icons';
+import { BRAND_COLORS } from '../../theme/colors';
 import { PROMO_ICONS, QUICK_ACTION_ICONS } from '../../theme/iconConstants';
 
 export const WELCOME_TEXT = {
@@ -23,28 +24,28 @@ export const WELCOME_TEXT = {
     { id: 'delivery', label: 'Giao hàng', icon: QUICK_ACTION_ICONS.DELIVERY },
     { id: 'takeaway', label: 'Mang đi', icon: QUICK_ACTION_ICONS.TAKEAWAY },
     { id: 'dine-in', label: 'Tại chỗ', icon: QUICK_ACTION_ICONS.DINE_IN },
-    { id: 'beans', label: 'Đổi Bean', icon: QUICK_ACTION_ICONS.BEANS },
+    { id: 'Loyaltys', label: 'Đổi Loyalty', icon: QUICK_ACTION_ICONS.LoyaltyS },
   ] as { id: string; label: string; icon: IoniconsName }[],
   PROMOS: [
     {
       id: '1',
       title: 'Càng đông càng vui',
       subtitle: 'ĐƠN LỚN TỪ 10 LY\nGiảm ngay 20% cho đơn hàng',
-      backgroundColor: '#87CEEB',
+      backgroundColor: BRAND_COLORS.secondary.xanhChanh,
       icon: PROMO_ICONS.CELEBRATION,
     },
     {
       id: '2',
       title: 'Ưu đãi buổi sáng',
       subtitle: 'Mua 1 tặng 1\nÁp dụng từ 6h-9h sáng',
-      backgroundColor: '#FFE4B5',
+      backgroundColor: BRAND_COLORS.secondary.hongSua,
       icon: PROMO_ICONS.SUNNY,
     },
     {
       id: '3',
       title: 'Tích điểm đổi quà',
       subtitle: 'Đến nhận và dùng tại\nBạn sẽ đến quầy nhận sản phẩm',
-      backgroundColor: '#98FB98',
+      backgroundColor: BRAND_COLORS.secondary.xanhNeon,
       icon: PROMO_ICONS.GIFT,
     },
   ] as { id: string; title: string; subtitle: string; backgroundColor: string; icon: IoniconsName }[],

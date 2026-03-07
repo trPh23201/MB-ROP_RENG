@@ -36,7 +36,7 @@ export function OrderAddressCard({ orderType, address, onChangeAddress, editable
                     <AppIcon
                         name="location"
                         size={20}
-                        color={hasAddress ? BRAND_COLORS.primary.xanhReu : '#999999'}
+                        color={hasAddress ? BRAND_COLORS.bta.primaryBg : BRAND_COLORS.ui.placeholder}
                     />
                 </View>
 
@@ -77,22 +77,22 @@ const styles = StyleSheet.create({
     headerTitle: {
         fontSize: TYPOGRAPHY.fontSize.md,
         fontFamily: TYPOGRAPHY.fontFamily.bodyBold,
-        color: BRAND_COLORS.text.primary,
+        color: BRAND_COLORS.ui.heading,
     },
     changeText: {
         fontSize: TYPOGRAPHY.fontSize.md,
         fontFamily: TYPOGRAPHY.fontFamily.bodyMedium,
-        color: BRAND_COLORS.secondary.camDam,
+        color: BRAND_COLORS.bta.primaryBg,
     },
     card: {
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: '#FFFFFF',
+        backgroundColor: BRAND_COLORS.screenBg.fresh,
         borderRadius: 12,
         paddingVertical: 14,
         paddingHorizontal: 14,
-        borderWidth: 1,
-        borderColor: '#F0F0F0',
+        borderWidth: 3,
+        borderColor: BRAND_COLORS.ui.placeholder,
         shadowColor: '#000000',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.06,
@@ -118,17 +118,17 @@ const styles = StyleSheet.create({
     addressName: {
         fontSize: 16,
         fontWeight: '700',
-        color: '#1A1A1A',
+        color: BRAND_COLORS.ui.heading,
         marginBottom: 2,
     },
     addressFull: {
         fontSize: 13,
-        color: '#888888',
+        color: BRAND_COLORS.ui.subtitle,
         lineHeight: 18,
     },
     placeholder: {
         fontSize: 15,
-        color: '#999999',
+        color: BRAND_COLORS.ui.placeholder,
         fontStyle: 'italic',
     },
     arrowContainer: {

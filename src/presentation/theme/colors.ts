@@ -1,70 +1,95 @@
 
 export const BRAND_COLORS = {
-  // Original Brand Colors (Keep for accents)
   primary: {
-    beSua: '#FAEDC0',      // Cream - For backgrounds, highlights
-    xanhBo: '#D4DF9A',     // Light Green - For secondary elements
-    xanhReu: '#606A37',    // Moss Green - For primary buttons, emphasis
+    beSua: '#FAEDC0',
+    xanhBo: '#D4DF9A',
+    xanhReu: '#606A37',
   },
 
   secondary: {
-    xanhChanh: '#BADA55',  // Xanh chanh
-    xanhNeon: '#D5E100',   // Xanh neon
-    nauEspresso: '#5B4537', // Nâu Espresso
-    hongSua: '#F1A5A1',    // Hồng sữa
-    reuDam: '#444E27',     // Rêu đậm
-    nauCaramel: '#BC9E70', // Nâu Caramel
-    vangNhat: '#F9E5A0',   // Light Yellow - For promotions
-    camNhat: '#FFB380',    // Light Orange - For special offers
-    camDam: '#fa7a24ff',
+    xanhChanh: '#BADA55',
+    xanhNeon: '#D5E100',
+    nauEspresso: '#5B4537',
+    hongSua: '#F1A5A1',
+    reuDam: '#444E27',
+    nauCaramel: '#BC9E70',
+    vangNhat: '#F9E5A0',
+    // camNhat: '#FFB380', 
+    // camDam: '#fa7a24ff',
   },
 
   text: {
-    primary: '#1A1A1A',      // Near black - Main text
-    secondary: '#4A4A4A',    // Dark gray - Supporting text
-    tertiary: '#8A8A8A',     // Medium gray - Hints, placeholders
-    disabled: '#BDBDBD',     // Light gray - Disabled state
-    inverse: '#FFFFFF',      // White - Text on dark backgrounds
-    accent: '#606A37',       // Moss green - Links, emphasis
+    primary: '#1A1A1A',
+    secondary: '#4A4A4A',
+    tertiary: '#8A8A8A',
+    disabled: '#BDBDBD',
+    inverse: '#FFFFFF',
+    accent: '#606A37',
   },
 
   background: {
-    primary: '#FFFFFF',      // Pure white - Main surfaces
-    secondary: '#F8F8F8',    // Off white - Card backgrounds
-    tertiary: '#F0F0F0',     // Light gray - Input fields
-    paper: '#FFFFFF',        // White - Modal, sheets
-    default: '#F5F5F5',      // Very light gray - App background
-    black: '#000000',        // Black - Dark mode backgrounds
+    primary: '#FFFFFF',
+    secondary: '#F8F8F8',
+    tertiary: '#F0F0F0',
+    paper: '#FFFFFF',
+    default: '#F5F5F5',
+    black: '#000000',
   },
 
   border: {
-    light: '#E8E8E8',        // Very light gray - Subtle dividers
-    medium: '#D0D0D0',       // Light gray - Standard borders
-    dark: '#A0A0A0',         // Medium gray - Emphasized borders
-    focus: '#606A37',        // Moss green - Focus state
+    light: '#E8E8E8',
+    medium: '#D0D0D0',
+    dark: '#A0A0A0',
+    focus: '#606A37',
   },
 
   semantic: {
-    success: '#4CAF50',      // Green - Success states
-    error: '#E74C3C',        // Red - Errors, destructive actions
-    warning: '#FF9800',      // Orange - Warnings, alerts
-    info: '#2196F3',         // Blue - Information, tips
+    success: '#4CAF50',
+    error: '#E74C3C',
+    warning: '#FF9800',
+    info: '#2196F3',
   },
 
   // OVERLAY (NEW)
   overlay: {
-    light: 'rgba(0, 0, 0, 0.3)',   // Light modal overlay
-    medium: 'rgba(0, 0, 0, 0.5)',  // Standard overlay
-    dark: 'rgba(0, 0, 0, 0.7)',    // Heavy overlay
+    light: 'rgba(0, 0, 0, 0.3)',
+    medium: 'rgba(0, 0, 0, 0.5)',
+    dark: 'rgba(0, 0, 0, 0.7)',
   },
 
-  // SHADOWS (NEW)
+  // SHADOWS
   shadow: {
-    light: 'rgba(0, 0, 0, 0.08)',  // Subtle shadow
-    medium: 'rgba(0, 0, 0, 0.15)',  // Standard shadow
-    heavy: 'rgba(0, 0, 0, 0.25)',   // Strong shadow
+    light: 'rgba(0, 0, 0, 0.08)',
+    medium: 'rgba(0, 0, 0, 0.15)',
+    heavy: 'rgba(0, 0, 0, 0.25)',
+  },
+
+  //Screen Backgrounds -> PRIMARY colors only
+  screenBg: {
+    warm: '#FAEDC0',
+    fresh: '#D4DF9A',
+    bold: '#606A37',
+    gradient: ['#606A37', '#D4DF9A', '#FAEDC0', '#FFFFFF'] as readonly string[],
+  },
+
+  //UI Elements -> SECONDARY colors only
+  ui: {
+    heading: '#444E27',
+    subtitle: '#5B4537',
+    placeholder: '#BC9E70',
+    badge: '#F1A5A1',
+    iconFill: '#BADA55',
+    promo: '#D5E100',
+  },
+
+  // Button Styles
+  bta: {
+    primaryBg: '#606A37',
+    primaryText: '#FFFFFF',
+    secondaryText: '#BC9E70',
+    accentBg: '#BADA55',
+    accentText: '#444E27',
   },
 };
 
-// Legacy aliases for backward compatibility
 export const COLORS = BRAND_COLORS;

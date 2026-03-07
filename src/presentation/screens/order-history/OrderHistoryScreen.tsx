@@ -4,6 +4,7 @@ import { ActivityIndicator, FlatList, RefreshControl, StyleSheet, Text, View } f
 import { Order } from "../../../domain/entities/Order";
 import { useAppSelector } from "../../../utils/hooks";
 import { BaseAuthenticatedLayout } from "../../layouts/BaseAuthenticatedLayout";
+import { BRAND_COLORS } from '../../theme/colors';
 import { ITEMS_PER_PAGE, ORDER_HISTORY_STRINGS, STATUS_CHIPS } from "./OrderHistoryConstants";
 import { OrderStatus } from "./OrderHistoryEnums";
 import { StatusChipData } from "./OrderHistoryInterfaces";
@@ -153,16 +154,16 @@ export default function OrderHistoryScreen() {
     if (!loadingMore) return null;
     return (
       <View style={styles.footerLoader}>
-        <ActivityIndicator size="small" color="#606A37" />
+        <ActivityIndicator size="small" color={BRAND_COLORS.bta.primaryBg} />
       </View>
     );
   }, [loadingMore]);
 
   if (loading && !refreshing) {
     return (
-      <BaseAuthenticatedLayout>
+      <BaseAuthenticatedLayout backgroundColor={BRAND_COLORS.screenBg.fresh}>
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#606A37" />
+          <ActivityIndicator size="large" color={BRAND_COLORS.bta.primaryBg} />
           <Text style={styles.loadingText}>{ORDER_HISTORY_STRINGS.LOADING}</Text>
         </View>
       </BaseAuthenticatedLayout>
@@ -170,13 +171,13 @@ export default function OrderHistoryScreen() {
   }
 
   return (
-    <BaseAuthenticatedLayout safeAreaEdges={['left', 'right']}>
+    <BaseAuthenticatedLayout backgroundColor={BRAND_COLORS.screenBg.fresh} safeAreaEdges={['left', 'right']}>
       {renderStatusChips()}
       <FlatList
         data={filteredOrders}
         keyExtractor={(item, index) => `${item.id}-${index}`}
         renderItem={({ item }) => <OrderHistoryItem order={item} onPress={() => handleOrderPress(item)} />}
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={handleRefresh} colors={["#606A37"]} />}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={handleRefresh} colors={[BRAND_COLORS.bta.primaryBg]} />}
         onEndReached={handleLoadMore}
         onEndReachedThreshold={0.5}
         initialNumToRender={10}
@@ -199,13 +200,13 @@ const styles = StyleSheet.create({
   loadingText: {
     marginTop: 12,
     fontSize: 14,
-    color: "#666666",
+    color: BRAND_COLORS.ui.subtitle,
   },
   chipsContainer: {
     paddingVertical: 12,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: BRAND_COLORS.screenBg.fresh,
     borderBottomWidth: 1,
-    borderBottomColor: "#F0F0F0",
+    borderBottomColor: BRAND_COLORS.ui.placeholder,
   },
   chipsContent: {
     paddingHorizontal: 16,
@@ -220,12 +221,12 @@ const styles = StyleSheet.create({
   emptyTitle: {
     fontSize: 18,
     fontWeight: "600",
-    color: "#333333",
+    color: BRAND_COLORS.ui.heading,
     marginBottom: 8,
   },
   emptyMessage: {
     fontSize: 14,
-    color: "#666666",
+    color: BRAND_COLORS.ui.subtitle,
     textAlign: "center",
     lineHeight: 20,
   },

@@ -60,7 +60,7 @@ export function RegisterPhoneInput({value, onChangeText, onSubmit, isValid, auto
         activeOpacity={0.8}
       >
         {isLoading ? (
-          <ActivityIndicator color={BRAND_COLORS.background.default} />
+          <ActivityIndicator color={BRAND_COLORS.bta.primaryText} />
         ) : (
           <Text style={[styles.buttonText, isValid && styles.buttonTextActive]}>
             {REGISTER_TEXT.REGISTER_BUTTON}
@@ -78,10 +78,10 @@ const styles = StyleSheet.create({
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: BRAND_COLORS.background.default,
+    backgroundColor: '#FFFFFF',
     borderRadius: REGISTER_LAYOUT.INPUT_BORDER_RADIUS,
     borderWidth: REGISTER_LAYOUT.INPUT_BORDER_WIDTH,
-    borderColor: '#E0E0E0',
+    borderColor: BRAND_COLORS.ui.placeholder,
     overflow: 'hidden',
   },
   countryCode: {
@@ -90,8 +90,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: REGISTER_LAYOUT.INPUT_PADDING_HORIZONTAL,
     paddingVertical: REGISTER_LAYOUT.INPUT_PADDING_VERTICAL,
     borderRightWidth: 1,
-    borderRightColor: '#E0E0E0',
-    backgroundColor: '#F5F5F5',
+    borderRightColor: BRAND_COLORS.ui.placeholder,
+    backgroundColor: BRAND_COLORS.screenBg.warm,
   },
   flag: {
     fontSize: 20,
@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
   code: {
     fontSize: REGISTER_LAYOUT.INPUT_FONT_SIZE,
     fontFamily: 'SpaceGrotesk-Medium',
-    color: BRAND_COLORS.primary.xanhReu,
+    color: BRAND_COLORS.ui.heading,
   },
   input: {
     flex: 1,
@@ -108,24 +108,24 @@ const styles = StyleSheet.create({
     paddingVertical: REGISTER_LAYOUT.INPUT_PADDING_VERTICAL,
     fontSize: REGISTER_LAYOUT.INPUT_FONT_SIZE,
     fontFamily: 'SpaceGrotesk-Medium',
-    color: BRAND_COLORS.primary.xanhReu,
+    color: BRAND_COLORS.ui.heading,
   },
   button: {
-    backgroundColor: '#E0E0E0',
+    backgroundColor: '#FFFFFF',
     borderRadius: REGISTER_LAYOUT.BUTTON_BORDER_RADIUS,
     paddingVertical: REGISTER_LAYOUT.BUTTON_PADDING_VERTICAL,
     alignItems: 'center',
     justifyContent: 'center',
   },
   buttonActive: {
-    backgroundColor: BRAND_COLORS.primary.xanhReu,
+    backgroundColor: BRAND_COLORS.bta.primaryBg,
   },
   buttonText: {
     fontSize: REGISTER_LAYOUT.BUTTON_FONT_SIZE,
     fontFamily: 'Phudu-Bold',
-    color: '#999999',
+    color: BRAND_COLORS.ui.subtitle,
   },
   buttonTextActive: {
-    color: BRAND_COLORS.background.default,
+    color: BRAND_COLORS.bta.primaryText,
   },
 });

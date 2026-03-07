@@ -36,7 +36,7 @@ export function LoginCard() {
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: BRAND_COLORS.background.default,
+    backgroundColor: BRAND_COLORS.primary.beSua,
     borderRadius: WELCOME_LAYOUT.CARD_BORDER_RADIUS,
     marginTop: WELCOME_LAYOUT.CARD_MARGIN_TOP,
     padding: WELCOME_LAYOUT.CARD_PADDING,
@@ -49,18 +49,18 @@ const styles = StyleSheet.create({
   title: {
     fontSize: WELCOME_LAYOUT.LOGIN_TITLE_SIZE,
     fontFamily: TYPOGRAPHY.fontFamily.heading,
-    color: BRAND_COLORS.primary.xanhReu,
+    color: BRAND_COLORS.secondary.reuDam,
     marginBottom: WELCOME_LAYOUT.LOGIN_TITLE_MARGIN_BOTTOM,
   },
   subtitle: {
     fontSize: WELCOME_LAYOUT.LOGIN_SUBTITLE_SIZE,
     fontFamily: TYPOGRAPHY.fontFamily.bodyMedium,
-    color: BRAND_COLORS.primary.xanhReu,
+    color: BRAND_COLORS.secondary.nauEspresso,
     lineHeight: WELCOME_LAYOUT.LOGIN_SUBTITLE_LINE_HEIGHT,
     marginBottom: WELCOME_LAYOUT.LOGIN_SUBTITLE_MARGIN_BOTTOM,
   },
   button: {
-    backgroundColor: BRAND_COLORS.secondary.nauEspresso,
+    backgroundColor: BRAND_COLORS.primary.xanhReu,
     borderRadius: WELCOME_LAYOUT.LOGIN_BUTTON_BORDER_RADIUS,
     paddingVertical: WELCOME_LAYOUT.LOGIN_BUTTON_PADDING_VERTICAL,
     alignItems: 'center',
@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: WELCOME_LAYOUT.LOGIN_BUTTON_TEXT_SIZE,
     fontFamily: TYPOGRAPHY.fontFamily.heading,
-    color: BRAND_COLORS.background.default,
+    color: BRAND_COLORS.primary.beSua,
   },
   loyaltyRow: {
     flexDirection: 'row',

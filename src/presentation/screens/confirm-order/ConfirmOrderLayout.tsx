@@ -18,7 +18,7 @@ export function ConfirmOrderLayout({ children }: ConfirmOrderLayoutProps) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: BRAND_COLORS.background.default,
+        backgroundColor: BRAND_COLORS.screenBg.warm,
     },
     content: {
         flex: 1,

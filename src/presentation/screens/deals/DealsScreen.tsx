@@ -37,6 +37,6 @@ export default function DealsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: BRAND_COLORS.background.default,
+    backgroundColor: BRAND_COLORS.screenBg.fresh,
   },
 });

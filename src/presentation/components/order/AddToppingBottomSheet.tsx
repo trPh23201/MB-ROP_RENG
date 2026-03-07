@@ -74,7 +74,7 @@ export const AddToppingBottomSheet = forwardRef<AddToppingRef, AddToppingBottomS
         >
             <View style={styles.header}>
                 <TouchableOpacity onPress={() => sheetRef.current?.dismiss()} style={styles.backButton}>
-                    <Ionicons name="chevron-back" size={24} color={BRAND_COLORS.text.primary} />
+                    <Ionicons name="chevron-back" size={24} color={BRAND_COLORS.ui.subtitle} />
                 </TouchableOpacity>
                 <View style={styles.headerTitleContainer}>
                     <Text style={styles.title}>{TOPPING_TEXT.TITLE}</Text>
@@ -97,7 +97,7 @@ export const AddToppingBottomSheet = forwardRef<AddToppingRef, AddToppingBottomS
                             disabled={!isSelected && selectedToppings.length >= 3}
                         >
                             <View style={[styles.checkbox, isSelected && styles.checkboxSelected]}>
-                                {isSelected && <Ionicons name="checkmark" size={16} color={BRAND_COLORS.text.inverse} />}
+                                {isSelected && <Ionicons name="checkmark" size={16} color={BRAND_COLORS.bta.primaryText} />}
                             </View>
                             <Text style={[styles.toppingName, !isSelected && selectedToppings.length >= 3 && styles.toppingDisabled]}>
                                 {topping.name}
@@ -115,12 +115,12 @@ AddToppingBottomSheet.displayName = 'AddToppingBottomSheet';
 
 const styles = StyleSheet.create({
     bottomSheetBackground: {
-        backgroundColor: BRAND_COLORS.background.default,
+        backgroundColor: BRAND_COLORS.primary.beSua,
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20,
     },
     indicator: {
-        backgroundColor: '#DDDDDD',
+        backgroundColor: BRAND_COLORS.secondary.nauEspresso,
         width: 40,
     },
     header: {
@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         paddingVertical: 10,
         borderBottomWidth: 1,
-        borderBottomColor: BRAND_COLORS.border.light,
+        borderBottomColor: BRAND_COLORS.ui.placeholder,
     },
     backButton: {
         padding: 4,
@@ -142,12 +142,12 @@ const styles = StyleSheet.create({
     title: {
         fontSize: TYPOGRAPHY.fontSize.base,
         fontFamily: TYPOGRAPHY.fontFamily.bodyBold,
-        color: BRAND_COLORS.text.primary,
+        color: BRAND_COLORS.ui.heading,
     },
     subtitle: {
         fontSize: TYPOGRAPHY.fontSize.xs,
         fontFamily: TYPOGRAPHY.fontFamily.bodyRegular,
-        color: BRAND_COLORS.text.tertiary,
+        color: BRAND_COLORS.ui.subtitle,
     },
     applyHeaderButton: {
         paddingHorizontal: 6,
@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingVertical: 10,
         borderBottomWidth: 1,
-        borderBottomColor: BRAND_COLORS.border.light,
+        borderBottomColor: BRAND_COLORS.ui.placeholder,
         gap: 12,
     },
     checkbox: {
@@ -175,7 +175,7 @@ const styles = StyleSheet.create({
         height: 20,
         borderRadius: 4,
         borderWidth: 2,
-        borderColor: BRAND_COLORS.text.tertiary,
+        borderColor: BRAND_COLORS.ui.placeholder,
         justifyContent: 'center',
         alignItems: 'center',
     },
@@ -187,14 +187,14 @@ const styles = StyleSheet.create({
         flex: 1,
         fontSize: TYPOGRAPHY.fontSize.base,
         fontFamily: TYPOGRAPHY.fontFamily.bodyRegular,
-        color: BRAND_COLORS.text.primary,
+        color: BRAND_COLORS.ui.heading,
     },
     toppingDisabled: {
-        color: BRAND_COLORS.text.tertiary,
+        color: BRAND_COLORS.ui.placeholder,
     },
     toppingPrice: {
         fontSize: TYPOGRAPHY.fontSize.base,
         fontFamily: TYPOGRAPHY.fontFamily.monoBold,
-        color: BRAND_COLORS.text.primary,
+        color: BRAND_COLORS.ui.heading,
     },
 });

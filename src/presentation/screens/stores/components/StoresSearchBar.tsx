@@ -16,11 +16,11 @@ export function StoresSearchBar({ value, onChangeText }: StoresSearchBarProps) {
   return (
     <View style={styles.container}>
       <View style={styles.searchInput}>
-        <AppIcon name={HEADER_ICONS.SEARCH} size="sm" color="#999999" />
+        <AppIcon name={HEADER_ICONS.SEARCH} size="sm" color={BRAND_COLORS.secondary.nauCaramel} />
         <TextInput
           style={styles.input}
           placeholder={STORES_TEXT.SEARCH_PLACEHOLDER}
-          placeholderTextColor="#999999"
+          placeholderTextColor={BRAND_COLORS.secondary.nauCaramel}
           value={value}
           onChangeText={onChangeText}
         />
@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: BRAND_COLORS.background.default,
+    backgroundColor: BRAND_COLORS.primary.beSua,
     borderWidth: 0.05,
     borderRadius: STORES_LAYOUT.SEARCH_BAR_BORDER_RADIUS,
     paddingHorizontal: STORES_LAYOUT.SEARCH_BAR_PADDING_HORIZONTAL,
@@ -59,12 +59,12 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: STORES_LAYOUT.SEARCH_INPUT_FONT_SIZE,
     fontFamily: 'SpaceGrotesk-Medium',
-    color: BRAND_COLORS.primary.xanhReu,
+    color: BRAND_COLORS.secondary.reuDam,
   },
   mapButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: BRAND_COLORS.background.default,
+    backgroundColor: BRAND_COLORS.primary.beSua,
     borderRadius: STORES_LAYOUT.MAP_BUTTON_BORDER_RADIUS,
     paddingHorizontal: STORES_LAYOUT.MAP_BUTTON_PADDING_HORIZONTAL,
     paddingVertical: STORES_LAYOUT.MAP_BUTTON_PADDING_VERTICAL,
@@ -79,6 +79,6 @@ const styles = StyleSheet.create({
   mapButtonText: {
     fontSize: STORES_LAYOUT.MAP_BUTTON_FONT_SIZE,
     fontFamily: 'SpaceGrotesk-Medium',
-    color: BRAND_COLORS.primary.xanhReu,
+    color: BRAND_COLORS.secondary.reuDam,
   },
 });

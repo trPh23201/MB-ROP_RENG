@@ -31,7 +31,7 @@ export function OrderProductItem({ item, onPress, editable = true }: OrderProduc
         >
             {editable && (
                 <View>
-                    <AppIcon name="create-outline" size={20} color={BRAND_COLORS.secondary.nauEspresso} />
+                    <AppIcon name="create-outline" size={20} color={BRAND_COLORS.ui.subtitle} />
                 </View>
             )}
 
@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
         minHeight: 64,
         paddingVertical: 12,
         paddingHorizontal: 16,
-        backgroundColor: BRAND_COLORS.background.primary,
+        backgroundColor: BRAND_COLORS.screenBg.fresh,
         gap: 12,
     },
     quantityContainer: {
@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
     quantityText: {
         fontSize: TYPOGRAPHY.fontSize.base,
         fontFamily: TYPOGRAPHY.fontFamily.bodyBold,
-        color: BRAND_COLORS.text.primary,
+        color: BRAND_COLORS.ui.heading,
     },
     productInfo: {
         flex: 1,
@@ -85,22 +85,22 @@ const styles = StyleSheet.create({
     productName: {
         fontSize: TYPOGRAPHY.fontSize.md,
         fontFamily: TYPOGRAPHY.fontFamily.bodyMedium,
-        color: BRAND_COLORS.text.primary,
+        color: BRAND_COLORS.ui.heading,
     },
     productOptions: {
         fontSize: TYPOGRAPHY.fontSize.sm,
         fontFamily: TYPOGRAPHY.fontFamily.bodyRegular,
-        color: BRAND_COLORS.text.tertiary,
+        color: BRAND_COLORS.ui.subtitle,
     },
     productPrice: {
         fontSize: TYPOGRAPHY.fontSize.lg,
         fontFamily: TYPOGRAPHY.fontFamily.monoBold,
-        color: BRAND_COLORS.text.primary,
+        color: BRAND_COLORS.ui.heading,
     },
     productTopping: {
         fontSize: TYPOGRAPHY.fontSize.xs,
         fontFamily: TYPOGRAPHY.fontFamily.bodyRegular,
-        color: BRAND_COLORS.secondary.nauEspresso,
+        color: BRAND_COLORS.ui.subtitle,
         marginTop: 2,
     },
 });

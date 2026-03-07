@@ -38,12 +38,14 @@ export function StoreCard({ store, onPress }: StoreCardProps) {
 const styles = StyleSheet.create({
   card: {
     flexDirection: 'row',
-    backgroundColor: BRAND_COLORS.background.default,
+    backgroundColor: BRAND_COLORS.primary.beSua,
     borderRadius: STORES_LAYOUT.STORE_CARD_BORDER_RADIUS,
     padding: STORES_LAYOUT.STORE_CARD_PADDING,
     marginBottom: STORES_LAYOUT.STORE_CARD_MARGIN_BOTTOM,
     gap: STORES_LAYOUT.STORE_CARD_GAP,
-    borderWidth: 0.05,
+    borderWidth: 0,
+    borderLeftWidth: 4,
+    borderLeftColor: BRAND_COLORS.secondary.nauEspresso,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,
@@ -54,7 +56,7 @@ const styles = StyleSheet.create({
     width: STORES_LAYOUT.STORE_IMAGE_SIZE,
     height: STORES_LAYOUT.STORE_IMAGE_SIZE,
     borderRadius: STORES_LAYOUT.STORE_IMAGE_BORDER_RADIUS,
-    backgroundColor: BRAND_COLORS.primary.beSua,
+    backgroundColor: BRAND_COLORS.primary.xanhBo,
     borderWidth: 0.05,
     shadowColor: '#000',
     shadowOffset: { width: 2, height: 2 },
@@ -69,18 +71,18 @@ const styles = StyleSheet.create({
   brandName: {
     fontSize: STORES_LAYOUT.STORE_BRAND_FONT_SIZE,
     fontFamily: 'SpaceGrotesk-Medium',
-    color: '#999999',
+    color: BRAND_COLORS.secondary.hongSua,
     marginBottom: 4,
   },
   name: {
     fontSize: STORES_LAYOUT.STORE_NAME_FONT_SIZE,
     fontFamily: 'Phudu-Bold',
-    color: BRAND_COLORS.primary.xanhReu,
+    color: BRAND_COLORS.secondary.reuDam,
     marginBottom: STORES_LAYOUT.STORE_NAME_MARGIN_BOTTOM,
   },
   distance: {
     fontSize: STORES_LAYOUT.STORE_DISTANCE_FONT_SIZE,
     fontFamily: 'SpaceGrotesk-Medium',
-    color: '#666666',
+    color: BRAND_COLORS.secondary.nauEspresso,
   },
 });

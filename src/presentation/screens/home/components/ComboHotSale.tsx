@@ -161,7 +161,7 @@ const styles = StyleSheet.create({
   countdownLabel: {
     fontSize: HOME_LAYOUT.COMBO_COUNTDOWN_LABEL_FONT_SIZE,
     fontFamily: 'SpaceGrotesk-Medium',
-    color: '#666666',
+    color: BRAND_COLORS.secondary.nauEspresso,
   },
   countdownValue: {
     fontSize: HOME_LAYOUT.COMBO_COUNTDOWN_VALUE_FONT_SIZE,
@@ -175,7 +175,7 @@ const styles = StyleSheet.create({
   },
   productCard: {
     width: HOME_LAYOUT.COMBO_PRODUCT_CARD_WIDTH,
-    backgroundColor: BRAND_COLORS.background.default,
+    backgroundColor: BRAND_COLORS.primary.beSua,
     borderRadius: HOME_LAYOUT.COMBO_PRODUCT_CARD_BORDER_RADIUS,
     marginBottom: HOME_LAYOUT.COMBO_PRODUCT_CARD_MARGIN_BOTTOM,
     shadowColor: '#000',
@@ -210,7 +210,7 @@ const styles = StyleSheet.create({
   discountText: {
     fontSize: HOME_LAYOUT.COMBO_DISCOUNT_BADGE_FONT_SIZE,
     fontFamily: 'Phudu-Bold',
-    color: BRAND_COLORS.background.default,
+    color: BRAND_COLORS.primary.beSua,
   },
   bestSellerBadge: {
     position: 'absolute',
@@ -226,7 +226,7 @@ const styles = StyleSheet.create({
   bestSellerText: {
     fontSize: 9,
     fontFamily: 'Phudu-Bold',
-    color: BRAND_COLORS.background.default,
+    color: BRAND_COLORS.primary.beSua,
     textAlign: 'center',
     lineHeight: 12,
   },

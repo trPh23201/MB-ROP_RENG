@@ -100,7 +100,7 @@ export default function RegisterScreen() {
             <Ionicons
               name="arrow-back"
               size={24}
-              color={BRAND_COLORS.primary.xanhReu}
+              color={BRAND_COLORS.bta.primaryText}
             />
           </TouchableOpacity>
           <Text style={styles.headerTitle}>{REGISTER_TEXT.HEADER_TITLE}</Text>
@@ -167,7 +167,7 @@ export default function RegisterScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: BRAND_COLORS.background.default,
+    backgroundColor: BRAND_COLORS.screenBg.bold,
   },
   header: {
     flexDirection: 'row',
@@ -175,8 +175,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: REGISTER_LAYOUT.HEADER_PADDING_HORIZONTAL,
     paddingVertical: REGISTER_LAYOUT.HEADER_PADDING_VERTICAL,
-    borderBottomWidth: 1,
-    borderBottomColor: '#E0E0E0',
+    backgroundColor: BRAND_COLORS.screenBg.bold,
+    borderBottomColor: BRAND_COLORS.screenBg.fresh,
   },
   backButton: {
     width: REGISTER_LAYOUT.BACK_BUTTON_SIZE,
@@ -187,13 +187,14 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: REGISTER_LAYOUT.HEADER_TITLE_FONT_SIZE,
     fontFamily: 'Phudu-Bold',
-    color: BRAND_COLORS.primary.xanhReu,
+    color: BRAND_COLORS.bta.primaryText,
   },
   headerRight: {
     width: REGISTER_LAYOUT.BACK_BUTTON_SIZE,
   },
   keyboardAvoid: {
     flex: 1,
+    backgroundColor: BRAND_COLORS.screenBg.fresh,
   },
   scrollView: {
     flex: 1,
@@ -210,21 +211,21 @@ const styles = StyleSheet.create({
   welcomeText: {
     fontSize: REGISTER_LAYOUT.WELCOME_FONT_SIZE,
     fontFamily: 'SpaceGrotesk-Medium',
-    color: BRAND_COLORS.primary.xanhReu,
+    color: BRAND_COLORS.ui.heading,
     textAlign: 'center',
     marginBottom: REGISTER_LAYOUT.WELCOME_MARGIN_BOTTOM,
   },
   brandName: {
     fontSize: REGISTER_LAYOUT.BRAND_NAME_FONT_SIZE,
     fontFamily: 'Phudu-Bold',
-    color: BRAND_COLORS.primary.xanhReu,
+    color: BRAND_COLORS.ui.heading,
     textAlign: 'center',
     marginBottom: REGISTER_LAYOUT.BRAND_NAME_MARGIN_BOTTOM,
   },
   subtitle: {
     fontSize: REGISTER_LAYOUT.SUBTITLE_FONT_SIZE,
     fontFamily: 'SpaceGrotesk-Medium',
-    color: '#666666',
+    color: BRAND_COLORS.ui.subtitle,
     textAlign: 'center',
   },
   formContainer: {
@@ -240,12 +241,12 @@ const styles = StyleSheet.create({
   hasAccountText: {
     fontSize: REGISTER_LAYOUT.LINK_FONT_SIZE,
     fontFamily: 'SpaceGrotesk-Medium',
-    color: BRAND_COLORS.primary.xanhReu,
+    color: BRAND_COLORS.ui.subtitle,
   },
   loginLinkText: {
     fontSize: REGISTER_LAYOUT.LINK_FONT_SIZE,
     fontFamily: 'SpaceGrotesk-Bold',
-    color: BRAND_COLORS.primary.xanhReu,
+    color: BRAND_COLORS.bta.primaryBg,
     textDecorationLine: 'underline',
   },
 });

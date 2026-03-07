@@ -194,7 +194,7 @@ export default function ConfirmOrderScreen() {
                     <View style={styles.paymentSection}>
                         <Text style={styles.paymentTitle}>{CONFIRM_ORDER_TEXT.PAYMENT_SECTION_TITLE}</Text>
                         <View style={styles.paymentCard}>
-                            <AppIcon name="card-outline" size={24} color={BRAND_COLORS.primary.xanhReu} />
+                            <AppIcon name="card-outline" size={24} color={BRAND_COLORS.bta.primaryBg} />
                             <Text style={styles.paymentMethod}>
                                 {PAYMENT_METHOD_LABELS[confirmedOrder.paymentMethod] || confirmedOrder.paymentMethod}
                             </Text>
@@ -216,7 +216,7 @@ export default function ConfirmOrderScreen() {
                 <Modal visible={isSubmitting} transparent statusBarTranslucent animationType="fade">
                     <View style={styles.overlayContainer}>
                         <View style={styles.loadingBox}>
-                            <ActivityIndicator size="large" color={BRAND_COLORS.primary.xanhReu} />
+                            <ActivityIndicator size="large" color={BRAND_COLORS.bta.primaryBg} />
                             <Text style={styles.loadingText}>Đang gửi đơn hàng...</Text>
                         </View>
                     </View>
@@ -236,8 +236,8 @@ const styles = StyleSheet.create({
         height: 56,
         paddingHorizontal: 16,
         borderBottomWidth: 1,
-        borderBottomColor: BRAND_COLORS.border.light,
-        backgroundColor: BRAND_COLORS.background.primary,
+        borderBottomColor: BRAND_COLORS.ui.placeholder,
+        backgroundColor: BRAND_COLORS.screenBg.bold,
     },
     backButton: {
         width: 40,
@@ -248,14 +248,14 @@ const styles = StyleSheet.create({
     headerTitle: {
         fontSize: TYPOGRAPHY.fontSize.md,
         fontFamily: TYPOGRAPHY.fontFamily.bodyBold,
-        color: BRAND_COLORS.text.primary,
+        color: BRAND_COLORS.bta.primaryText,
     },
     headerRight: {
         width: 40,
     },
     scrollView: {
         flex: 1,
-        backgroundColor: BRAND_COLORS.background.default,
+        backgroundColor: BRAND_COLORS.primary.beSua,
     },
     contentContainer: {
         padding: 16,
@@ -270,7 +270,7 @@ const styles = StyleSheet.create({
         marginTop: 12,
         fontSize: TYPOGRAPHY.fontSize.base,
         fontFamily: TYPOGRAPHY.fontFamily.bodyRegular,
-        color: BRAND_COLORS.text.secondary,
+        color: BRAND_COLORS.ui.subtitle,
     },
     errorContainer: {
         flex: 1,
@@ -281,26 +281,26 @@ const styles = StyleSheet.create({
     errorTitle: {
         fontSize: TYPOGRAPHY.fontSize.lg,
         fontFamily: TYPOGRAPHY.fontFamily.bodyBold,
-        color: BRAND_COLORS.text.primary,
+        color: BRAND_COLORS.ui.heading,
         marginBottom: 8,
     },
     errorMessage: {
         fontSize: TYPOGRAPHY.fontSize.base,
         fontFamily: TYPOGRAPHY.fontFamily.bodyRegular,
-        color: BRAND_COLORS.text.secondary,
+        color: BRAND_COLORS.ui.subtitle,
         textAlign: 'center',
         marginBottom: 24,
     },
     retryButton: {
         paddingHorizontal: 24,
         paddingVertical: 12,
-        backgroundColor: BRAND_COLORS.primary.xanhReu,
+        backgroundColor: BRAND_COLORS.bta.primaryBg,
         borderRadius: 12,
     },
     retryButtonText: {
         fontSize: TYPOGRAPHY.fontSize.base,
         fontFamily: TYPOGRAPHY.fontFamily.bodyMedium,
-        color: BRAND_COLORS.text.inverse,
+        color: BRAND_COLORS.bta.primaryText,
     },
     paymentSection: {
         gap: 12,
@@ -308,22 +308,22 @@ const styles = StyleSheet.create({
     paymentTitle: {
         fontSize: TYPOGRAPHY.fontSize.md,
         fontFamily: TYPOGRAPHY.fontFamily.bodyBold,
-        color: BRAND_COLORS.text.primary,
+        color: BRAND_COLORS.ui.heading,
     },
     paymentCard: {
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: BRAND_COLORS.background.primary,
+        backgroundColor: BRAND_COLORS.screenBg.fresh,
         borderRadius: 12,
         padding: 16,
-        borderWidth: 1,
-        borderColor: BRAND_COLORS.border.light,
+        borderWidth: 3,
+        borderColor: BRAND_COLORS.ui.placeholder,
         gap: 12,
     },
     paymentMethod: {
         fontSize: TYPOGRAPHY.fontSize.base,
         fontFamily: TYPOGRAPHY.fontFamily.bodyMedium,
-        color: BRAND_COLORS.text.primary,
+        color: BRAND_COLORS.ui.heading,
     },
     footerContainer: {
         position: 'absolute',
@@ -338,7 +338,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     loadingBox: {
-        backgroundColor: BRAND_COLORS.background.primary,
+        backgroundColor: BRAND_COLORS.screenBg.warm,
         padding: 24,
         borderRadius: 16,
         alignItems: 'center',

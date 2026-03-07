@@ -325,7 +325,7 @@ const styles = StyleSheet.create({
   greetingIcon: { color: BRAND_COLORS.primary.beSua },
   greetingText: {
     fontSize: HOME_LAYOUT.GREETING_TEXT_SIZE,
-    fontFamily: 'SpaceGrotesk-Medium',
+    fontFamily: 'Phudu-Bold',
     color: BRAND_COLORS.primary.beSua,
   },
   headerIcons: { flexDirection: 'row', alignItems: 'center', gap: 12 },
@@ -430,7 +430,7 @@ const styles = StyleSheet.create({
   userLocationText: {
     fontSize: 12,
     fontFamily: 'SpaceGrotesk-Regular',
-    color: BRAND_COLORS.secondary.reuDam,
+    color: BRAND_COLORS.secondary.nauEspresso,
     marginTop: 4,
   },
 });

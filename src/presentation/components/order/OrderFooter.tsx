@@ -41,7 +41,7 @@ export function OrderFooter({ orderType, totalItems, totalPrice, buttonText, onB
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: BRAND_COLORS.secondary.vangNhat,
+        backgroundColor: BRAND_COLORS.screenBg.warm,
         paddingTop: 24,
         paddingHorizontal: 20,
         borderTopLeftRadius: 20,
@@ -61,18 +61,18 @@ const styles = StyleSheet.create({
     infoText: {
         fontSize: TYPOGRAPHY.fontSize.base,
         fontFamily: TYPOGRAPHY.fontFamily.bodyMedium,
-        color: BRAND_COLORS.text.primary,
+        color: BRAND_COLORS.ui.heading,
     },
     totalPrice: {
         fontSize: TYPOGRAPHY.fontSize.xl,
         fontFamily: TYPOGRAPHY.fontFamily.monoBold,
-        color: BRAND_COLORS.text.primary,
+        color: BRAND_COLORS.ui.heading,
     },
     button: {
         height: 56,
         width: '60%',
         alignSelf: 'center',
-        backgroundColor: BRAND_COLORS.primary.xanhReu,
+        backgroundColor: BRAND_COLORS.bta.primaryBg,
         borderRadius: 16,
         justifyContent: 'center',
         alignItems: 'center',
@@ -86,11 +86,11 @@ const styles = StyleSheet.create({
     buttonText: {
         fontSize: TYPOGRAPHY.fontSize.lg,
         fontFamily: TYPOGRAPHY.fontFamily.bodyBold,
-        color: BRAND_COLORS.text.inverse,
+        color: BRAND_COLORS.bta.primaryText,
         letterSpacing: 1,
     },
     buttonDisabled: {
         opacity: 0.6,
-        backgroundColor: '#CCCCCC',
+        backgroundColor: BRAND_COLORS.ui.placeholder,
     },
 });

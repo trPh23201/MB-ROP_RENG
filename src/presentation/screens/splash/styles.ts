@@ -4,7 +4,7 @@ import { BRAND_COLORS } from '../../theme/colors';
 export const splashStyles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: BRAND_COLORS.background.default,
+    backgroundColor: BRAND_COLORS.screenBg.bold,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -22,7 +22,7 @@ export const splashStyles = StyleSheet.create({
     alignItems: 'center',
   },
   logoText: {
-    color: BRAND_COLORS.background.default,
+    color: BRAND_COLORS.primary.beSua,
     fontSize: 16,
     textAlign: 'center',
   },

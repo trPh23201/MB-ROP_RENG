@@ -10,7 +10,7 @@ export const preOrderStyles = StyleSheet.create({
   // Common
   divider: {
     height: 1,
-    backgroundColor: BRAND_COLORS.background.default,
+    backgroundColor: BRAND_COLORS.ui.placeholder,
   },
   
   // Shadows

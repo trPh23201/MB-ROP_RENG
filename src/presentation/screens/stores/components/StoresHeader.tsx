@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: STORES_LAYOUT.HEADER_TITLE_SIZE,
     fontFamily: 'Phudu-Bold',
-    color: BRAND_COLORS.primary.xanhReu,
+    color: BRAND_COLORS.secondary.reuDam,
   },
   iconGroup: {
     flexDirection: 'row',
@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
     position: 'relative',
     width: STORES_LAYOUT.HEADER_ICON_SIZE,
     height: STORES_LAYOUT.HEADER_ICON_SIZE,
-    backgroundColor: BRAND_COLORS.background.default,
+    backgroundColor: BRAND_COLORS.primary.beSua,
     borderRadius: STORES_LAYOUT.HEADER_ICON_BORDER_RADIUS,
     justifyContent: 'center',
     alignItems: 'center',
@@ -92,6 +92,6 @@ const styles = StyleSheet.create({
   badgeText: {
     fontSize: STORES_LAYOUT.HEADER_BADGE_FONT_SIZE,
     fontFamily: 'Phudu-Bold',
-    color: BRAND_COLORS.background.default,
+    color: '#FFFFFF',
   },
 });

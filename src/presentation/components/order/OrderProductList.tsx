@@ -53,9 +53,9 @@ export function OrderProductList({
 const styles = StyleSheet.create({
     container: {
         borderRadius: 12,
-        backgroundColor: BRAND_COLORS.background.primary,
-        borderColor: BRAND_COLORS.border.light,
-        borderWidth: 1,
+        backgroundColor: BRAND_COLORS.screenBg.fresh,
+        borderColor: BRAND_COLORS.ui.placeholder,
+        borderWidth: 3,
         paddingVertical: 8,
         marginBottom: 16,
     },
@@ -69,12 +69,12 @@ const styles = StyleSheet.create({
     title: {
         fontSize: TYPOGRAPHY.fontSize.base,
         fontFamily: TYPOGRAPHY.fontFamily.bodyBold,
-        color: BRAND_COLORS.text.primary,
+        color: BRAND_COLORS.ui.heading,
     },
     addButton: {
         fontSize: TYPOGRAPHY.fontSize.md,
         fontFamily: TYPOGRAPHY.fontFamily.bodyMedium,
-        color: BRAND_COLORS.secondary.camDam,
+        color: BRAND_COLORS.bta.primaryBg,
     },
     emptyContainer: {
         paddingVertical: 40,
@@ -83,6 +83,6 @@ const styles = StyleSheet.create({
     emptyText: {
         fontSize: TYPOGRAPHY.fontSize.base,
         fontFamily: TYPOGRAPHY.fontFamily.bodyRegular,
-        color: BRAND_COLORS.text.tertiary,
+        color: BRAND_COLORS.ui.placeholder,
     },
 });

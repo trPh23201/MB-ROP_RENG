@@ -32,7 +32,7 @@ export function HomeQuickActions() {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    backgroundColor: BRAND_COLORS.background.default,
+    backgroundColor: BRAND_COLORS.primary.beSua,
     borderRadius: HOME_LAYOUT.HOME_QUICK_ACTION_CONTAINER_BORDER_RADIUS,
     padding: HOME_LAYOUT.HOME_QUICK_ACTION_CONTAINER_PADDING,
     justifyContent: 'space-around',
@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
   iconContainer: {
     width: HOME_LAYOUT.HOME_QUICK_ACTION_ICON_SIZE,
     height: HOME_LAYOUT.HOME_QUICK_ACTION_ICON_SIZE,
-    backgroundColor: BRAND_COLORS.primary.beSua,
+    backgroundColor: BRAND_COLORS.primary.xanhBo,
     borderRadius: HOME_LAYOUT.HOME_QUICK_ACTION_ICON_BORDER_RADIUS,
     justifyContent: 'center',
     alignItems: 'center',

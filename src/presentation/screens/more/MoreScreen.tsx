@@ -108,7 +108,7 @@ export default function MoreScreen() {
     <BaseFullScreenLayout
       renderHeader={() => <MoreHeader />}
       safeAreaEdges={['left', 'right']}
-      backgroundColor={BRAND_COLORS.background.paper}
+      backgroundColor={BRAND_COLORS.screenBg.fresh}
     >
       <ScrollView showsVerticalScrollIndicator={false}>
         <UtilityGrid onItemPress={handleMenuPress} />

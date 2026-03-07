@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
   brandPlaceholderText: {
     fontSize: 14,
     fontFamily: 'Phudu-Bold',
-    color: BRAND_COLORS.primary.xanhReu,
+    color: BRAND_COLORS.secondary.nauEspresso,
     textAlign: 'center',
   },
 });

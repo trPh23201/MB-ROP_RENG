@@ -39,7 +39,7 @@ export function OrderPriceSection({ subtotal, shippingFee, discountAmount = 0, o
                         activeOpacity={0.7}
                     >
                         <Text style={styles.promotionLabel}>{ORDER_TEXT.PROMOTION_LABEL}</Text>
-                        <Ionicons name="chevron-forward" size={20} color={BRAND_COLORS.text.tertiary} />
+                        <Ionicons name="chevron-forward" size={20} color={BRAND_COLORS.ui.placeholder} />
                     </TouchableOpacity>
                 )}
 
@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
     title: {
         fontSize: TYPOGRAPHY.fontSize.md,
         fontFamily: TYPOGRAPHY.fontFamily.bodyBold,
-        color: BRAND_COLORS.text.primary,
+        color: BRAND_COLORS.ui.heading,
     },
     content: {
         gap: 12,
@@ -74,17 +74,17 @@ const styles = StyleSheet.create({
     label: {
         fontSize: TYPOGRAPHY.fontSize.base,
         fontFamily: TYPOGRAPHY.fontFamily.bodyRegular,
-        color: BRAND_COLORS.text.secondary,
+        color: BRAND_COLORS.ui.subtitle,
     },
     value: {
         fontSize: TYPOGRAPHY.fontSize.md,
         fontFamily: TYPOGRAPHY.fontFamily.monoBold,
-        color: BRAND_COLORS.text.primary,
+        color: BRAND_COLORS.ui.heading,
     },
     discountValue: {
         fontSize: TYPOGRAPHY.fontSize.md,
         fontFamily: TYPOGRAPHY.fontFamily.monoBold,
-        color: BRAND_COLORS.primary.xanhReu,
+        color: BRAND_COLORS.bta.primaryBg,
     },
     promotionRow: {
         flexDirection: 'row',
@@ -95,11 +95,11 @@ const styles = StyleSheet.create({
     promotionLabel: {
         fontSize: TYPOGRAPHY.fontSize.base,
         fontFamily: TYPOGRAPHY.fontFamily.bodyRegular,
-        color: BRAND_COLORS.primary.xanhReu,
+        color: BRAND_COLORS.bta.primaryBg,
     },
     divider: {
         height: 1,
-        backgroundColor: BRAND_COLORS.border.light,
+        backgroundColor: BRAND_COLORS.ui.placeholder,
         marginVertical: 4,
     },
     totalRow: {
@@ -111,11 +111,11 @@ const styles = StyleSheet.create({
     totalLabel: {
         fontSize: TYPOGRAPHY.fontSize.md,
         fontFamily: TYPOGRAPHY.fontFamily.bodyBold,
-        color: BRAND_COLORS.text.primary,
+        color: BRAND_COLORS.ui.heading,
     },
     totalValue: {
         fontSize: 22,
         fontFamily: TYPOGRAPHY.fontFamily.monoBold,
-        color: BRAND_COLORS.primary.xanhReu,
+        color: BRAND_COLORS.bta.primaryBg,
     },
 });

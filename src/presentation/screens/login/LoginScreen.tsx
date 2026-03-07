@@ -6,7 +6,7 @@ import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-na
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { scheduleOnRN } from 'react-native-worklets';
 import { BRAND_COLORS } from '../../theme/colors';
-import { OtpVerificationRef, OtpVerificationBottomSheet } from '../otp-verification/OtpVerificationBottomSheet';
+import { OtpVerificationBottomSheet, OtpVerificationRef } from '../otp-verification/OtpVerificationBottomSheet';
 import { PhoneInput } from './components/PhoneInput';
 import { SocialButton } from './components/SocialButton';
 import { LOGIN_TEXT } from './LoginConstants';
@@ -172,11 +172,11 @@ const styles = StyleSheet.create({
   },
   modalWrapper: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: BRAND_COLORS.background.default,
+    backgroundColor: BRAND_COLORS.screenBg.fresh,
   },
   safeArea: {
     flex: 1,
-    backgroundColor: BRAND_COLORS.background.default,
+    backgroundColor: BRAND_COLORS.screenBg.fresh,
   },
   scrollContent: {
     flexGrow: 1,
@@ -199,19 +199,19 @@ const styles = StyleSheet.create({
   closeButton: {
     fontSize: LOGIN_LAYOUT.CLOSE_BUTTON_FONT_SIZE,
     marginBottom: 2,
-    color: BRAND_COLORS.primary.xanhReu,
+    color: BRAND_COLORS.bta.primaryBg,
     fontFamily: 'SpaceGrotesk-Bold',
   },
   heroContainer: {
     height: LOGIN_LAYOUT.HERO_HEIGHT,
-    backgroundColor: BRAND_COLORS.primary.beSua,
+    backgroundColor: BRAND_COLORS.screenBg.warm,
     justifyContent: 'center',
     alignItems: 'center',
   },
   heroPlaceholder: {
     fontSize: LOGIN_LAYOUT.HERO_FONT_SIZE,
     fontFamily: 'SpaceGrotesk-Medium',
-    color: BRAND_COLORS.primary.xanhReu,
+    color: BRAND_COLORS.ui.heading,
     textAlign: 'center',
   },
   formContainer: {
@@ -222,14 +222,14 @@ const styles = StyleSheet.create({
   welcomeText: {
     fontSize: LOGIN_LAYOUT.WELCOME_FONT_SIZE,
     fontFamily: 'SpaceGrotesk-Medium',
-    color: BRAND_COLORS.primary.xanhReu,
+    color: BRAND_COLORS.ui.heading,
     textAlign: 'center',
     marginBottom: LOGIN_LAYOUT.WELCOME_TEXT_MARGIN_BOTTOM,
   },
   brandName: {
     fontSize: LOGIN_LAYOUT.BRAND_NAME_FONT_SIZE,
     fontFamily: 'Phudu-Bold',
-    color: BRAND_COLORS.primary.xanhReu,
+    color: BRAND_COLORS.ui.heading,
     textAlign: 'center',
     marginBottom: LOGIN_LAYOUT.BRAND_NAME_MARGIN_BOTTOM,
     letterSpacing: LOGIN_LAYOUT.BRAND_NAME_LETTER_SPACING,
@@ -237,7 +237,7 @@ const styles = StyleSheet.create({
   divider: {
     fontSize: LOGIN_LAYOUT.DIVIDER_FONT_SIZE,
     fontFamily: 'SpaceGrotesk-Medium',
-    color: '#999999',
+    color: BRAND_COLORS.ui.placeholder,
     textAlign: 'center',
     marginVertical: LOGIN_LAYOUT.DIVIDER_MARGIN_VERTICAL,
   },
@@ -251,12 +251,12 @@ const styles = StyleSheet.create({
   noAccountText: {
     fontSize: 14,
     fontFamily: 'SpaceGrotesk-Medium',
-    color: BRAND_COLORS.primary.xanhReu,
+    color: BRAND_COLORS.ui.subtitle,
   },
   registerLinkText: {
     fontSize: 14,
     fontFamily: 'SpaceGrotesk-Bold',
-    color: BRAND_COLORS.primary.xanhReu,
+    color: BRAND_COLORS.bta.primaryBg,
     textDecorationLine: 'underline',
   },
 });

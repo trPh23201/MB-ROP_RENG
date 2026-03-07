@@ -44,7 +44,7 @@ export function OrderTypeSelector({ selectedType, store, onPress, editable = tru
                     <Ionicons
                         name={iconName as any}
                         size={24}
-                        color={BRAND_COLORS.primary.xanhReu}
+                        color={BRAND_COLORS.bta.primaryBg}
                     />
                     <View style={styles.typeInfo}>
                         <Text style={styles.typeLabel}>{typeLabel}</Text>
@@ -54,7 +54,7 @@ export function OrderTypeSelector({ selectedType, store, onPress, editable = tru
                         <Ionicons
                             name="chevron-forward"
                             size={20}
-                            color={BRAND_COLORS.text.tertiary}
+                            color={BRAND_COLORS.ui.placeholder}
                         />
                     )}
                 </View>
@@ -75,18 +75,18 @@ const styles = StyleSheet.create({
     title: {
         fontSize: TYPOGRAPHY.fontSize.md,
         fontFamily: TYPOGRAPHY.fontFamily.bodyBold,
-        color: BRAND_COLORS.text.primary,
+        color: BRAND_COLORS.ui.heading,
     },
     changeButton: {
         fontSize: TYPOGRAPHY.fontSize.md,
         fontFamily: TYPOGRAPHY.fontFamily.bodyMedium,
-        color: BRAND_COLORS.secondary.camDam,
+        color: BRAND_COLORS.bta.primaryBg,
     },
     content: {
-        backgroundColor: BRAND_COLORS.background.primary,
+        backgroundColor: BRAND_COLORS.screenBg.fresh,
         borderRadius: 12,
-        borderWidth: 1,
-        borderColor: BRAND_COLORS.border.light,
+        borderWidth: 3,
+        borderColor: BRAND_COLORS.ui.placeholder,
         padding: 16,
         gap: 12,
     },
@@ -96,16 +96,16 @@ const styles = StyleSheet.create({
     storeName: {
         fontSize: TYPOGRAPHY.fontSize.md,
         fontFamily: TYPOGRAPHY.fontFamily.bodyBold,
-        color: BRAND_COLORS.text.primary,
+        color: BRAND_COLORS.ui.heading,
     },
     storeAddress: {
         fontSize: TYPOGRAPHY.fontSize.sm,
         fontFamily: TYPOGRAPHY.fontFamily.bodyRegular,
-        color: BRAND_COLORS.text.secondary,
+        color: BRAND_COLORS.ui.subtitle,
     },
     divider: {
         height: 1,
-        backgroundColor: BRAND_COLORS.border.light,
+        backgroundColor: BRAND_COLORS.ui.placeholder,
     },
     typeRow: {
         flexDirection: 'row',
@@ -119,11 +119,11 @@ const styles = StyleSheet.create({
     typeLabel: {
         fontSize: TYPOGRAPHY.fontSize.base,
         fontFamily: TYPOGRAPHY.fontFamily.bodyMedium,
-        color: BRAND_COLORS.text.primary,
+        color: BRAND_COLORS.ui.heading,
     },
     timeEstimate: {
         fontSize: TYPOGRAPHY.fontSize.sm,
         fontFamily: TYPOGRAPHY.fontFamily.bodyRegular,
-        color: BRAND_COLORS.text.tertiary,
+        color: BRAND_COLORS.ui.subtitle,
     },
 });

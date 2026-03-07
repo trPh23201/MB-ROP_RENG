@@ -307,7 +307,7 @@ export default function AddressManagementScreen() {
     <BaseAuthenticatedLayout
       headerMode="hidden"
       safeAreaEdges={['bottom']}
-      backgroundColor="#F5F5F5"
+      backgroundColor={BRAND_COLORS.primary.beSua}
     >
       {showMapLoading && (
         <View style={styles.loadingContainer}>
@@ -392,11 +392,11 @@ export default function AddressManagementScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F5F5F5",
+    backgroundColor: BRAND_COLORS.primary.beSua,
   },
   loadingContainer: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: "#F5F5F5",
+    backgroundColor: BRAND_COLORS.primary.beSua,
     justifyContent: "center",
     alignItems: "center",
     zIndex: 100,
@@ -404,7 +404,7 @@ const styles = StyleSheet.create({
   loadingText: {
     marginTop: 12,
     fontSize: 14,
-    color: "#666666",
+    color: BRAND_COLORS.secondary.nauEspresso,
   },
   hiddenMap: {
     opacity: 0,
@@ -419,7 +419,7 @@ const styles = StyleSheet.create({
     zIndex: 20,
     width: 44,
     height: 44,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: BRAND_COLORS.primary.beSua,
     borderRadius: 22,
     alignItems: "center",
     justifyContent: "center",
@@ -463,7 +463,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: BRAND_COLORS.primary.beSua,
     paddingHorizontal: 20,
     paddingTop: 20,
     paddingBottom: 34,
@@ -480,7 +480,7 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 12,
-    color: "#888888",
+    color: BRAND_COLORS.secondary.nauEspresso,
     fontWeight: "600",
     letterSpacing: 0.5,
     marginBottom: 6,
@@ -509,7 +509,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#CCCCCC",
   },
   btnText: {
-    color: "#FFFFFF",
+    color: BRAND_COLORS.primary.beSua,
     fontWeight: "700",
     fontSize: 16,
   },
@@ -520,7 +520,7 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 24,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: BRAND_COLORS.primary.beSua,
     justifyContent: "center",
     alignItems: "center",
     elevation: 4,

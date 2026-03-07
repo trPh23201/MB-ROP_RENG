@@ -132,7 +132,7 @@ export default function SearchScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: BRAND_COLORS.background.default,
+    backgroundColor: BRAND_COLORS.screenBg.warm,
   },
   header: {
     flexDirection: 'row',
@@ -141,13 +141,13 @@ const styles = StyleSheet.create({
     paddingVertical: SEARCH_LAYOUT.HEADER_PADDING_VERTICAL,
     gap: SEARCH_LAYOUT.HEADER_GAP,
     borderBottomWidth: SEARCH_LAYOUT.HEADER_BORDER_BOTTOM_WIDTH,
-    borderBottomColor: BRAND_COLORS.background.default,
+    borderBottomColor: BRAND_COLORS.secondary.nauCaramel,
   },
   searchBar: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: BRAND_COLORS.background.default,
+    backgroundColor: BRAND_COLORS.primary.beSua,
     borderRadius: SEARCH_LAYOUT.SEARCH_BAR_BORDER_RADIUS,
     paddingHorizontal: SEARCH_LAYOUT.SEARCH_BAR_PADDING_HORIZONTAL,
     gap: SEARCH_LAYOUT.SEARCH_BAR_GAP,
@@ -171,7 +171,7 @@ const styles = StyleSheet.create({
   productItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: BRAND_COLORS.background.default,
+    backgroundColor: BRAND_COLORS.primary.beSua,
     borderRadius: SEARCH_LAYOUT.ITEM_BORDER_RADIUS,
     padding: SEARCH_LAYOUT.ITEM_PADDING,
     marginBottom: SEARCH_LAYOUT.ITEM_MARGIN_BOTTOM,
@@ -204,7 +204,7 @@ const styles = StyleSheet.create({
   badgeText: {
     fontSize: SEARCH_LAYOUT.BADGE_FONT_SIZE,
     fontFamily: 'Phudu-Bold',
-    color: BRAND_COLORS.background.default,
+    color: BRAND_COLORS.primary.beSua,
   },
   productInfo: {
     flex: 1,
@@ -223,14 +223,14 @@ const styles = StyleSheet.create({
   addButton: {
     width: SEARCH_LAYOUT.ADD_BUTTON_SIZE,
     height: SEARCH_LAYOUT.ADD_BUTTON_SIZE,
-    backgroundColor: BRAND_COLORS.secondary.nauEspresso,
+    backgroundColor: BRAND_COLORS.primary.xanhReu,
     borderRadius: SEARCH_LAYOUT.ADD_BUTTON_BORDER_RADIUS,
     justifyContent: 'center',
     alignItems: 'center',
   },
   addIcon: {
     fontSize: SEARCH_LAYOUT.ADD_ICON_FONT_SIZE,
-    color: BRAND_COLORS.background.default,
+    color: BRAND_COLORS.primary.beSua,
     fontWeight: 'bold',
   },
 });

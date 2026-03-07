@@ -69,7 +69,7 @@ export const EDIT_PRODUCT_TEXT = {
     ICE_LABEL: 'Lượng đá',
     SWEETNESS_LABEL: 'Độ ngọt',
     TOPPING_LABEL: 'THÊM LỰA CHỌN',
-    TOPPING_HINT: 'Tùy chọn thêm sữa, syrup hay topping yêu thích để Nhà pha dùng gụ bạn nhất (Một số lựa chọn có phụ phí).',
+    TOPPING_HINT: 'Tùy chọn thêm topping yêu thích để Rốp Rẻng pha đúng gu bạn nhất (Một số lựa chọn có phụ phí).',
     NOTE_LABEL: 'Thêm ghi chú',
     CHANGE_BUTTON: 'Thay đổi',
     DELETE_CONFIRM_TITLE: 'Xác nhận',

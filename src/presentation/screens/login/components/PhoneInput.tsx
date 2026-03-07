@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: BRAND_COLORS.background.default,
+    backgroundColor: '#FFFFFF',
     borderWidth: LOGIN_LAYOUT.INPUT_BORDER_WIDTH,
     borderColor: '#807878ff',
     borderRadius: LOGIN_LAYOUT.INPUT_BORDER_RADIUS,
@@ -91,16 +91,16 @@ const styles = StyleSheet.create({
   code: {
     fontSize: 14,
     fontFamily: 'SpaceGrotesk-Medium',
-    color: BRAND_COLORS.primary.xanhReu,
+    color: BRAND_COLORS.ui.heading,
   },
   input: {
     flex: 1,
     fontSize: 14,
     fontFamily: 'SpaceGrotesk-Medium',
-    color: BRAND_COLORS.primary.xanhReu,
+    color: BRAND_COLORS.ui.heading,
   },
   button: {
-    backgroundColor: '#E5E5E5',
+    backgroundColor: '#FFFFFF',
     borderRadius: LOGIN_LAYOUT.BUTTON_BORDER_RADIUS,
     paddingVertical: LOGIN_LAYOUT.BUTTON_PADDING_VERTICAL,
     alignItems: 'center',
@@ -108,14 +108,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   buttonActive: {
-    backgroundColor: BRAND_COLORS.secondary.nauEspresso,
+    backgroundColor: BRAND_COLORS.bta.primaryBg,
   },
   buttonText: {
     fontSize: 14,
     fontFamily: 'Phudu-Bold',
-    color: '#999999',
+    color: BRAND_COLORS.ui.subtitle,
   },
   buttonTextActive: {
-    color: BRAND_COLORS.background.default,
+    color: BRAND_COLORS.bta.primaryText,
   },
 });

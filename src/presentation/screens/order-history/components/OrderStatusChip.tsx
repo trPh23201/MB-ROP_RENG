@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { BRAND_COLORS } from '../../../theme/colors';
 
 interface OrderStatusChipProps {
   label: string;
@@ -26,22 +27,22 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 20,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: BRAND_COLORS.screenBg.warm,
     marginRight: 8,
     borderWidth: 1,
-    borderColor: '#E0E0E0',
+    borderColor: BRAND_COLORS.ui.placeholder,
   },
   chipSelected: {
-    backgroundColor: '#606A37',
-    borderColor: '#606A37',
+    backgroundColor: BRAND_COLORS.bta.primaryBg,
+    borderColor: BRAND_COLORS.bta.primaryBg,
   },
   chipText: {
     fontSize: 14,
-    color: '#666666',
+    color: BRAND_COLORS.ui.subtitle,
     fontWeight: '500',
   },
   chipTextSelected: {
-    color: '#FFFFFF',
+    color: BRAND_COLORS.bta.primaryText,
     fontWeight: '600',
   },
 });

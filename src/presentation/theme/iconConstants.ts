@@ -20,7 +20,7 @@ export const QUICK_ACTION_ICONS = {
   DELIVERY: 'bicycle-outline' as IoniconsName,
   TAKEAWAY: 'bag-outline' as IoniconsName,
   DINE_IN: 'restaurant-outline' as IoniconsName,
-  BEANS: 'cafe' as IoniconsName,
+  LoyaltyS: 'cafe' as IoniconsName,
 } as const;
 
 export const CATEGORY_ICONS = {

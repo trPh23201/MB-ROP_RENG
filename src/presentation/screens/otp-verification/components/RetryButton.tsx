@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
     height: OTP_LAYOUT.RETRY_BUTTON_SIZE,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: BRAND_COLORS.background.default,
+    backgroundColor: BRAND_COLORS.primary.beSua,
     borderRadius: OTP_LAYOUT.RETRY_BUTTON_SIZE / 2,
     marginLeft: OTP_LAYOUT.RETRY_BUTTON_MARGIN_LEFT,
   },

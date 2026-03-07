@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: DEALS_LAYOUT.TIER_CONTAINER_PADDING_HORIZONTAL,
   },
   containerSelected: {
-    backgroundColor: BRAND_COLORS.background.default,
+    backgroundColor: BRAND_COLORS.screenBg.warm,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.15,
@@ -96,12 +96,12 @@ const styles = StyleSheet.create({
   logoText: {
     fontSize: DEALS_LAYOUT.TIER_LOGO_SIZE,
     fontFamily: 'Phudu-Bold',
-    color: BRAND_COLORS.background.default,
+    color: BRAND_COLORS.bta.primaryText,
   },
   tierName: {
     fontSize: DEALS_LAYOUT.TIER_NAME_SIZE,
     fontFamily: 'SpaceGrotesk-Medium',
-    color: BRAND_COLORS.primary.xanhReu,
+    color: BRAND_COLORS.ui.heading,
     marginTop: DEALS_LAYOUT.TIER_NAME_MARGIN_TOP,
     paddingBottom: DEALS_LAYOUT.TIER_NAME_MARGIN_BOTTOM,
     textAlign: 'center',

@@ -31,6 +31,15 @@ export function BenefitsList({ benefits }: BenefitsListProps) {
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: DEALS_LAYOUT.BENEFITS_PADDING_HORIZONTAL,
+    marginHorizontal: 16,
+    backgroundColor: BRAND_COLORS.screenBg.warm,
+    borderRadius: 16,
+    padding: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
   },
   benefitItem: {
     flexDirection: 'row',
@@ -41,7 +50,7 @@ const styles = StyleSheet.create({
   iconContainer: {
     width: DEALS_LAYOUT.BENEFIT_ICON_SIZE,
     height: DEALS_LAYOUT.BENEFIT_ICON_SIZE,
-    backgroundColor: '#fcca7fff',
+    backgroundColor: BRAND_COLORS.ui.iconFill,
     borderRadius: 24,
     justifyContent: 'center',
     alignItems: 'center',
@@ -53,12 +62,12 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: DEALS_LAYOUT.BENEFIT_TEXT_SIZE,
     fontFamily: 'SpaceGrotesk-Medium',
-    color: BRAND_COLORS.primary.xanhReu,
+    color: BRAND_COLORS.ui.subtitle,
     lineHeight: 24,
   },
   divider: {
     height: DEALS_LAYOUT.BENEFIT_BORDER_WIDTH,
-    backgroundColor: '#F0F0F0',
+    backgroundColor: BRAND_COLORS.ui.placeholder,
     marginHorizontal: DEALS_LAYOUT.BENEFIT_ICON_SIZE + DEALS_LAYOUT.BENEFIT_GAP,
   },
 });

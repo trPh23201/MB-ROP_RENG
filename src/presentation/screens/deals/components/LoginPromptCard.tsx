@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
     marginHorizontal: DEALS_LAYOUT.LOGIN_CARD_MARGIN_HORIZONTAL,
     marginTop: DEALS_LAYOUT.LOGIN_CARD_MARGIN_TOP,
     marginBottom: DEALS_LAYOUT.LOGIN_CARD_MARGIN_BOTTOM,
-    backgroundColor: '#FF8C00',
+    backgroundColor: BRAND_COLORS.bta.primaryBg,
     borderRadius: DEALS_LAYOUT.LOGIN_CARD_BORDER_RADIUS,
     padding: DEALS_LAYOUT.LOGIN_CARD_PADDING,
     minHeight: DEALS_LAYOUT.LOGIN_CARD_MIN_HEIGHT,
@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
   text: {
     fontSize: DEALS_LAYOUT.LOGIN_TEXT_SIZE,
     fontFamily: 'SpaceGrotesk-Medium',
-    color: BRAND_COLORS.background.default,
+    color: BRAND_COLORS.bta.primaryText,
     textAlign: 'center',
     marginBottom: 24,
     lineHeight: 24,
@@ -56,6 +56,6 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: DEALS_LAYOUT.LOGIN_BUTTON_SIZE,
     fontFamily: 'Phudu-Bold',
-    color: BRAND_COLORS.background.default,
+    color: BRAND_COLORS.bta.primaryText,
   },
 });

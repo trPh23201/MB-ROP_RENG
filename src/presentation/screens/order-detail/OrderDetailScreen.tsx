@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { Order } from '../../../domain/entities/Order';
 import { BaseAuthenticatedLayout } from '../../layouts/BaseAuthenticatedLayout';
+import { BRAND_COLORS } from '../../theme/colors';
 import { ORDER_STATUS_LABELS, PAYMENT_STATUS_LABELS, STATUS_COLORS } from '../order-history/OrderHistoryConstants';
 import { ORDER_DETAIL_STRINGS, PAYMENT_METHOD_LABELS } from './OrderDetailConstants';
 import { OrderDetailService } from './OrderDetailService';
@@ -35,9 +36,9 @@ export default function OrderDetailScreen() {
 
   if (loading) {
     return (
-      <BaseAuthenticatedLayout safeAreaEdges={['left', 'right']}>
+      <BaseAuthenticatedLayout backgroundColor={BRAND_COLORS.screenBg.fresh} safeAreaEdges={['left', 'right']}>
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#606A37" />
+          <ActivityIndicator size="large" color={BRAND_COLORS.bta.primaryBg} />
           <Text style={styles.loadingText}>{ORDER_DETAIL_STRINGS.LOADING}</Text>
         </View>
       </BaseAuthenticatedLayout>
@@ -46,7 +47,7 @@ export default function OrderDetailScreen() {
 
   if (error || !order) {
     return (
-      <BaseAuthenticatedLayout safeAreaEdges={['left', 'right']}>
+      <BaseAuthenticatedLayout backgroundColor={BRAND_COLORS.screenBg.fresh} safeAreaEdges={['left', 'right']}>
         <View style={styles.errorContainer}>
           <Text style={styles.errorText}>{error || ORDER_DETAIL_STRINGS.ERROR_LOAD}</Text>
         </View>
@@ -55,7 +56,7 @@ export default function OrderDetailScreen() {
   }
 
   return (
-    <BaseAuthenticatedLayout safeAreaEdges={['left', 'right']}>
+    <BaseAuthenticatedLayout backgroundColor={BRAND_COLORS.screenBg.fresh} safeAreaEdges={['left', 'right']}>
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.section}>
           <Text style={styles.orderCode}>{order.orderCode}</Text>
@@ -178,7 +179,7 @@ const styles = StyleSheet.create({
   loadingText: {
     marginTop: 12,
     fontSize: 16,
-    color: '#666666',
+    color: BRAND_COLORS.ui.subtitle,
   },
   errorContainer: {
     flex: 1,
@@ -192,18 +193,20 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   section: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: BRAND_COLORS.screenBg.warm,
     padding: 16,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    borderBottomWidth: 1,
-    borderBottomColor: '#E0E0E0',
+    borderBottomColor: BRAND_COLORS.ui.placeholder,
+    marginHorizontal: 16,
+    marginTop: 16,
+    borderRadius: 12,
   },
   orderCode: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#333333',
+    color: BRAND_COLORS.ui.heading,
   },
   statusBadge: {
     paddingHorizontal: 12,
@@ -213,24 +216,26 @@ const styles = StyleSheet.create({
   statusText: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: BRAND_COLORS.bta.primaryText,
   },
   card: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: BRAND_COLORS.screenBg.warm,
     marginTop: 12,
+    marginHorizontal: 16,
     padding: 16,
+    borderRadius: 12,
   },
   sectionTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#333333',
+    color: BRAND_COLORS.ui.heading,
     marginBottom: 12,
   },
   itemContainer: {
     marginBottom: 16,
     paddingBottom: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#F0F0F0',
+    borderBottomColor: BRAND_COLORS.ui.placeholder,
   },
   itemHeader: {
     flexDirection: 'row',
@@ -240,25 +245,25 @@ const styles = StyleSheet.create({
   itemQty: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#606A37',
+    color: BRAND_COLORS.bta.primaryBg,
     minWidth: 40,
   },
   itemName: {
     flex: 1,
     fontSize: 16,
-    color: '#333333',
+    color: BRAND_COLORS.ui.heading,
   },
   itemPrice: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#333333',
+    color: BRAND_COLORS.ui.heading,
   },
   optionsContainer: {
     marginLeft: 40,
   },
   optionText: {
     fontSize: 14,
-    color: '#666666',
+    color: BRAND_COLORS.ui.subtitle,
     marginBottom: 4,
   },
   summaryRow: {
@@ -268,40 +273,40 @@ const styles = StyleSheet.create({
   },
   summaryLabel: {
     fontSize: 14,
-    color: '#666666',
+    color: BRAND_COLORS.ui.subtitle,
   },
   summaryValue: {
     fontSize: 14,
-    color: '#333333',
+    color: BRAND_COLORS.ui.heading,
   },
   discountValue: {
     color: '#EF5350',
   },
   divider: {
     height: 1,
-    backgroundColor: '#E0E0E0',
+    backgroundColor: BRAND_COLORS.ui.placeholder,
     marginVertical: 12,
   },
   totalLabel: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#333333',
+    color: BRAND_COLORS.ui.heading,
   },
   totalValue: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#606A37',
+    color: BRAND_COLORS.ui.heading,
   },
   infoRow: {
     marginBottom: 12,
   },
   infoLabel: {
     fontSize: 14,
-    color: '#999999',
+    color: BRAND_COLORS.ui.placeholder,
     marginBottom: 4,
   },
   infoValue: {
     fontSize: 14,
-    color: '#333333',
+    color: BRAND_COLORS.ui.heading,
   },
 });
