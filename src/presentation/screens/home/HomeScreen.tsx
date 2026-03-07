@@ -37,7 +37,6 @@ const CATEGORY_ICONS: Record<string, string> = {
 export default function HomeScreen() {
   const handleAddToCart = useAddToCart();
 
-  // Use cached location from Redux (fetched at app startup)
   const cachedLocation = useAppSelector(selectAppLocation);
   const currentLocation = cachedLocation ?? {
     lat: APP_DEFAULT_LOCATION.latitude,
@@ -146,7 +145,7 @@ export default function HomeScreen() {
       }
     };
     getAddress();
-  }, [currentLocation]);
+  }, [currentLocation.lat, currentLocation.lng]);
 
   const handleLocationPress = useCallback(() => {
     console.log('[HomeScreen] Location banner pressed');

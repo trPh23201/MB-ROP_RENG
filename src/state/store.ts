@@ -16,7 +16,7 @@ import storesReducer from './slices/storesSlice';
 const authPersistConfig = {
   key: 'auth',
   storage: AsyncStorage,
-  whitelist: ['isAuthenticated', 'user', 'phoneNumber', 'userId', 'pendingIntent'],
+  whitelist: ['isAuthenticated', 'user', 'phoneNumber', 'pendingAction'],
 };
 
 const persistedAuthReducer = persistReducer(authPersistConfig, auth);

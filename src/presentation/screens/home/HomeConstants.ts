@@ -5,7 +5,7 @@ export const HOME_TEXT = {
   COMBO_SECTION: {
     EXPIRES_IN: 'Khuyến mãi còn hiệu lực trong',
     CHOOSE_BUTTON: 'Chọn',
-    DISCOUNT_PREFIX: '-', // "-20,000đ"
+    DISCOUNT_PREFIX: '-',
     DISCOUNT_SUFFIX: 'đ',
   },
   COLLECTION_SECTION: {

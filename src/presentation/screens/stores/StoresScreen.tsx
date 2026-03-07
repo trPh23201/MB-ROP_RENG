@@ -3,12 +3,13 @@ import { selectAppLocation } from '@/src/state/slices/appSlice';
 import { setSelectedStore } from '@/src/state/slices/orderCartSlice';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { ActivityIndicator, Alert, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Store } from '../../../data/mockStores';
 import { fetchMenuByStore } from '../../../state/slices/homeSlice';
 import { clearStoresError, fetchStores, fetchStoresByProduct } from '../../../state/slices/storesSlice';
 import { useAppDispatch, useAppSelector } from '../../../utils/hooks';
+import { popupService } from '../../layouts/popup/PopupService';
 import { BRAND_COLORS } from '../../theme/colors';
 import { StoreSection } from './components/StoreSection';
 import { StoresHeader } from './components/StoresHeader';
@@ -28,6 +29,7 @@ export default function StoresScreen() {
   const totalItems = useAppSelector((state) => state.orderCart.totalItems);
   const { stores: apiStores, loading, error } = useAppSelector((state) => state.stores);
   const userLocation = cachedLocation ?? { lat: APP_DEFAULT_LOCATION.latitude, lng: APP_DEFAULT_LOCATION.longitude };
+  const hasFetchedRef = React.useRef(false);
 
   useEffect(() => {
     if (!cachedLocation) return;
@@ -43,10 +45,11 @@ export default function StoresScreen() {
           refresh: true,
         })
       );
-    } else if (apiStores.length === 0) {
+    } else if (!hasFetchedRef.current) {
+      hasFetchedRef.current = true;
       dispatch(fetchStores({ page: 1, refresh: true }));
     }
-  }, [dispatch, params.mode, params.productId, cachedLocation, userLocation.lat, userLocation.lng, apiStores.length]);
+  }, [dispatch, params.mode, params.productId, cachedLocation, userLocation.lat, userLocation.lng]);
 
   const uiStores = useMemo<Store[]>(() => {
     return apiStores.map(apiStore =>
@@ -69,34 +72,32 @@ export default function StoresScreen() {
     [filteredStores]
   );
 
-  const handleStorePress = useCallback((store: Store) => {
+  const handleStorePress = useCallback(async (store: Store) => {
     console.log(`[StoresScreen] Store pressed: ${store.name}`);
 
     if (selectedStore && selectedStore.id !== store.id && totalItems > 0) {
-      Alert.alert(
-        STORES_TEXT.ALERT_TITLE,
+      const confirmed = await popupService.confirm(
         STORES_TEXT.ALERT_MESSAGE(totalItems),
-        [
-          {
-            text: STORES_TEXT.ALERT_CANCEL,
-            style: 'cancel',
-            onPress: () => console.log('[StoresScreen] User cancelled store switch'),
-          },
-          {
-            text: STORES_TEXT.ALERT_CONFIRM,
-            style: 'destructive',
-            onPress: () => {
-              console.log('[StoresScreen] User confirmed, clearing cart and switching store');
-              dispatch(setSelectedStore(store));
-              dispatch(fetchMenuByStore(Number(store.id)));
-
-              if (params.mode === 'select') {
-                router.replace('/(tabs)/order');
-              }
-            },
-          },
-        ]
+        {
+          title: STORES_TEXT.ALERT_TITLE,
+          confirmText: STORES_TEXT.ALERT_CONFIRM,
+          cancelText: STORES_TEXT.ALERT_CANCEL,
+          confirmStyle: 'destructive',
+        }
       );
+
+      if (!confirmed) {
+        console.log('[StoresScreen] User cancelled store switch');
+        return;
+      }
+
+      console.log('[StoresScreen] User confirmed, clearing cart and switching store');
+      dispatch(setSelectedStore(store));
+      dispatch(fetchMenuByStore(Number(store.id)));
+
+      if (params.mode === 'select') {
+        router.replace('/(tabs)/order');
+      }
       return;
     }
 

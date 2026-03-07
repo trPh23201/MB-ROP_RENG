@@ -19,7 +19,8 @@ export default function MoreScreen() {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const db = useSQLiteContext();
-  const { isAuthenticated, user } = useAppSelector((state) => state.auth);
+  const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
+  const user = useAppSelector((state) => state.auth.user);
 
   const accountMenuSection: MenuSectionData = useMemo(() => {
     if (isAuthenticated) {

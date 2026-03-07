@@ -23,7 +23,9 @@ const ordersSlice = createSlice({
       state.historyOrders = action.payload;
     },
     appendHistoryOrders(state, action: PayloadAction<Order[]>) {
-      state.historyOrders = [...state.historyOrders, ...action.payload];
+      const existingIds = new Set(state.historyOrders.map(o => o.id));
+      const newOrders = action.payload.filter(o => !existingIds.has(o.id));
+      state.historyOrders = [...state.historyOrders, ...newOrders];
     },
     setCurrentOrder(state, action: PayloadAction<Order | null>) {
       state.currentOrder = action.payload;

@@ -42,24 +42,14 @@ export default function PreOrderBottomSheet({ visible, onClose, onOrderSuccess }
   const globalOrderType = useAppSelector(selectPreOrderType);
   const selectedVouchers = useAppSelector(selectSelectedVouchers);
 
-  const [preOrderState, setPreOrderState] = useState<PreOrderState>({
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>(PaymentMethod.CASH);
+
+  // Derive preOrderState directly from Redux — no useEffect sync needed
+  const preOrderState: PreOrderState = useMemo(() => ({
     orderType: globalOrderType,
-    paymentMethod: PaymentMethod.CASH,
-    shippingFee: 0,
-  });
-
-  useEffect(() => {
-    if (lastOrder) {
-      setPreOrderState(prev => ({
-        ...prev,
-        shippingFee: lastOrder.deliveryFee
-      }));
-    }
-  }, [lastOrder]);
-
-  useEffect(() => {
-    setPreOrderState(prev => ({ ...prev, orderType: globalOrderType }));
-  }, [globalOrderType]);
+    paymentMethod,
+    shippingFee: lastOrder?.deliveryFee ?? 0,
+  }), [globalOrderType, paymentMethod, lastOrder]);
 
   const [isNavigatingToAddress, setIsNavigatingToAddress] = useState(false);
   const serverSubtotal = lastOrder?.subtotal ?? totalPrice;
@@ -117,7 +107,7 @@ export default function PreOrderBottomSheet({ visible, onClose, onOrderSuccess }
   );
 
   const handlePaymentMethodChange = useCallback((method: PaymentMethod) => {
-    setPreOrderState((prev) => ({ ...prev, paymentMethod: method }));
+    setPaymentMethod(method);
     paymentModalRef.current?.dismiss();
   }, []);
 

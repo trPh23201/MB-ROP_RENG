@@ -37,7 +37,6 @@ const isSameCustomizations = (a: CartItemCustomization, b: CartItemCustomization
   if (a.sweetness !== b.sweetness) return false;
   if (a.toppings.length !== b.toppings.length) return false;
 
-  // Compare toppings by ID (sorted to avoid order issues)
   const aToppingIds = a.toppings.map(t => t.id).sort();
   const bToppingIds = b.toppings.map(t => t.id).sort();
   return aToppingIds.every((id, i) => id === bToppingIds[i]);
@@ -127,22 +126,13 @@ const orderCartSlice = createSlice({
     },
 
     removeCartItem: (state, action: PayloadAction<string>) => {
-      const item = state.items.find((i) => i.id === action.payload);
-      if (!item) return;
-
       state.items = state.items.filter((i) => i.id !== action.payload);
-      state.totalItems -= item.quantity;
-      state.totalPrice -= item.finalPrice;
+      recalculateTotals(state);
     },
 
     removeItem: (state, action: PayloadAction<string>) => {
-      const productId = action.payload;
-      const item = state.items.find((i) => i.product.id === productId);
-      if (!item) return;
-
-      state.items = state.items.filter((i) => i.product.id !== productId);
-      state.totalItems -= item.quantity;
-      state.totalPrice -= item.finalPrice;
+      state.items = state.items.filter((i) => i.product.id !== action.payload);
+      recalculateTotals(state);
     },
 
     clearCart: (state) => {

@@ -8,12 +8,15 @@ import { PendingAuthAction } from '../../domain/services/AuthActionService';
 import { authRepository } from '../../infrastructure/repositories/AuthRepositoryImpl';
 import { TokenStorage } from '../../infrastructure/storage/tokenStorage';
 
+const registerUseCase = new RegisterUseCase(authRepository);
+const loginUseCase = new LoginUseCase(authRepository);
+const getProfileUseCase = new GetProfileUseCase();
+
 export const fetchProfile = createAsyncThunk<SerializableUser, string, { rejectValue: string }>(
   'auth/fetchProfile',
   async (userId, { rejectWithValue }) => {
     try {
-      const useCase = new GetProfileUseCase();
-      const user = await useCase.execute(userId);
+      const user = await getProfileUseCase.execute(userId);
       return AuthMapper.toSerializable(user);
     } catch (error) {
       if (error instanceof AppError) {
@@ -48,8 +51,7 @@ const initialState: AuthState = {
 
 export const registerUser = createAsyncThunk<{ phone: string }, { phone: string }, { rejectValue: string }>('auth/register', async ({ phone }, { rejectWithValue }) => {
   try {
-    const useCase = new RegisterUseCase(authRepository);
-    await useCase.execute(phone);
+    await registerUseCase.execute(phone);
     return { phone };
 
   } catch (error) {
@@ -62,8 +64,7 @@ export const registerUser = createAsyncThunk<{ phone: string }, { phone: string 
 
 export const loginWithOtp = createAsyncThunk<{ user: SerializableUser; phone: string }, { phone: string; otp: string }, { rejectValue: string }>('auth/login', async ({ phone, otp }, { rejectWithValue }) => {
   try {
-    const useCase = new LoginUseCase(authRepository);
-    const result = await useCase.execute(phone, otp);
+    const result = await loginUseCase.execute(phone, otp);
     const serializableUser = AuthMapper.toSerializable(result.user);
     return { user: serializableUser, phone };
 
@@ -118,13 +119,7 @@ const authSlice = createSlice({
       state.pendingAction = null;
     },
 
-    loginDirect: (
-      state,
-      action: PayloadAction<{ phoneNumber: string; userId: string }>
-    ) => {
-      state.isAuthenticated = true;
-      state.phoneNumber = action.payload.phoneNumber;
-    },
+
   },
 
   extraReducers: (builder) => {
@@ -182,12 +177,12 @@ const authSlice = createSlice({
       .addCase(logoutUser.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(logoutUser.fulfilled, (state) => {
+      .addCase(logoutUser.fulfilled, () => {
         return { ...initialState };
       })
-      .addCase(logoutUser.rejected, (state) => {
+      .addCase(logoutUser.rejected, (state, action) => {
         state.isLoading = false;
-        return { ...initialState };
+        state.error = action.payload ?? 'Đăng xuất thất bại';
       });
 
     builder
@@ -210,10 +205,8 @@ export const {
   resetOtpFlow,
   setPendingAction,
   clearPendingAction,
-  loginDirect,
 } = authSlice.actions;
 
-export const login = loginDirect;
 export const logout = logoutUser;
 
 export default authSlice.reducer;

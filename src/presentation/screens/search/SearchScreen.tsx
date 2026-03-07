@@ -48,9 +48,9 @@ export default function SearchScreen() {
     }
   }, [isFocused]);
 
-  const handleCancel = useCallback(() => {
+  const handleCancel = () => {
     router.back();
-  }, [router]);
+  };
 
   const handleSearch = useCallback((text: string) => {
     setSearchQuery(text);

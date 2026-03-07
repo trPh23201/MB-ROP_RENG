@@ -1,9 +1,9 @@
 import * as Crypto from 'expo-crypto';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Alert } from 'react-native';
 import { AppError } from '../../core/errors/AppErrors';
 import { IAddressSuggestion } from '../../domain/shared/types';
 import { GoongGeocodingRepository } from '../../infrastructure/repositories/GoongGeocodingRepository';
+import { popupService } from '../../presentation/layouts/popup/PopupService';
 
 const repository = new GoongGeocodingRepository();
 
@@ -39,7 +39,7 @@ export const useAddressSearch = () => {
       } catch (error: any) {
         setSuggestions([]);
         if (error instanceof AppError && error.code === 'QUOTA_EXCEEDED') {
-          Alert.alert('Thông báo', error.message);
+          popupService.alert(error.message, { title: 'Thông báo' });
         }
       } finally {
         setIsLoading(false);

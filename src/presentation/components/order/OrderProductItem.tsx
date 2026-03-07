@@ -6,10 +6,6 @@ import { AppIcon } from '../shared/AppIcon';
 import { OrderProductItemProps } from './OrderInterfaces';
 import { OrderService } from './OrderService';
 
-/**
- * Shared product item component for order display.
- * Used in both Pre-order and Confirm Order screens.
- */
 export function OrderProductItem({ item, onPress, editable = true }: OrderProductItemProps) {
     const optionsText = OrderService.formatOptionsText(item.options);
     const hasToppings = item.options.toppings && item.options.toppings.length > 0;

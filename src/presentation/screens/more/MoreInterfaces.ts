@@ -4,16 +4,16 @@ export interface UtilityItemData {
   id: string;
   label: string;
   icon: IoniconsName;
-  route?: string; // Dùng để navigate nếu cần
-  badge?: number; // Số lượng (ví dụ: số ưu đãi)
+  route?: string;
+  badge?: number;
 }
 
 export interface MenuItemData {
   id: string;
   label: string;
   icon: IoniconsName;
-  isDestructive?: boolean; // Cho nút Đăng xuất (màu đỏ)
-  action?: () => void; // Hàm xử lý khi bấm
+  isDestructive?: boolean;
+  action?: () => void;
   route?: string;
 }
 

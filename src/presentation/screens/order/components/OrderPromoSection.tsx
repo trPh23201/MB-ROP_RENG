@@ -67,7 +67,6 @@ export function OrderPromoSection({ title, expiresAt, products, onProductPress }
                 </View>
               )}
               
-              {/* Sửa luôn chỗ này để an toàn: !!product.discount */}
               {/* {!!product.discount && (
                 <View style={orderStyles.percentBadge}>
                   <Text style={orderStyles.percentText}>

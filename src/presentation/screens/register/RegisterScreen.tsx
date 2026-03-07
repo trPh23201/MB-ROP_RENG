@@ -2,11 +2,12 @@ import { Ionicons } from '@expo/vector-icons';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { useRouter } from 'expo-router';
 import React, { useEffect, useRef, useState } from 'react';
-import { Alert, KeyboardAvoidingView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { KeyboardAvoidingView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { clearError, loginWithOtp, registerUser } from '../../../state/slices/authSlice';
 import { useAppDispatch, useAppSelector } from '../../../utils/hooks';
 import { IS_IOS } from '../../../utils/platform';
+import { popupService } from '../../layouts/popup/PopupService';
 import { BRAND_COLORS } from '../../theme/colors';
 import { OtpVerificationBottomSheet, OtpVerificationRef } from '../otp-verification/OtpVerificationBottomSheet';
 import { RegisterPhoneInput } from './components/RegisterPhoneInput';
@@ -17,9 +18,10 @@ import { RegisterUIService } from './RegisterService';
 export default function RegisterScreen() {
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const { isLoading, error, otpSent, otpPhone } = useAppSelector(
-    (state) => state.auth
-  );
+  const isLoading = useAppSelector((state) => state.auth.isLoading);
+  const error = useAppSelector((state) => state.auth.error);
+  const otpSent = useAppSelector((state) => state.auth.otpSent);
+  const otpPhone = useAppSelector((state) => state.auth.otpPhone);
 
   const [phoneNumber, setPhoneNumber] = useState('');
   const otpModalRef = useRef<OtpVerificationRef>(null);
@@ -34,29 +36,18 @@ export default function RegisterScreen() {
 
   useEffect(() => {
     if (error) {
-      if (RegisterUIService.isPhoneExistedError(error)) {
-        Alert.alert(
-          REGISTER_TEXT.PHONE_EXISTED_TITLE,
-          REGISTER_TEXT.PHONE_EXISTED_MESSAGE,
-          [
-            {
-              text: REGISTER_TEXT.PHONE_EXISTED_OK,
-              onPress: () => {
-                dispatch(clearError());
-              },
-            },
-          ]
-        );
-      } else {
-        Alert.alert('Lỗi', error, [
-          {
-            text: 'OK',
-            onPress: () => {
-              dispatch(clearError());
-            },
-          },
-        ]);
-      }
+      const handleError = async () => {
+        if (RegisterUIService.isPhoneExistedError(error)) {
+          await popupService.alert(
+            REGISTER_TEXT.PHONE_EXISTED_MESSAGE,
+            { title: REGISTER_TEXT.PHONE_EXISTED_TITLE, buttonText: REGISTER_TEXT.PHONE_EXISTED_OK }
+          );
+        } else {
+          await popupService.alert(error, { title: 'Lỗi' });
+        }
+        dispatch(clearError());
+      };
+      handleError();
     }
   }, [error, dispatch]);
 

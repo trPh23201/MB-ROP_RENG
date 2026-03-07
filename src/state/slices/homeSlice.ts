@@ -180,13 +180,10 @@ const homeSlice = createSlice({
 
     builder
       .addCase(fetchMenuByStore.pending, (state) => {
-        console.log(`[homeSlice] fetchMenuByStore PENDING — current products: ${state.products.length}, toppings: ${state.toppings.length}`);
         state.productsLoading = true;
         state.productsError = null;
       })
       .addCase(fetchMenuByStore.fulfilled, (state, action) => {
-        const oldProductCount = state.products.length;
-        const oldToppingCount = state.toppings.length;
         state.productsLoading = false;
         state.storeId = action.payload.storeId;
         state.menuId = action.payload.menuId;
@@ -194,14 +191,8 @@ const homeSlice = createSlice({
         state.toppings = action.payload.toppings;
         state.currentPage = 0;
         state.hasMore = false;
-        console.log(`[homeSlice] fetchMenuByStore FULFILLED — menu REPLACED!`);
-        console.log(`[homeSlice]   storeId: ${action.payload.storeId}, menuId: ${action.payload.menuId}`);
-        console.log(`[homeSlice]   products: ${oldProductCount} → ${action.payload.products.length}`);
-        console.log(`[homeSlice]   toppings: ${oldToppingCount} → ${action.payload.toppings.length}`);
-        console.log(`[homeSlice]   product names: ${action.payload.products.map(p => p.name).join(', ')}`);
       })
       .addCase(fetchMenuByStore.rejected, (state, action) => {
-        console.error(`[homeSlice] fetchMenuByStore REJECTED — error: ${action.payload}`);
         state.productsLoading = false;
         state.productsError = action.payload as string;
       });

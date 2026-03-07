@@ -6,10 +6,6 @@ import { ORDER_TEXT } from './OrderConstants';
 import { OrderProductListProps } from './OrderInterfaces';
 import { OrderProductItem } from './OrderProductItem';
 
-/**
- * Shared product list component for order display.
- * Used in both Pre-order and Confirm Order screens.
- */
 export function OrderProductList({
     items,
     title = ORDER_TEXT.PRODUCT_LIST_TITLE,

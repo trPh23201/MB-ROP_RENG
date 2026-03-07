@@ -14,7 +14,7 @@ import { OrderStatusChip } from "./components/OrderStatusChip";
 
 export default function OrderHistoryScreen() {
   const router = useRouter();
-  const { user } = useAppSelector((state) => state.auth);
+  const user = useAppSelector((state) => state.auth.user);
   const service = useMemo(() => new OrderHistoryService(), []);
 
   const [allOrders, setAllOrders] = useState<Order[]>([]);

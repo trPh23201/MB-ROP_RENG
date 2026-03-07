@@ -2,8 +2,6 @@
 import { AppLifecycleEvent } from '@/src/infrastructure/services/lifecycle/appLifecycle.types';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-const STALE_THRESHOLD_MS = 5 * 60 * 1000;
-
 interface AppLocation {
     lat: number;
     lng: number;
@@ -67,8 +65,4 @@ export const selectAppLocation = (state: RootState) => state.app.location;
 export const selectDataFetchedAt = (state: RootState) => state.app.dataFetchedAt;
 export const selectLifecycleState = (state: RootState) => state.app.lifecycleState;
 
-export const selectIsDataStale = (state: RootState): boolean => {
-    const { dataFetchedAt } = state.app;
-    if (!dataFetchedAt) return true;
-    return Date.now() - dataFetchedAt > STALE_THRESHOLD_MS;
-};
+export const STALE_THRESHOLD_MS = 5 * 60 * 1000;

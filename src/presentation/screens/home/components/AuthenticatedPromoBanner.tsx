@@ -16,7 +16,6 @@ export function AuthenticatedPromoBanner() {
   const autoScrollTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const resumeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Auto-scroll logic
   useEffect(() => {
     if (isUserInteracting) return;
 
@@ -86,7 +85,6 @@ export function AuthenticatedPromoBanner() {
         ))}
       </ScrollView>
 
-      {/* Fixed Overlay with Pagination Dots */}
       <View style={styles.paginationOverlay}>
         <View style={styles.pagination}>
           {WELCOME_TEXT.PROMOS.map((_, index) => (
@@ -154,7 +152,6 @@ const styles = StyleSheet.create({
     lineHeight: 20,
   },
 
-  // Fixed overlay layer
   paginationOverlay: {
     position: 'absolute',
     bottom: 0,

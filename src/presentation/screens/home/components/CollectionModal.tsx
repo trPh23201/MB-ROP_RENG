@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 200,
     resizeMode: 'cover',
-    borderTopLeftRadius: 24, // Bo góc theo sheet
+    borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
   },
   content: {

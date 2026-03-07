@@ -1,5 +1,5 @@
 import { useLocalSearchParams } from 'expo-router';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { ActivityIndicator, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { Order } from '../../../domain/entities/Order';
 import { BaseAuthenticatedLayout } from '../../layouts/BaseAuthenticatedLayout';
@@ -11,17 +11,13 @@ import { OrderDetailService } from './OrderDetailService';
 export default function OrderDetailScreen() {
   const params = useLocalSearchParams();
   const orderId = Number(params.orderId);
-  const service = new OrderDetailService();
+  const service = useMemo(() => new OrderDetailService(), []);
 
   const [order, setOrder] = useState<Order | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    loadOrderDetail();
-  }, [orderId]);
-
-  const loadOrderDetail = async () => {
+  const loadOrderDetail = useCallback(async () => {
     try {
       setLoading(true);
       const orderData = await service.loadOrderDetail(orderId);
@@ -32,7 +28,11 @@ export default function OrderDetailScreen() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [orderId, service]);
+
+  useEffect(() => {
+    loadOrderDetail();
+  }, [loadOrderDetail]);
 
   if (loading) {
     return (

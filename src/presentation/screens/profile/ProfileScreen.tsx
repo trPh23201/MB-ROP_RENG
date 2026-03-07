@@ -1,18 +1,19 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import React, { useCallback, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { fetchProfile, logout } from '../../../state/slices/authSlice';
+import { fetchProfile } from '../../../state/slices/authSlice';
 import { useAppDispatch, useAppSelector } from '../../../utils/hooks';
 import { BaseFullScreenLayout } from '../../layouts/BaseFullScreenLayout';
-import { popupService } from '../../layouts/popup/PopupService';
 import { BRAND_COLORS } from '../../theme/colors';
 import { PROFILE_STRINGS } from './ProfileConstants';
 
 export default function ProfileScreen() {
     const router = useRouter();
     const dispatch = useAppDispatch();
-    const { isAuthenticated, user, isLoading } = useAppSelector((state) => state.auth);
+    const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
+    const user = useAppSelector((state) => state.auth.user);
+    const isLoading = useAppSelector((state) => state.auth.isLoading);
 
     useEffect(() => {
         if (isAuthenticated && user?.uuid) {
@@ -20,32 +21,15 @@ export default function ProfileScreen() {
         }
     }, [isAuthenticated, user?.uuid, dispatch]);
 
-    const handleRefresh = useCallback(() => {
+    const handleRefresh = () => {
         if (isAuthenticated && user?.uuid) {
             dispatch(fetchProfile(user.uuid));
         }
-    }, [isAuthenticated, user?.uuid, dispatch]);
+    };
 
-    const handleLogout = useCallback(() => {
-        popupService.confirm(
-            PROFILE_STRINGS.LOGOUT_CONFIRM_MSG,
-            {
-                title: PROFILE_STRINGS.LOGOUT_CONFIRM_TITLE,
-                cancelText: PROFILE_STRINGS.CANCEL,
-                confirmText: PROFILE_STRINGS.AGREE,
-                confirmStyle: 'destructive',
-            }
-        ).then((confirmed) => {
-            if (confirmed) {
-                dispatch(logout());
-                // router.replace('/');
-            }
-        });
-    }, [dispatch]);
-
-    const handleLogin = useCallback(() => {
+    const handleLogin = () => {
         router.push('../(auth)/login');
-    }, [router]);
+    };
 
     const formatDate = (dateString?: Date | string | null) => {
         if (!dateString) return '--';

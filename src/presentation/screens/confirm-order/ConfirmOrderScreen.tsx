@@ -92,13 +92,13 @@ export default function ConfirmOrderScreen() {
         };
     }, [confirmedOrder, displayItems]);
 
-    const handleBack = useCallback(() => {
+    const handleBack = () => {
         router.back();
-    }, []);
+    };
 
-    const handlePromotionPress = useCallback(() => {
+    const handlePromotionPress = () => {
         popupService.alert(CONFIRM_ORDER_TEXT.VOUCHER_NOTICE, { title: 'Thông báo' });
-    }, []);
+    };
 
     const handleConfirmOrder = useCallback(async () => {
         if (!confirmedOrder || !user || !selectedStore) {

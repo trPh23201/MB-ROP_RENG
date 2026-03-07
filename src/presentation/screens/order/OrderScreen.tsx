@@ -86,19 +86,19 @@ export default function OrderScreen() {
     popupService.alert(`Đã thêm ${product.name} vào giỏ hàng`, { title: 'Thành công', type: 'success' });
   }, [selectedStore, pendingAction, dispatch, products]);
 
-  const handleMiniCartPress = useCallback(() => {
+  const handleMiniCartPress = () => {
     console.log('[OrderScreen] Opening PreOrder sheet');
     setShowPreOrder(true);
-  }, []);
+  };
 
-  const handlePreOrderClose = useCallback(() => {
+  const handlePreOrderClose = () => {
     setShowPreOrder(false);
-  }, []);
+  };
 
-  const handleOrderSuccess = useCallback(() => {
+  const handleOrderSuccess = () => {
     console.log('[OrderScreen] Order placed successfully, redirecting to Home');
     router.replace('../(tabs)/');
-  }, []);
+  };
 
   const productsByCategory = useMemo(() => {
     const categoryMap = new Map<string, { categoryName: string; products: typeof products }>();

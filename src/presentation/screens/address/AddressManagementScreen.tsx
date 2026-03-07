@@ -67,11 +67,7 @@ export default function AddressManagementScreen() {
     };
   }, []);
 
-  useEffect(() => {
-    initLocation();
-  }, [savedAddress]);
-
-  const initLocation = async () => {
+  const initLocation = useCallback(async () => {
     try {
       if (savedAddress?.lat && savedAddress?.lng) {
         const coords: [number, number] = [savedAddress.lng, savedAddress.lat];
@@ -105,14 +101,13 @@ export default function AddressManagementScreen() {
       } catch (error: any) {
         console.error("[AddressManagement] Reverse geocode failed:", error);
 
-        // Show retry popup for initial load failure
         const shouldRetry = await popupService.confirm(
           "Không thể xác định tên đường do lỗi kết nối. Bạn có muốn thử lại?",
           { title: "Lỗi kết nối", confirmText: "Thử lại", cancelText: "Để sau" }
         );
 
         if (shouldRetry) {
-          initLocation(); // Recursive retry
+          initLocation();
           return;
         }
 
@@ -136,7 +131,11 @@ export default function AddressManagementScreen() {
 
       setInitialRegion([APP_DEFAULT_LOCATION.longitude, APP_DEFAULT_LOCATION.latitude]);
     }
-  };
+  }, [savedAddress]);
+
+  useEffect(() => {
+    initLocation();
+  }, [initLocation]);
 
   const handleSelectSuggestion = async (item: IAddressSuggestion) => {
     try {
@@ -325,7 +324,6 @@ export default function AddressManagementScreen() {
         >
           <Camera
             ref={cameraRef}
-          // No defaultSettings - camera position controlled via setCamera() only
           />
           <UserLocation visible={true} />
         </GoongMapView>
