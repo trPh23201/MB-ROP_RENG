@@ -1,11 +1,12 @@
 import { fetchBrands, selectBrand as selectBrandAction, selectBrandError, selectBrandLoading, selectBrands, selectSelectedBrandId } from '@/src/state/slices/brandSlice';
 import { useAppSelector } from '@/src/utils/hooks';
+import { useBrandColor } from '@/src/utils/hooks/useBrandColor';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, Animated, FlatList, Image, Pressable, Text, View } from 'react-native';
 import { useDispatch } from 'react-redux';
-import { BRAND_COLORS } from '../../theme/colors';
+import { BRAND_COLORS, DYNAMIC_COLORS } from '../../theme/colors';
 import { SELECT_BRAND_CONSTANTS } from './constants';
 import { selectBrandStyles as styles } from './styles';
 
@@ -21,12 +22,14 @@ type SerializableBrand = {
 export default function SelectBrandScreen() {
     const router = useRouter();
     const dispatch = useDispatch<any>();
+    const { fetchAndCacheBrand, applyBrandColors, forceColorUpdate } = useBrandColor();
     const brands = useAppSelector(selectBrands);
-    const selectedBrandId = useAppSelector(selectSelectedBrandId);
-    const loading = useAppSelector(selectBrandLoading);
+    const isLoading = useAppSelector(selectBrandLoading);
     const error = useAppSelector(selectBrandError);
+    const selectedBrandId = useAppSelector(selectSelectedBrandId);
     const fadeAnim = useRef(new Animated.Value(0)).current;
     const slideAnim = useRef(new Animated.Value(30)).current;
+    const [, setColorVersion] = useState(0);
 
     useEffect(() => {
         dispatch(fetchBrands());
@@ -46,10 +49,17 @@ export default function SelectBrandScreen() {
     }, [dispatch, fadeAnim, slideAnim]);
 
     const handleSelectBrand = useCallback(
-        (brandId: number) => {
+        async (brandId: number) => {
             dispatch(selectBrandAction(brandId));
+
+            try {
+                await fetchAndCacheBrand(brandId);
+                await applyBrandColors(brandId);
+            } catch (err) {
+                console.log('[SelectBrandScreen] Brand flow failed:', err);
+            }
         },
-        [dispatch],
+        [dispatch, fetchAndCacheBrand, applyBrandColors],
     );
 
     const handleContinue = useCallback(() => {
@@ -101,7 +111,7 @@ export default function SelectBrandScreen() {
     );
 
     const renderContent = () => {
-        if (loading && brands.length === 0) {
+        if (isLoading && brands.length === 0) {
             return (
                 <View style={styles.loadingContainer}>
                     <ActivityIndicator
@@ -176,12 +186,12 @@ export default function SelectBrandScreen() {
                 >
                     <View style={styles.headerContainer}>
                         <Text
-                            style={[styles.title, { fontFamily: 'Phudu-Bold' }]}
+                            style={[styles.title, { fontFamily: 'Phudu-Bold', backgroundColor: DYNAMIC_COLORS.colorTest.red }]}
                         >
                             {SELECT_BRAND_CONSTANTS.TITLE}
                         </Text>
                         <Text
-                            style={[styles.subtitle, { fontFamily: 'SpaceGrotesk-Medium' }]}
+                            style={[styles.subtitle, { fontFamily: 'SpaceGrotesk-Medium', color: DYNAMIC_COLORS.colorTest.blue }]}
                         >
                             {SELECT_BRAND_CONSTANTS.SUBTITLE}
                         </Text>

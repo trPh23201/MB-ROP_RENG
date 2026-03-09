@@ -1,7 +1,8 @@
 import { AxiosError } from 'axios';
-import { GetBrandsResponseDTO } from '../../application/dto/BrandDTO';
+import { GetBrandByIdResponseDTO, GetBrandsResponseDTO } from '../../application/dto/BrandDTO';
 import { BrandMapper } from '../../application/mappers/BrandMapper';
 import { ApiError, NetworkError } from '../../core/errors/AppErrors';
+import { Brand } from '../../domain/entities/Brand';
 import { BrandRepository, BrandsResult } from '../../domain/repositories/BrandRepository';
 import { BRAND_ENDPOINTS } from '../api/brand/BrandApiConfig';
 import { httpClient } from '../http/HttpClient';
@@ -25,6 +26,18 @@ export class BrandRepositoryImpl implements BrandRepository {
             );
 
             return BrandMapper.toBrandsResult(response);
+        } catch (error) {
+            throw this.handleError(error);
+        }
+    }
+
+    async getBrandById(id: number): Promise<Brand> {
+        try {
+            const response = await httpClient.get<GetBrandByIdResponseDTO>(
+                BRAND_ENDPOINTS.GET_BY_ID(id),
+            );
+
+            return BrandMapper.toBrandEntity(response.brand);
         } catch (error) {
             throw this.handleError(error);
         }

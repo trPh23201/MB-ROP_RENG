@@ -14,8 +14,6 @@ export const BRAND_COLORS = {
     reuDam: '#444E27',
     nauCaramel: '#BC9E70',
     vangNhat: '#F9E5A0',
-    // camNhat: '#FFB380', 
-    // camDam: '#fa7a24ff',
   },
 
   text: {
@@ -50,21 +48,18 @@ export const BRAND_COLORS = {
     info: '#2196F3',
   },
 
-  // OVERLAY (NEW)
   overlay: {
     light: 'rgba(0, 0, 0, 0.3)',
     medium: 'rgba(0, 0, 0, 0.5)',
     dark: 'rgba(0, 0, 0, 0.7)',
   },
 
-  // SHADOWS
   shadow: {
     light: 'rgba(0, 0, 0, 0.08)',
     medium: 'rgba(0, 0, 0, 0.15)',
     heavy: 'rgba(0, 0, 0, 0.25)',
   },
 
-  //Screen Backgrounds -> PRIMARY colors only
   screenBg: {
     warm: '#FAEDC0',
     fresh: '#D4DF9A',
@@ -72,7 +67,6 @@ export const BRAND_COLORS = {
     gradient: ['#606A37', '#D4DF9A', '#FAEDC0', '#FFFFFF'],
   },
 
-  //UI Elements -> SECONDARY colors only
   ui: {
     heading: '#444E27',
     subtitle: '#5B4537',
@@ -82,7 +76,6 @@ export const BRAND_COLORS = {
     promo: '#D5E100',
   },
 
-  // Button Styles
   bta: {
     primaryBg: '#606A37',
     primaryText: '#FFFFFF',
@@ -91,5 +84,14 @@ export const BRAND_COLORS = {
     accentText: '#444E27',
   },
 };
+
+export const DYNAMIC_COLORS = {
+  colorTest: {
+    red: '#FFFFFF',
+    blue: '#000000',
+  },
+};
+
+export type BrandColorsType = typeof BRAND_COLORS;
 
 export const COLORS = BRAND_COLORS;

@@ -1,32 +1,76 @@
-import React from 'react';
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { useAuthGuard } from '../../../../utils/hooks/useAuthGuard';
-import { BRAND_COLORS } from '../../../theme/colors';
-import { WELCOME_TEXT } from '../WelcomeConstants';
+import { Brand } from '@/src/domain/entities/Brand';
+import { fetchBrands, selectBrands, selectSelectedBrandId } from '@/src/state/slices/brandSlice';
+import { useAppSelector } from '@/src/utils/hooks';
+import { useBrandColor } from '@/src/utils/hooks/useBrandColor';
+import { BottomSheetModal } from '@gorhom/bottom-sheet';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { useDispatch } from 'react-redux';
+import { BrandDetailBottomSheet } from '../../../components/brand/BrandDetailBottomSheet';
+import { BRAND_COLORS, DYNAMIC_COLORS } from '../../../theme/colors';
 
 export function BrandSelector() {
-  const handleBrandPress = useAuthGuard(
-    (brandId: string, brandName: string) => {
-      console.log(`Clicked: ${brandName} (${brandId})`);
-      // TODO: Switch brand context
+  const dispatch = useDispatch<any>();
+  const brands = useAppSelector(selectBrands);
+  const selectedBrandId = useAppSelector(selectSelectedBrandId);
+  const { fetchAndCacheBrand, applyBrandColors } = useBrandColor();
+  const bottomSheetRef = useRef<BottomSheetModal>(null);
+  const [selectedBrand, setSelectedBrand] = useState<Brand | null>(null);
+
+  useEffect(() => {
+    dispatch(fetchBrands());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (selectedBrand) {
+      bottomSheetRef.current?.present();
     }
-  );
+  }, [selectedBrand]);
+
+  const handleBrandPress = useCallback(async (brandId: number) => {
+    const brand = await fetchAndCacheBrand(brandId);
+    if (brand) setSelectedBrand(brand);
+  }, [fetchAndCacheBrand]);
+
+  const handleVisit = useCallback(async () => {
+    if (!selectedBrand) return;
+    await applyBrandColors(selectedBrand.id);
+    bottomSheetRef.current?.dismiss();
+    setSelectedBrand(null);
+  }, [selectedBrand, applyBrandColors]);
 
   return (
     <View>
       <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
-        {WELCOME_TEXT.BRAND_SECTION.BRANDS.map((brand) => (
+        {brands.map((brand) => (
           <TouchableOpacity
             key={brand.id}
-            style={styles.brandCard}
-            onPress={() => handleBrandPress(brand.id, brand.name)}
+            style={[styles.brandCard, selectedBrandId === brand.id && styles.brandCardActive]}
+            onPress={() => handleBrandPress(brand.id)}
           >
-            <View style={styles.brandPlaceholder}>
-              <Text style={styles.brandPlaceholderText}>{brand.name}</Text>
+            <View style={[styles.brandPlaceholder, { borderColor: DYNAMIC_COLORS.colorTest.red, backgroundColor: DYNAMIC_COLORS.colorTest.blue }]}>
+              {brand.logoUrl ? (
+                <Image
+                  source={{ uri: brand.logoUrl }}
+                  style={styles.brandLogoImage}
+                  resizeMode="cover"
+                />
+              ) : (
+                <Text style={styles.brandPlaceholderText}>
+                  {brand.name.charAt(0).toUpperCase()}
+                </Text>
+              )}
             </View>
+            <Text style={styles.brandNameText} numberOfLines={1}>{brand.name}</Text>
           </TouchableOpacity>
         ))}
       </ScrollView>
+
+      <BrandDetailBottomSheet
+        ref={bottomSheetRef}
+        brand={selectedBrand}
+        onVisit={handleVisit}
+      />
     </View>
   );
 }
@@ -38,29 +82,45 @@ const styles = StyleSheet.create({
   },
   brandCard: {
     width: 80,
-    height: 80,
     marginBottom: 5,
     marginLeft: 5,
-    backgroundColor: BRAND_COLORS.background.default,
+    alignItems: 'center',
+  },
+  brandCardActive: {
+    transform: [{ scale: 1.05 }],
+  },
+  brandPlaceholder: {
+    width: 80,
+    height: 80,
+    backgroundColor: BRAND_COLORS.primary.beSua,
     borderRadius: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+    overflow: 'hidden',
+    borderWidth: 2,
+    borderColor: 'transparent',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 5,
     elevation: 5,
   },
-  brandPlaceholder: {
-    flex: 1,
-    backgroundColor: BRAND_COLORS.primary.beSua,
-    borderRadius: 12,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 16,
+  brandLogoImage: {
+    width: '100%',
+    height: '100%',
   },
   brandPlaceholderText: {
     fontSize: 14,
     fontFamily: 'Phudu-Bold',
     color: BRAND_COLORS.secondary.nauEspresso,
+    textAlign: 'center',
+    padding: 8,
+  },
+  brandNameText: {
+    marginTop: 6,
+    fontSize: 11,
+    fontFamily: 'SpaceGrotesk-Medium',
+    color: BRAND_COLORS.ui.heading,
     textAlign: 'center',
   },
 });

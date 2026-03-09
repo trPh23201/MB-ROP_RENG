@@ -10,4 +10,5 @@ export interface BrandsResult {
 
 export interface BrandRepository {
     getBrands(): Promise<BrandsResult>;
+    getBrandById(id: number): Promise<Brand>;
 }

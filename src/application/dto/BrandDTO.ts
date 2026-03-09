@@ -29,3 +29,7 @@ export interface GetBrandsResponseDTO {
     total: number;
     total_pages: number;
 }
+
+export interface GetBrandByIdResponseDTO {
+    brand: BrandDetailDTO;
+}
