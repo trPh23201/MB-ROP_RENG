@@ -1,4 +1,5 @@
 import { selectInitError, selectIsAppReady } from '@/src/state/slices/appSlice';
+import { selectSelectedBrandId } from '@/src/state/slices/brandSlice';
 import { useAppSelector } from '@/src/utils/hooks';
 import { useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
@@ -10,6 +11,7 @@ export default function SplashScreen() {
   const router = useRouter();
   const isReady = useAppSelector(selectIsAppReady);
   const initError = useAppSelector(selectInitError);
+  const selectedBrandId = useAppSelector(selectSelectedBrandId);
   const [minTimeElapsed, setMinTimeElapsed] = useState(false);
 
   useEffect(() => {
@@ -22,9 +24,13 @@ export default function SplashScreen() {
 
   useEffect(() => {
     if (isReady && minTimeElapsed) {
-      router.replace('/(tabs)');
+      if (selectedBrandId) {
+        router.replace('/(tabs)');
+      } else {
+        router.replace('/select-brand' as any);
+      }
     }
-  }, [isReady, minTimeElapsed, router]);
+  }, [isReady, minTimeElapsed, selectedBrandId, router]);
 
   return (
     <View style={splashStyles.container}>

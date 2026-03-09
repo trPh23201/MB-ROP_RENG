@@ -4,6 +4,7 @@ import { persistReducer, persistStore } from 'redux-persist';
 import { StateTrackingService } from '../infrastructure/services/StateTrackingService';
 import appReducer from './slices/appSlice';
 import auth from './slices/authSlice';
+import brandReducer from './slices/brandSlice';
 import confirmOrderReducer from './slices/confirmOrderSlice';
 import deliveryReducer from './slices/deliverySlice';
 import homeReducer from './slices/homeSlice';
@@ -21,10 +22,20 @@ const authPersistConfig = {
 
 const persistedAuthReducer = persistReducer(authPersistConfig, auth);
 
+// Persist config for brand slice - remember selected brand
+const brandPersistConfig = {
+  key: 'brand',
+  storage: AsyncStorage,
+  whitelist: ['selectedBrandId'],
+};
+
+const persistedBrandReducer = persistReducer(brandPersistConfig, brandReducer);
+
 export const store = configureStore({
   reducer: {
     app: appReducer,
     auth: persistedAuthReducer,
+    brand: persistedBrandReducer,
     orderCart,
     delivery: deliveryReducer,
     home: homeReducer,

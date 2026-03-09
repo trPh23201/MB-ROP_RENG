@@ -1,3 +1,4 @@
+export * from './Brand';
 export * from './ConfirmOrder';
 export * from './ConfirmOrderItem';
 export * from './Menu';
@@ -8,4 +9,3 @@ export * from './Region';
 export * from './Store';
 export * from './User';
 export * from './Voucher';
-

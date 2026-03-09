@@ -69,7 +69,7 @@ export const BRAND_COLORS = {
     warm: '#FAEDC0',
     fresh: '#D4DF9A',
     bold: '#606A37',
-    gradient: ['#606A37', '#D4DF9A', '#FAEDC0', '#FFFFFF'] as readonly string[],
+    gradient: ['#606A37', '#D4DF9A', '#FAEDC0', '#FFFFFF'],
   },
 
   //UI Elements -> SECONDARY colors only
