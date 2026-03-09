@@ -3,7 +3,8 @@ import { BottomSheetBackdrop, BottomSheetModal, BottomSheetScrollView, useBottom
 import { BottomSheetDefaultBackdropProps } from '@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types';
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { forwardRef, useCallback, useMemo } from 'react';
-import { Dimensions, Easing, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Easing } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { BRAND_COLORS } from '../../theme/colors';
 
