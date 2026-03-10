@@ -1,6 +1,7 @@
 import { useAuthGuard } from '@/src/utils/hooks/useAuthGuard';
+import { Image } from 'expo-image';
 import React from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { BRAND_COLORS } from '../../../theme/colors';
 import { Collection } from '../HomeInterfaces';
 import { HOME_LAYOUT } from '../HomeLayout';
@@ -22,7 +23,7 @@ export function CollectionCard({ collection, onPress }: CollectionCardProps) {
 
   return (
     <TouchableOpacity style={styles.card} onPress={guardedPress} activeOpacity={0.8}>
-      <Image source={{ uri: collection.bannerImage }} style={styles.image} />
+      <Image source={collection.bannerImage} style={styles.image} contentFit="cover" cachePolicy="disk" />
       <View style={styles.overlay}>
         <Text style={styles.title}>{collection.title}</Text>
         <Text style={styles.description} numberOfLines={2}>

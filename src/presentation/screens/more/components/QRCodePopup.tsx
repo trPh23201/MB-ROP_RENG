@@ -61,7 +61,7 @@ export function QRCodePopup({ uuid, onDismiss }: QRCodePopupProps) {
         />
         <Text style={styles.toggleText}>
           {isQR ? 'Barcode' : 'QR Code'}
-          
+
         </Text>
       </TouchableOpacity>
     </View>

@@ -1,5 +1,6 @@
+import { Image } from 'expo-image';
 import React from 'react';
-import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { AppIcon } from '../../../components/shared/AppIcon';
 import { BRAND_COLORS } from '../../../theme/colors';
 import { WELCOME_LAYOUT } from '../WelcomeLayout';
@@ -38,7 +39,7 @@ export function ProductCard({ product, onPress }: ProductCardProps) {
       activeOpacity={0.8}
     >
       <View style={styles.imageContainer}>
-        <Image source={{ uri: product.imageUrl }} style={styles.image} />
+        <Image source={product.imageUrl} style={styles.image} contentFit="cover" cachePolicy="disk" />
         {product.badge && (
           <View
             style={[
