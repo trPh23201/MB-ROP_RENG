@@ -1,5 +1,6 @@
+import { Image } from 'expo-image';
 import React, { useEffect, useState } from 'react';
-import { Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { ComboProduct } from '../../home/HomeInterfaces';
 import { ORDER_TEXT } from '../OrderConstants';
 import { orderStyles } from '../styles';
@@ -55,8 +56,10 @@ export function OrderPromoSection({ title, expiresAt, products, onProductPress }
           <View key={product.id} style={orderStyles.promoCard}>
             <View style={orderStyles.promoImageContainer}>
               <Image
-                source={{ uri: product.imageUrl }}
+                source={product.imageUrl}
                 style={orderStyles.promoImage}
+                contentFit="cover"
+                cachePolicy="disk"
               />
               
               {(product.discountAmount ?? 0) > 0 && (

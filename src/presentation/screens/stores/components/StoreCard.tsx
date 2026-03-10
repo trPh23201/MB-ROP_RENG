@@ -1,6 +1,7 @@
 import { useAuthGuard } from '@/src/utils/hooks/useAuthGuard';
+import { Image } from 'expo-image';
 import React from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { BRAND_COLORS } from '../../../theme/colors';
 import { STORES_TEXT } from '../StoresConstants';
 import { StoreCardProps } from '../StoresInterfaces';
@@ -23,7 +24,7 @@ export function StoreCard({ store, onPress }: StoreCardProps) {
   
   return (
     <TouchableOpacity style={styles.card} onPress={handlePress} activeOpacity={0.7}>
-      <Image source={{ uri: store.imageUrl }} style={styles.image} />
+      <Image source={store.imageUrl} style={styles.image} contentFit="cover" cachePolicy="disk" />
       <View style={styles.info}>
         <Text style={styles.brandName}>{store.brandName}</Text>
         <Text style={styles.name}>{store.name}</Text>

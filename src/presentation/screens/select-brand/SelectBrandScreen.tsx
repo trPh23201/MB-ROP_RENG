@@ -1,10 +1,11 @@
 import { fetchBrands, selectBrand as selectBrandAction, selectBrandError, selectBrandLoading, selectBrands, selectSelectedBrandId } from '@/src/state/slices/brandSlice';
 import { useAppSelector } from '@/src/utils/hooks';
 import { useBrandColor } from '@/src/utils/hooks/useBrandColor';
+import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, Animated, FlatList, Image, Pressable, Text, View } from 'react-native';
+import { ActivityIndicator, Animated, FlatList, Pressable, Text, View } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { BRAND_COLORS, DYNAMIC_COLORS } from '../../theme/colors';
 import { SELECT_BRAND_CONSTANTS } from './constants';
@@ -90,9 +91,10 @@ export default function SelectBrandScreen() {
                     <View style={styles.brandLogoContainer}>
                         {item.logoUrl ? (
                             <Image
-                                source={{ uri: item.logoUrl }}
+                                source={item.logoUrl}
                                 style={styles.brandLogoImage}
-                                resizeMode="cover"
+                                contentFit="cover"
+                                cachePolicy="disk"
                             />
                         ) : (
                             <Text style={styles.brandLogoFallback}>

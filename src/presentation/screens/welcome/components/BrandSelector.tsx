@@ -3,8 +3,9 @@ import { fetchBrands, selectBrands, selectSelectedBrandId } from '@/src/state/sl
 import { useAppSelector } from '@/src/utils/hooks';
 import { useBrandColor } from '@/src/utils/hooks/useBrandColor';
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
+import { Image } from 'expo-image';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { BrandDetailBottomSheet } from '../../../components/brand/BrandDetailBottomSheet';
 import { BRAND_COLORS, DYNAMIC_COLORS } from '../../../theme/colors';
@@ -51,9 +52,10 @@ export function BrandSelector() {
             <View style={[styles.brandPlaceholder, { borderColor: DYNAMIC_COLORS.colorTest.red, backgroundColor: DYNAMIC_COLORS.colorTest.blue }]}>
               {brand.logoUrl ? (
                 <Image
-                  source={{ uri: brand.logoUrl }}
+                  source={brand.logoUrl}
                   style={styles.brandLogoImage}
-                  resizeMode="cover"
+                  contentFit="cover"
+                  cachePolicy="disk"
                 />
               ) : (
                 <Text style={styles.brandPlaceholderText}>

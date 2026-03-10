@@ -1,5 +1,6 @@
+import { Image } from 'expo-image';
 import React from 'react';
-import { Image, Text, TouchableOpacity, View } from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
 import { Product } from '../../../../domain/entities/Product';
 import { AppIcon } from '../../../components/shared/AppIcon';
 import { ORDER_TEXT } from '../OrderConstants';
@@ -22,8 +23,10 @@ export function OrderProductSection({
       {products.map((product) => (
         <View key={product.id} style={orderStyles.productItem}>
           <Image
-            source={{ uri: product.imageUrl }}
+            source={product.imageUrl}
             style={orderStyles.productImage}
+            contentFit="cover"
+            cachePolicy="disk"
           />
           <View style={orderStyles.productInfo}>
             <Text style={orderStyles.productName} numberOfLines={2}>

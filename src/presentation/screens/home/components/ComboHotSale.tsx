@@ -1,5 +1,6 @@
+import { Image } from 'expo-image';
 import React, { useEffect, useState } from 'react';
-import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useAddToCart } from '../../../../utils/hooks/useAddToCart';
 import { BRAND_COLORS } from '../../../theme/colors';
 import { HOME_TEXT } from '../HomeConstants';
@@ -72,7 +73,7 @@ const ComboItem = ({ combo }: { combo: Combo }) => {
             activeOpacity={0.9}
           >
             <View style={styles.imageContainer}>
-              <Image source={{ uri: product.imageUrl }} style={styles.productImage} />
+              <Image source={product.imageUrl} style={styles.productImage} contentFit="cover" cachePolicy="disk" />
 
               {(product.discountAmount ?? 0) > 0 && (
                 <View style={styles.discountBadge}>

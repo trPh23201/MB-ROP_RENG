@@ -1,9 +1,10 @@
 import { Brand } from '@/src/domain/entities/Brand';
 import { BottomSheetBackdrop, BottomSheetModal, BottomSheetScrollView, useBottomSheetTimingConfigs } from '@gorhom/bottom-sheet';
 import { BottomSheetDefaultBackdropProps } from '@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types';
+import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { forwardRef, useCallback, useMemo } from 'react';
-import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Easing } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { BRAND_COLORS } from '../../theme/colors';
@@ -62,9 +63,10 @@ export const BrandDetailBottomSheet = forwardRef<BottomSheetModal, BrandDetailBo
                         <View style={styles.heroContainer}>
                             {brand.logoUrl ? (
                                 <Image
-                                    source={{ uri: brand.logoUrl }}
+                                    source={brand.logoUrl}
                                     style={styles.heroImage}
-                                    resizeMode="cover"
+                                    contentFit="cover"
+                                    cachePolicy="disk"
                                 />
                             ) : (
                                 <View style={styles.heroPlaceholder}>

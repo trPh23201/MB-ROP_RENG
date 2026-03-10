@@ -1,7 +1,8 @@
 import { BRAND_COLORS } from '@/src/presentation/theme/colors';
 import BottomSheet, { BottomSheetBackdrop, BottomSheetView } from '@gorhom/bottom-sheet';
+import { Image } from 'expo-image';
 import React, { useCallback, useMemo, useRef } from 'react';
-import { Image, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Collection } from '../HomeInterfaces';
 
@@ -52,7 +53,7 @@ export function CollectionModal({ collection, onClose }: CollectionModalProps) {
         handleIndicatorStyle={styles.indicator}
       >
         <BottomSheetView style={styles.contentContainer}>
-          <Image source={{ uri: collection.bannerImage }} style={styles.bannerImage} />
+          <Image source={collection.bannerImage} style={styles.bannerImage} contentFit="cover" cachePolicy="disk" />
           
           <View style={styles.content}>
             <Text style={styles.title}>{collection.title}</Text>
@@ -94,7 +95,6 @@ const styles = StyleSheet.create({
   bannerImage: {
     width: '100%',
     height: 200,
-    resizeMode: 'cover',
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
   },
