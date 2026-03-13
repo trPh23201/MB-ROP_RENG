@@ -17,27 +17,38 @@ export class BrandColorRepository {
   async saveColors(brandId: number, colors: BrandColorDbItem[]): Promise<void> {
     const now = Date.now();
 
-    await this.db.withTransactionAsync(async () => {
-      for (const color of colors) {
-        await this.db.runAsync(
-          `INSERT OR REPLACE INTO brand_colors 
-           (id, brand_id, color_name, hex_code, rgb_code, is_active, sort_order, synced_at) 
-           VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-          [
-            color.id,
-            brandId,
-            color.color_name,
-            color.hex_code,
-            color.rgb_code,
-            color.is_active,
-            color.sort_order,
-            now,
-          ]
-        );
-      }
-    });
+    await this.db.getFirstAsync<{ count: number }>(
+      'SELECT COUNT(*) as count FROM brand_colors WHERE brand_id = ?',
+      [brandId]
+    );
 
-    console.log(`[BrandColorRepo] Saved ${colors.length} colors for brand ${brandId}`);
+    await this.db.runAsync(
+      'DELETE FROM brand_colors WHERE brand_id = ?',
+      [brandId]
+    );
+
+    for (const color of colors) {
+      await this.db.runAsync(
+        `INSERT INTO brand_colors 
+         (id, brand_id, color_name, hex_code, rgb_code, is_active, sort_order, synced_at) 
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+        [
+          color.id,
+          brandId,
+          color.color_name,
+          color.hex_code,
+          color.rgb_code,
+          color.is_active,
+          color.sort_order,
+          now,
+        ]
+      );
+    }
+
+    await this.db.getFirstAsync<{ count: number }>(
+      'SELECT COUNT(*) as count FROM brand_colors WHERE brand_id = ?',
+      [brandId]
+    );
   }
 
   async getColorsByBrandId(brandId: number): Promise<BrandColorDbItem[]> {

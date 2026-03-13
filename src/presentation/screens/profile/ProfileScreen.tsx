@@ -5,10 +5,11 @@ import { RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View } 
 import { fetchProfile } from '../../../state/slices/authSlice';
 import { useAppDispatch, useAppSelector } from '../../../utils/hooks';
 import { BaseFullScreenLayout } from '../../layouts/BaseFullScreenLayout';
-import { BRAND_COLORS } from '../../theme/colors';
+import { useBrandColors } from '../../theme/BrandColorContext';
 import { PROFILE_STRINGS } from './ProfileConstants';
 
 export default function ProfileScreen() {
+    const BRAND_COLORS = useBrandColors();
     const router = useRouter();
     const dispatch = useAppDispatch();
     const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
@@ -38,12 +39,12 @@ export default function ProfileScreen() {
     };
 
     const InfoRow = ({ label, value, icon, isLast = false }: { label: string, value: string, icon: keyof typeof Ionicons.glyphMap, isLast?: boolean }) => (
-        <View style={[styles.infoRow, isLast && styles.noBorder]}>
+        <View style={[styles.infoRow, { borderBottomColor: BRAND_COLORS.ui.placeholder, backgroundColor: BRAND_COLORS.screenBg.warm }, isLast && styles.noBorder]}>
             <View style={styles.infoLabelContainer}>
                 <Ionicons name={icon} size={20} color={BRAND_COLORS.text.tertiary} style={styles.icon} />
-                <Text style={styles.infoLabel}>{label}</Text>
+                <Text style={[styles.infoLabel, { color: BRAND_COLORS.ui.subtitle }]}>{label}</Text>
             </View>
-            <Text style={styles.infoValue}>{value}</Text>
+            <Text style={[styles.infoValue, { color: BRAND_COLORS.ui.heading }]}>{value}</Text>
         </View>
     );
 
@@ -52,9 +53,9 @@ export default function ProfileScreen() {
             <BaseFullScreenLayout backgroundColor={BRAND_COLORS.screenBg.fresh} safeAreaEdges={['top', 'left', 'right', 'bottom']}>
                 <View style={styles.unauthContainer}>
                     <Ionicons name="person-circle-outline" size={80} color={BRAND_COLORS.text.disabled} />
-                    <Text style={styles.unauthText}>{PROFILE_STRINGS.LOGIN_REQUIRED}</Text>
-                    <TouchableOpacity style={styles.primaryButton} onPress={handleLogin}>
-                        <Text style={styles.primaryButtonText}>{PROFILE_STRINGS.LOGIN}</Text>
+                    <Text style={[styles.unauthText, { color: BRAND_COLORS.ui.subtitle }]}>{PROFILE_STRINGS.LOGIN_REQUIRED}</Text>
+                    <TouchableOpacity style={[styles.primaryButton, { backgroundColor: BRAND_COLORS.bta.primaryBg }]} onPress={handleLogin}>
+                        <Text style={[styles.primaryButtonText, { color: BRAND_COLORS.bta.primaryText }]}>{PROFILE_STRINGS.LOGIN}</Text>
                     </TouchableOpacity>
                 </View>
             </BaseFullScreenLayout>
@@ -72,30 +73,30 @@ export default function ProfileScreen() {
             >
 
                 <View style={styles.headerSection}>
-                    <View style={styles.avatarContainer}>
+                    <View style={[styles.avatarContainer, { backgroundColor: BRAND_COLORS.screenBg.warm }]}>
                         <Ionicons name="person" size={40} color={BRAND_COLORS.bta.primaryBg} />
                     </View>
-                    <Text style={styles.nameText}>{user.displayName || user.phone}</Text>
-                    <Text style={styles.roleText}>{user.role === 'end_user' ? 'Khách hàng' : user.role}</Text>
+                    <Text style={[styles.nameText, { color: BRAND_COLORS.ui.heading }]}>{user.displayName || user.phone}</Text>
+                    <Text style={[styles.roleText, { color: BRAND_COLORS.ui.subtitle }]}>{user.role === 'end_user' ? 'Khách hàng' : user.role}</Text>
                 </View>
 
-                <View style={styles.cardSection}>
+                <View style={[styles.cardSection, { backgroundColor: BRAND_COLORS.screenBg.warm, shadowColor: BRAND_COLORS.shadow.light }]}>
                     <InfoRow label={PROFILE_STRINGS.PHONE} value={user.phone} icon="call-outline" />
                     <InfoRow label={PROFILE_STRINGS.EMAIL} value={user.email || '--'} icon="mail-outline" />
                     <InfoRow label={PROFILE_STRINGS.NAME} value={user.displayName || '--'} icon="person-outline" />
                     <InfoRow label={PROFILE_STRINGS.CREATED_AT} value={formatDate(user.createdAt)} icon="calendar-outline" isLast />
                 </View>
 
-                <View style={styles.cardSection}>
+                <View style={[styles.cardSection, { backgroundColor: BRAND_COLORS.screenBg.warm, shadowColor: BRAND_COLORS.shadow.light }]}>
                     <View style={styles.pointRow}>
                         <View style={styles.pointBox}>
-                            <Text style={styles.pointLabel}>{PROFILE_STRINGS.LOYALTY_POINT}</Text>
-                            <Text style={styles.pointValue}>{user.loyaltyPoint}</Text>
+                            <Text style={[styles.pointLabel, { color: BRAND_COLORS.ui.subtitle }]}>{PROFILE_STRINGS.LOYALTY_POINT}</Text>
+                            <Text style={[styles.pointValue, { color: BRAND_COLORS.ui.heading }]}>{user.loyaltyPoint}</Text>
                         </View>
-                        <View style={styles.divider} />
+                        <View style={[styles.divider, { backgroundColor: BRAND_COLORS.ui.placeholder }]} />
                         <View style={styles.pointBox}>
-                            <Text style={styles.pointLabel}>{PROFILE_STRINGS.AVAILABLE_POINT}</Text>
-                            <Text style={styles.pointValue}>{user.availablePoint}</Text>
+                            <Text style={[styles.pointLabel, { color: BRAND_COLORS.ui.subtitle }]}>{PROFILE_STRINGS.AVAILABLE_POINT}</Text>
+                            <Text style={[styles.pointValue, { color: BRAND_COLORS.ui.heading }]}>{user.availablePoint}</Text>
                         </View>
                     </View>
                 </View>
@@ -117,13 +118,11 @@ const styles = StyleSheet.create({
     },
     unauthText: {
         fontSize: 16,
-        color: BRAND_COLORS.ui.subtitle,
         textAlign: 'center',
         marginVertical: 24,
         lineHeight: 24,
     },
     primaryButton: {
-        backgroundColor: BRAND_COLORS.bta.primaryBg,
         paddingHorizontal: 32,
         paddingVertical: 12,
         borderRadius: 8,
@@ -131,7 +130,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     primaryButtonText: {
-        color: BRAND_COLORS.bta.primaryText,
         fontSize: 16,
         fontWeight: '600',
     },
@@ -144,7 +142,6 @@ const styles = StyleSheet.create({
         width: 80,
         height: 80,
         borderRadius: 40,
-        backgroundColor: BRAND_COLORS.screenBg.warm,
         justifyContent: 'center',
         alignItems: 'center',
         marginBottom: 16,
@@ -152,19 +149,15 @@ const styles = StyleSheet.create({
     nameText: {
         fontSize: 20,
         fontWeight: '700',
-        color: BRAND_COLORS.ui.heading,
         marginBottom: 4,
     },
     roleText: {
         fontSize: 14,
-        color: BRAND_COLORS.ui.subtitle,
     },
     cardSection: {
-        backgroundColor: BRAND_COLORS.screenBg.warm,
         borderRadius: 12,
         padding: 16,
         marginBottom: 16,
-        shadowColor: BRAND_COLORS.shadow.light,
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 1,
         shadowRadius: 4,
@@ -176,7 +169,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingVertical: 12,
         borderBottomWidth: 1,
-        borderBottomColor: BRAND_COLORS.ui.placeholder,
     },
     noBorder: {
         borderBottomWidth: 0,
@@ -190,12 +182,10 @@ const styles = StyleSheet.create({
     },
     infoLabel: {
         fontSize: 15,
-        color: BRAND_COLORS.ui.subtitle,
     },
     infoValue: {
         fontSize: 15,
         fontWeight: '500',
-        color: BRAND_COLORS.ui.heading,
     },
     pointRow: {
         flexDirection: 'row',
@@ -209,31 +199,14 @@ const styles = StyleSheet.create({
     },
     pointLabel: {
         fontSize: 13,
-        color: BRAND_COLORS.ui.subtitle,
         marginBottom: 8,
     },
     pointValue: {
         fontSize: 24,
         fontWeight: '700',
-        color: BRAND_COLORS.ui.heading,
     },
     divider: {
         width: 1,
         height: 40,
-        backgroundColor: BRAND_COLORS.ui.placeholder,
-    },
-    logoutButton: {
-        backgroundColor: BRAND_COLORS.screenBg.warm,
-        paddingVertical: 14,
-        borderRadius: 12,
-        alignItems: 'center',
-        marginTop: 8,
-        borderWidth: 1,
-        borderColor: BRAND_COLORS.semantic.error,
-    },
-    logoutButtonText: {
-        color: BRAND_COLORS.semantic.error,
-        fontSize: 16,
-        fontWeight: '600',
     },
 });

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { Animated, Dimensions, StyleSheet, Text } from 'react-native';
-import { BRAND_COLORS } from '../../theme/colors';
+import { useBrandColors } from '../../theme/BrandColorContext';
 
 const { width } = Dimensions.get('window');
 
@@ -11,6 +11,7 @@ interface ToastProps {
 }
 
 export function Toast({ message, duration = 2000, onHide }: ToastProps) {
+  const BRAND_COLORS = useBrandColors();
   const opacity = useRef(new Animated.Value(0)).current;
   const translateY = useRef(new Animated.Value(50)).current;
 
@@ -53,10 +54,11 @@ export function Toast({ message, duration = 2000, onHide }: ToastProps) {
         {
           opacity,
           transform: [{ translateY }],
+          backgroundColor: BRAND_COLORS.primary.p3,
         },
       ]}
     >
-      <Text style={styles.text}>{message}</Text>
+      <Text style={[styles.text, { color: BRAND_COLORS.primary.p1 }]}>{message}</Text>
     </Animated.View>
   );
 }
@@ -67,7 +69,6 @@ const styles = StyleSheet.create({
     bottom: 100,
     left: (width - 300) / 2,
     width: 300,
-    backgroundColor: BRAND_COLORS.primary.xanhReu,
     paddingHorizontal: 20,
     paddingVertical: 14,
     borderRadius: 24,
@@ -80,7 +81,6 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 14,
     fontFamily: 'SpaceGrotesk-Medium',
-    color: BRAND_COLORS.primary.beSua,
     textAlign: 'center',
   },
 });

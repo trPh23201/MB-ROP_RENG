@@ -5,21 +5,17 @@ import { MORE_LAYOUT } from './MoreLayout';
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: BRAND_COLORS.screenBg.fresh,
   },
   headerContainer: {
-    backgroundColor: BRAND_COLORS.screenBg.bold,
     paddingHorizontal: 16,
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: BRAND_COLORS.screenBg.fresh,
     alignItems: 'center',
     justifyContent: 'center',
   },
   headerTitle: {
     fontFamily: 'Phudu-Bold',
     fontSize: 18,
-    color: BRAND_COLORS.text.inverse,
   },
 
   sectionContainer: {
@@ -38,7 +34,6 @@ export const styles = StyleSheet.create({
   sectionTitle: {
     fontFamily: 'Phudu-Bold',
     fontSize: 16,
-    color: BRAND_COLORS.ui.heading,
     marginLeft: 16,
     marginBottom: 8,
   },
@@ -61,14 +56,11 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 8,
-    backgroundColor: BRAND_COLORS.ui.iconFill,
-    borderColor: BRAND_COLORS.bta.primaryBg,
     borderWidth: 2,
   },
   gridLabel: {
     fontFamily: 'SpaceGrotesk-Regular',
     fontSize: 11,
-    color: BRAND_COLORS.ui.heading,
     textAlign: 'center',
     lineHeight: 14,
   },
@@ -96,11 +88,9 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 16,
     height: MORE_LAYOUT.MENU_ITEM_HEIGHT,
-    backgroundColor: BRAND_COLORS.screenBg.warm,
   },
   menuItemBorder: {
     borderBottomWidth: 1,
-    borderBottomColor: BRAND_COLORS.ui.placeholder,
     marginLeft: 56,
   },
   menuIcon: {
@@ -111,7 +101,6 @@ export const styles = StyleSheet.create({
     flex: 1,
     fontFamily: 'SpaceGrotesk-Medium',
     fontSize: 15,
-    color: BRAND_COLORS.ui.heading,
   },
   destructiveText: {
     color: '#D32F2F',
@@ -124,6 +113,5 @@ export const styles = StyleSheet.create({
   versionText: {
     fontFamily: 'SpaceMono-Regular',
     fontSize: 12,
-    color: BRAND_COLORS.ui.placeholder,
   },
 });

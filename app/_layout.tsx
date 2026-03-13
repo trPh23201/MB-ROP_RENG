@@ -12,6 +12,7 @@ import { TamaguiProvider } from 'tamagui';
 import { DatabaseProvider } from '../src/infrastructure/db/sqlite/provider';
 import { NetworkGuard } from '../src/presentation/layouts/network/NetworkGuard';
 import { PopupProvider } from '../src/presentation/layouts/popup/PopupProvider';
+import { BrandColorProvider } from '../src/presentation/theme/BrandColorContext';
 import { persistor, store } from '../src/state/store';
 import { useAppInitialization } from '../src/utils/hooks/useAppInitialization';
 import config from '../tamagui.config';
@@ -59,25 +60,27 @@ export default function RootLayout() {
             <TamaguiProvider config={config}>
               <BottomSheetModalProvider>
                 <DatabaseProvider>
-                  <PopupProvider>
-                    <AppInitializer fontsLoaded={fontsLoaded}>
-                      <StatusBar style={IS_IOS ? 'dark' : 'auto'} />
-                      <Stack screenOptions={{ headerShown: false }}>
-                        <Stack.Screen name="index" />
-                        <Stack.Screen name="(auth)" />
-                        <Stack.Screen name="(tabs)" />
-                        <Stack.Screen name="select-brand" />
-                        <Stack.Screen
-                          name="address-management"
-                          options={{
-                            headerShown: false,
-                            presentation: 'fullScreenModal',
-                            animation: 'slide_from_bottom'
-                          }}
-                        />
-                      </Stack>
-                    </AppInitializer>
-                  </PopupProvider>
+                  <BrandColorProvider>
+                    <PopupProvider>
+                      <AppInitializer fontsLoaded={fontsLoaded}>
+                        <StatusBar style={IS_IOS ? 'dark' : 'auto'} />
+                        <Stack screenOptions={{ headerShown: false }}>
+                          <Stack.Screen name="index" />
+                          <Stack.Screen name="(auth)" />
+                          <Stack.Screen name="(tabs)" />
+                          <Stack.Screen name="select-brand" />
+                          <Stack.Screen
+                            name="address-management"
+                            options={{
+                              headerShown: false,
+                              presentation: 'fullScreenModal',
+                              animation: 'slide_from_bottom'
+                            }}
+                          />
+                        </Stack>
+                      </AppInitializer>
+                    </PopupProvider>
+                  </BrandColorProvider>
                 </DatabaseProvider>
               </BottomSheetModalProvider>
             </TamaguiProvider>

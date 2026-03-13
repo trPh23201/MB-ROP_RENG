@@ -1,10 +1,11 @@
+import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from "expo-router";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { ActivityIndicator, FlatList, RefreshControl, StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator, Dimensions, FlatList, RefreshControl, StyleSheet, Text, View } from "react-native";
 import { Order } from "../../../domain/entities/Order";
 import { useAppSelector } from "../../../utils/hooks";
 import { BaseAuthenticatedLayout } from "../../layouts/BaseAuthenticatedLayout";
-import { BRAND_COLORS } from '../../theme/colors';
+import { useBrandColors } from '../../theme/BrandColorContext';
 import { ITEMS_PER_PAGE, ORDER_HISTORY_STRINGS, STATUS_CHIPS } from "./OrderHistoryConstants";
 import { OrderStatus } from "./OrderHistoryEnums";
 import { StatusChipData } from "./OrderHistoryInterfaces";
@@ -13,6 +14,7 @@ import { OrderHistoryItem } from "./components/OrderHistoryItem";
 import { OrderStatusChip } from "./components/OrderStatusChip";
 
 export default function OrderHistoryScreen() {
+  const BRAND_COLORS = useBrandColors();
   const router = useRouter();
   const user = useAppSelector((state) => state.auth.user);
   const service = useMemo(() => new OrderHistoryService(), []);
@@ -121,7 +123,7 @@ export default function OrderHistoryScreen() {
 
   const renderStatusChips = useCallback(() => {
     return (
-      <View style={styles.chipsContainer}>
+      <View style={[styles.chipsContainer, { backgroundColor: BRAND_COLORS.screenBg.fresh, borderBottomColor: BRAND_COLORS.ui.placeholder }]}>
         <FlatList
           horizontal
           data={selectedStatuses}
@@ -141,14 +143,24 @@ export default function OrderHistoryScreen() {
   }, [selectedStatuses, handleChipPress]);
 
   const renderEmpty = useCallback(() => {
-    if (loading) return null;
+    if (loading) {
+      return (
+        <View style={styles.emptyContainer}>
+          <ActivityIndicator size="large" color={BRAND_COLORS.bta.primaryBg} />
+          <Text style={[styles.loadingText, { color: BRAND_COLORS.ui.subtitle }]}>{ORDER_HISTORY_STRINGS.LOADING}</Text>
+        </View>
+      );
+    }
     return (
       <View style={styles.emptyContainer}>
-        <Text style={styles.emptyTitle}>{ORDER_HISTORY_STRINGS.EMPTY_TITLE}</Text>
-        <Text style={styles.emptyMessage}>{ORDER_HISTORY_STRINGS.EMPTY_MESSAGE}</Text>
+        <View style={styles.emptyIconContainer}>
+          <Ionicons name="receipt-outline" size={120} color={BRAND_COLORS.ui.heading} />
+        </View>
+        <Text style={[styles.emptyTitle, { color: BRAND_COLORS.ui.heading }]}>{ORDER_HISTORY_STRINGS.EMPTY_TITLE}</Text>
+        <Text style={[styles.emptyMessage, { color: BRAND_COLORS.ui.subtitle }]}>{ORDER_HISTORY_STRINGS.EMPTY_MESSAGE}</Text>
       </View>
     );
-  }, [loading]);
+  }, [loading, BRAND_COLORS]);
 
   const renderFooter = useCallback(() => {
     if (!loadingMore) return null;
@@ -159,16 +171,7 @@ export default function OrderHistoryScreen() {
     );
   }, [loadingMore]);
 
-  if (loading && !refreshing) {
-    return (
-      <BaseAuthenticatedLayout backgroundColor={BRAND_COLORS.screenBg.fresh}>
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color={BRAND_COLORS.bta.primaryBg} />
-          <Text style={styles.loadingText}>{ORDER_HISTORY_STRINGS.LOADING}</Text>
-        </View>
-      </BaseAuthenticatedLayout>
-    );
-  }
+
 
   return (
     <BaseAuthenticatedLayout backgroundColor={BRAND_COLORS.screenBg.fresh} safeAreaEdges={['left', 'right']}>
@@ -200,33 +203,34 @@ const styles = StyleSheet.create({
   loadingText: {
     marginTop: 12,
     fontSize: 14,
-    color: BRAND_COLORS.ui.subtitle,
   },
   chipsContainer: {
     paddingVertical: 12,
-    backgroundColor: BRAND_COLORS.screenBg.fresh,
     borderBottomWidth: 1,
-    borderBottomColor: BRAND_COLORS.ui.placeholder,
   },
   chipsContent: {
     paddingHorizontal: 16,
   },
   emptyContainer: {
-    flex: 1,
+    height: Dimensions.get('window').height * 0.7,
     justifyContent: "center",
     alignItems: "center",
     paddingHorizontal: 32,
-    paddingTop: 80,
+  },
+  emptyIconContainer: {
+    width: 120,
+    height: 120,
+    marginBottom: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   emptyTitle: {
     fontSize: 18,
     fontWeight: "600",
-    color: BRAND_COLORS.ui.heading,
     marginBottom: 8,
   },
   emptyMessage: {
     fontSize: 14,
-    color: BRAND_COLORS.ui.subtitle,
     textAlign: "center",
     lineHeight: 20,
   },

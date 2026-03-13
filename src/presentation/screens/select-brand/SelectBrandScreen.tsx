@@ -7,7 +7,7 @@ import { useRouter } from 'expo-router';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, Animated, FlatList, Pressable, Text, View } from 'react-native';
 import { useDispatch } from 'react-redux';
-import { BRAND_COLORS, DYNAMIC_COLORS } from '../../theme/colors';
+import { useBrandColors } from '../../theme/BrandColorContext';
 import { SELECT_BRAND_CONSTANTS } from './constants';
 import { selectBrandStyles as styles } from './styles';
 
@@ -21,16 +21,17 @@ type SerializableBrand = {
 };
 
 export default function SelectBrandScreen() {
+    const BRAND_COLORS = useBrandColors();
     const router = useRouter();
     const dispatch = useDispatch<any>();
-    const { fetchAndCacheBrand, applyBrandColors, forceColorUpdate } = useBrandColor();
+    const { fetchAndCacheBrand, applyBrandColors } = useBrandColor();
     const brands = useAppSelector(selectBrands);
     const isLoading = useAppSelector(selectBrandLoading);
     const error = useAppSelector(selectBrandError);
     const selectedBrandId = useAppSelector(selectSelectedBrandId);
     const fadeAnim = useRef(new Animated.Value(0)).current;
     const slideAnim = useRef(new Animated.Value(30)).current;
-    const [, setColorVersion] = useState(0);
+
 
     useEffect(() => {
         dispatch(fetchBrands());
@@ -80,30 +81,34 @@ export default function SelectBrandScreen() {
             return (
                 <Pressable
                     onPress={() => handleSelectBrand(item.id)}
-                    style={[styles.brandCard, isSelected && styles.brandCardSelected]}
+                    style={[
+                        styles.brandCard,
+                        { backgroundColor: BRAND_COLORS.background.primary, borderColor: BRAND_COLORS.border.light, shadowColor: BRAND_COLORS.shadow.light },
+                        isSelected && [styles.brandCardSelected, { borderColor: BRAND_COLORS.bta.primaryBg, shadowColor: BRAND_COLORS.bta.primaryBg }]
+                    ]}
                 >
                     {isSelected && (
-                        <View style={styles.selectedCheck}>
-                            <Text style={styles.selectedCheckText}>✓</Text>
+                        <View style={[styles.selectedCheck, { backgroundColor: BRAND_COLORS.bta.primaryBg }]}>
+                            <Text style={[styles.selectedCheckText, { color: BRAND_COLORS.bta.primaryText }]}>✓</Text>
                         </View>
                     )}
 
-                    <View style={styles.brandLogoContainer}>
+                    <View style={[styles.brandLogoContainer, { backgroundColor: BRAND_COLORS.screenBg.warm }]}>
                         {item.logoUrl ? (
                             <Image
-                                source={item.logoUrl}
+                                source={{ uri: item.logoUrl }}
                                 style={styles.brandLogoImage}
                                 contentFit="cover"
                                 cachePolicy="disk"
                             />
                         ) : (
-                            <Text style={styles.brandLogoFallback}>
+                            <Text style={[styles.brandLogoFallback, { color: BRAND_COLORS.ui.heading }]}>
                                 {item.name.charAt(0).toUpperCase()}
                             </Text>
                         )}
                     </View>
 
-                    <Text style={styles.brandName} numberOfLines={2}>
+                    <Text style={[styles.brandName, { color: BRAND_COLORS.ui.heading }]} numberOfLines={2}>
                         {item.name}
                     </Text>
                 </Pressable>
@@ -120,7 +125,7 @@ export default function SelectBrandScreen() {
                         size="large"
                         color={BRAND_COLORS.bta.primaryBg}
                     />
-                    <Text style={styles.loadingText}>
+                    <Text style={[styles.loadingText, { color: BRAND_COLORS.ui.subtitle }]}>
                         {SELECT_BRAND_CONSTANTS.LOADING_TEXT}
                     </Text>
                 </View>
@@ -130,9 +135,9 @@ export default function SelectBrandScreen() {
         if (error && brands.length === 0) {
             return (
                 <View style={styles.errorContainer}>
-                    <Text style={styles.errorText}>{error}</Text>
-                    <Pressable style={styles.retryButton} onPress={handleRetry}>
-                        <Text style={styles.retryButtonText}>
+                    <Text style={[styles.errorText, { color: BRAND_COLORS.semantic.error }]}>{error}</Text>
+                    <Pressable style={[styles.retryButton, { backgroundColor: BRAND_COLORS.bta.accentBg }]} onPress={handleRetry}>
+                        <Text style={[styles.retryButtonText, { color: BRAND_COLORS.bta.accentText }]}>
                             {SELECT_BRAND_CONSTANTS.ERROR_RETRY}
                         </Text>
                     </Pressable>
@@ -155,12 +160,13 @@ export default function SelectBrandScreen() {
                     <Pressable
                         style={[
                             styles.continueButton,
-                            !selectedBrandId && styles.continueButtonDisabled,
+                            { backgroundColor: BRAND_COLORS.bta.primaryBg, shadowColor: BRAND_COLORS.bta.primaryBg },
+                            !selectedBrandId && [styles.continueButtonDisabled, { backgroundColor: BRAND_COLORS.ui.placeholder }],
                         ]}
                         onPress={handleContinue}
                         disabled={!selectedBrandId}
                     >
-                        <Text style={styles.continueButtonText}>
+                        <Text style={[styles.continueButtonText, { color: BRAND_COLORS.bta.primaryText }]}>
                             {SELECT_BRAND_CONSTANTS.BUTTON_TEXT}
                         </Text>
                     </Pressable>
@@ -188,12 +194,12 @@ export default function SelectBrandScreen() {
                 >
                     <View style={styles.headerContainer}>
                         <Text
-                            style={[styles.title, { fontFamily: 'Phudu-Bold', backgroundColor: DYNAMIC_COLORS.colorTest.red }]}
+                            style={[styles.title, { color: BRAND_COLORS.ui.heading }, { fontFamily: 'Phudu-Bold' }]}
                         >
                             {SELECT_BRAND_CONSTANTS.TITLE}
                         </Text>
                         <Text
-                            style={[styles.subtitle, { fontFamily: 'SpaceGrotesk-Medium', color: DYNAMIC_COLORS.colorTest.blue }]}
+                            style={[styles.subtitle, { color: BRAND_COLORS.ui.subtitle }, { fontFamily: 'SpaceGrotesk-Medium' }]}
                         >
                             {SELECT_BRAND_CONSTANTS.SUBTITLE}
                         </Text>

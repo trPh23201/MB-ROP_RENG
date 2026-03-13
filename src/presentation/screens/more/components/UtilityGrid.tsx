@@ -1,3 +1,4 @@
+import { useBrandColors } from '@/src/presentation/theme/BrandColorContext';
 import React from 'react';
 import { View } from 'react-native';
 import { UTILITIES } from '../MoreConstants';
@@ -9,6 +10,7 @@ interface UtilityGridProps {
 }
 
 export function UtilityGrid({ onItemPress }: UtilityGridProps) {
+  const BRAND_COLORS = useBrandColors();
   const handlePress = (id: string) => {
     if (onItemPress) {
       onItemPress(id);
@@ -16,7 +18,7 @@ export function UtilityGrid({ onItemPress }: UtilityGridProps) {
   };
 
   return (
-    <View style={styles.sectionContainer}>
+    <View style={[styles.sectionContainer, { backgroundColor: BRAND_COLORS.screenBg.warm }]}>
       <View style={styles.gridContainer}>
         {UTILITIES.map((item) => (
           <UtilityItem key={item.id} item={item} onPress={handlePress} />

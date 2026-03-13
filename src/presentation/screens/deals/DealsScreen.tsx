@@ -3,13 +3,14 @@ import { ScrollView, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MOCK_MEMBERSHIP_TIERS } from '../../../data/mockMemberships';
 import { useAppSelector } from '../../../utils/hooks';
-import { BRAND_COLORS } from '../../theme/colors';
+import { useBrandColors } from '../../theme/BrandColorContext';
 import { BenefitsList } from './components/BenefitsList';
 import { LoginPromptCard } from './components/LoginPromptCard';
 import { MembershipTierList } from './components/MembershipTierList';
 import { SelectedTier } from './DealsInterfaces';
 
 export default function DealsScreen() {
+  const BRAND_COLORS = useBrandColors();
   const insets = useSafeAreaInsets();
   const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
   
@@ -18,7 +19,7 @@ export default function DealsScreen() {
   const selectedTierData = selectedTier ? MOCK_MEMBERSHIP_TIERS.find((t) => t.id === selectedTier) : null;
 
   return (
-    <View style={[styles.container, { paddingTop: insets.top }]}>
+    <View style={[styles.container, { backgroundColor: BRAND_COLORS.screenBg.fresh }, { paddingTop: insets.top }]}>
       <ScrollView showsVerticalScrollIndicator={false}>
         {!isAuthenticated && <LoginPromptCard />}
         
@@ -37,6 +38,5 @@ export default function DealsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: BRAND_COLORS.screenBg.fresh,
   },
 });

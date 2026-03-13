@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { BRAND_COLORS } from '../../../theme/colors';
+import { useBrandColors } from '../../../theme/BrandColorContext';
 import { MembershipBenefit } from '../DealsInterfaces';
 import { DEALS_LAYOUT } from '../DealsLayout';
 
@@ -9,19 +9,20 @@ interface BenefitsListProps {
 }
 
 export function BenefitsList({ benefits }: BenefitsListProps) {
+  const BRAND_COLORS = useBrandColors();
   if (benefits.length === 0) return null;
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: BRAND_COLORS.screenBg.warm }]}>
       {benefits.map((benefit, index) => (
         <View key={benefit.id}>
           <View style={styles.benefitItem}>
-            <View style={styles.iconContainer}>
+            <View style={[styles.iconContainer, { backgroundColor: BRAND_COLORS.ui.iconFill }]}>
               <Text style={styles.icon}>{benefit.icon}</Text>
             </View>
-            <Text style={styles.description}>{benefit.description}</Text>
+            <Text style={[styles.description, { color: BRAND_COLORS.ui.subtitle }]}>{benefit.description}</Text>
           </View>
-          {index < benefits.length - 1 && <View style={styles.divider} />}
+          {index < benefits.length - 1 && <View style={[styles.divider, { backgroundColor: BRAND_COLORS.ui.placeholder }]} />}
         </View>
       ))}
     </View>
@@ -32,7 +33,6 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: DEALS_LAYOUT.BENEFITS_PADDING_HORIZONTAL,
     marginHorizontal: 16,
-    backgroundColor: BRAND_COLORS.screenBg.warm,
     borderRadius: 16,
     padding: 16,
     shadowColor: '#000',
@@ -50,7 +50,6 @@ const styles = StyleSheet.create({
   iconContainer: {
     width: DEALS_LAYOUT.BENEFIT_ICON_SIZE,
     height: DEALS_LAYOUT.BENEFIT_ICON_SIZE,
-    backgroundColor: BRAND_COLORS.ui.iconFill,
     borderRadius: 24,
     justifyContent: 'center',
     alignItems: 'center',
@@ -62,12 +61,10 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: DEALS_LAYOUT.BENEFIT_TEXT_SIZE,
     fontFamily: 'SpaceGrotesk-Medium',
-    color: BRAND_COLORS.ui.subtitle,
     lineHeight: 24,
   },
   divider: {
     height: DEALS_LAYOUT.BENEFIT_BORDER_WIDTH,
-    backgroundColor: BRAND_COLORS.ui.placeholder,
     marginHorizontal: DEALS_LAYOUT.BENEFIT_ICON_SIZE + DEALS_LAYOUT.BENEFIT_GAP,
   },
 });

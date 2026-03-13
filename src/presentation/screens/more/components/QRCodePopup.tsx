@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { BarcodeCreatorView, BarcodeFormat } from 'react-native-barcode-creator';
 import { CustomPopupProps } from '../../../layouts/popup/types';
-import { BRAND_COLORS } from '../../../theme/colors';
+import { useBrandColors } from '../../../theme/BrandColorContext';
 
 interface QRCodePopupExtraProps {
   uuid: string;
@@ -19,6 +19,7 @@ const POPUP_WIDTH_BARCODE = Math.min(SCREEN_WIDTH, 400);
 const FIXED_HEIGHT = 400;
 
 export function QRCodePopup({ uuid, onDismiss }: QRCodePopupProps) {
+  const BRAND_COLORS = useBrandColors();
   const [mode, setMode] = useState<CodeMode>('qr');
   const isQR = mode === 'qr';
 
@@ -27,7 +28,7 @@ export function QRCodePopup({ uuid, onDismiss }: QRCodePopupProps) {
       <View style={styles.header}>
         <Text style={styles.title}>{isQR ? 'Mã QR' : 'Barcode'}</Text>
         <TouchableOpacity
-          style={styles.closeButton}
+          style={[styles.closeButton, { backgroundColor: BRAND_COLORS.background.tertiary }]}
           onPress={onDismiss}
           activeOpacity={0.6}
           hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
@@ -37,7 +38,7 @@ export function QRCodePopup({ uuid, onDismiss }: QRCodePopupProps) {
       </View>
 
       <View style={styles.codeArea}>
-        <View style={styles.codeContainer}>
+        <View style={[styles.codeContainer, { borderColor: BRAND_COLORS.border.focus }]}>
           <BarcodeCreatorView
             value={uuid}
             format={isQR ? BarcodeFormat.QR : BarcodeFormat.CODE128}
@@ -49,7 +50,7 @@ export function QRCodePopup({ uuid, onDismiss }: QRCodePopupProps) {
       </View>
 
       <TouchableOpacity
-        style={styles.toggleButton}
+        style={[styles.toggleButton, { backgroundColor: BRAND_COLORS.ui.iconFill }]}
         onPress={() => setMode(isQR ? 'barcode' : 'qr')}
         activeOpacity={0.7}
       >
@@ -59,7 +60,7 @@ export function QRCodePopup({ uuid, onDismiss }: QRCodePopupProps) {
           color={BRAND_COLORS.bta.accentText}
           style={{ marginRight: 6 }}
         />
-        <Text style={styles.toggleText}>
+        <Text style={[styles.toggleText, { color: BRAND_COLORS.bta.accentText }]}>
           {isQR ? 'Barcode' : 'QR Code'}
 
         </Text>
@@ -91,7 +92,6 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: 'Phudu-Bold',
     fontSize: 20,
-    color: BRAND_COLORS.ui.heading,
     textAlign: 'center',
   },
   closeButton: {
@@ -100,7 +100,6 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: BRAND_COLORS.background.tertiary,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -114,7 +113,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     borderRadius: 5,
     borderWidth: 2,
-    borderColor: BRAND_COLORS.border.focus,
     alignItems: 'center',
     justifyContent: 'center',
     padding: 4,
@@ -132,7 +130,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     width: '50%',
-    backgroundColor: BRAND_COLORS.ui.iconFill,
     marginHorizontal: 100,
     marginBottom: 18,
     paddingVertical: 12,
@@ -141,6 +138,5 @@ const styles = StyleSheet.create({
   toggleText: {
     fontFamily: 'SpaceGrotesk-Bold',
     fontSize: 14,
-    color: BRAND_COLORS.bta.accentText,
   },
 });

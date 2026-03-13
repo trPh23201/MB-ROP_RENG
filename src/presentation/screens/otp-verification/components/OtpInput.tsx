@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { StyleSheet, TextInput, TextInputKeyPressEvent } from 'react-native';
 import Animated from 'react-native-reanimated';
-import { BRAND_COLORS } from '../../../theme/colors';
+import { useBrandColors } from '../../../theme/BrandColorContext';
 import { OTP_CONFIG } from '../OtpVerificationConstants';
 import { OTP_LAYOUT } from '../OtpVerificationLayout';
 import { OtpVerificationService } from '../OtpVerificationService';
@@ -15,6 +15,7 @@ interface OtpInputProps {
 }
 
 export function OtpInput({ digits, onDigitsChange, onComplete, shakeAnimatedStyle, disabled = false }: OtpInputProps) {
+  const BRAND_COLORS = useBrandColors();
   const inputRefs = useRef<(TextInput | null)[]>([]);
 
   useEffect(() => {
@@ -63,7 +64,8 @@ export function OtpInput({ digits, onDigitsChange, onComplete, shakeAnimatedStyl
           }}
           style={[
             styles.input,
-            digits[index] && styles.inputFilled,
+            { borderColor: BRAND_COLORS.secondary.s6, backgroundColor: BRAND_COLORS.primary.p1, color: BRAND_COLORS.primary.p3 },
+            digits[index] && [styles.inputFilled, { borderColor: BRAND_COLORS.secondary.s3, backgroundColor: BRAND_COLORS.primary.p1 }],
             disabled && styles.inputDisabled,
           ]}
           value={digits[index] || ''}
@@ -89,17 +91,12 @@ const styles = StyleSheet.create({
     width: OTP_LAYOUT.OTP_BOX_SIZE,
     height: OTP_LAYOUT.OTP_BOX_SIZE,
     borderWidth: OTP_LAYOUT.OTP_BOX_BORDER_WIDTH,
-    borderColor: BRAND_COLORS.secondary.nauCaramel,
     borderRadius: OTP_LAYOUT.OTP_BOX_BORDER_RADIUS,
-    backgroundColor: BRAND_COLORS.primary.beSua,
     fontSize: OTP_LAYOUT.OTP_BOX_FONT_SIZE,
     fontFamily: 'Phudu-Bold',
-    color: BRAND_COLORS.primary.xanhReu,
     textAlign: 'center',
   },
   inputFilled: {
-    borderColor: BRAND_COLORS.secondary.nauEspresso,
-    backgroundColor: BRAND_COLORS.primary.beSua,
   },
   inputDisabled: {
     opacity: 0.5,

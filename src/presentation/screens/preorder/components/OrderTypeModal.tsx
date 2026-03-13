@@ -6,7 +6,7 @@ import React, { forwardRef, useCallback, useMemo } from 'react';
 import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { OrderType } from '../../../../domain/shared';
 import { ORDER_TYPE_LABELS } from '../../../components/order/OrderConstants';
-import { BRAND_COLORS } from '../../../theme/colors';
+import { useBrandColors } from '../../../theme/BrandColorContext';
 import { TYPOGRAPHY } from '../../../theme/typography';
 import { PREORDER_TEXT } from '../PreOrderConstants';
 import { PREORDER_LAYOUT } from '../PreOrderLayout';
@@ -22,6 +22,7 @@ const MODAL_HEIGHT = WINDOW_HEIGHT * 0.6;
 
 export const OrderTypeModal = forwardRef<BottomSheetModal, OrderTypeModalProps>(
   ({ selectedType, onSelectType }, ref) => {
+    const BRAND_COLORS = useBrandColors();
     const snapPoints = useMemo(() => [MODAL_HEIGHT], []);
     const orderTypes = useMemo(() => [OrderType.DELIVERY, OrderType.TAKEAWAY, OrderType.DINE_IN], []);
 
@@ -63,8 +64,8 @@ export const OrderTypeModal = forwardRef<BottomSheetModal, OrderTypeModalProps>(
           contentContainerStyle={styles.contentContainer}
           showsVerticalScrollIndicator={false}
         >
-          <View style={styles.header}>
-            <Text style={styles.title}>{PREORDER_TEXT.ORDER_TYPE_MODAL_TITLE}</Text>
+          <View style={[styles.header, { borderBottomColor: BRAND_COLORS.screenBg.fresh }]}>
+            <Text style={[styles.title, { color: BRAND_COLORS.ui.heading }]}>{PREORDER_TEXT.ORDER_TYPE_MODAL_TITLE}</Text>
             <TouchableOpacity onPress={handleClose} style={styles.closeButton}>
               <AppIcon name="close" size={PREORDER_LAYOUT.HEADER_BUTTON_SIZE} color={BRAND_COLORS.ui.subtitle} />
             </TouchableOpacity>
@@ -78,7 +79,11 @@ export const OrderTypeModal = forwardRef<BottomSheetModal, OrderTypeModalProps>(
               return (
                 <TouchableOpacity
                   key={type}
-                  style={[styles.option, isSelected && styles.optionSelected]}
+                  style={[
+                    styles.option,
+                    { borderColor: BRAND_COLORS.screenBg.fresh },
+                    isSelected && [styles.optionSelected, { borderColor: BRAND_COLORS.bta.primaryBg, backgroundColor: `${BRAND_COLORS.screenBg.fresh}30` }]
+                  ]}
                   onPress={() => onSelectType(type)}
                   activeOpacity={0.7}
                 >
@@ -88,7 +93,11 @@ export const OrderTypeModal = forwardRef<BottomSheetModal, OrderTypeModalProps>(
                       size={PREORDER_LAYOUT.ORDER_TYPE_ICON_SIZE}
                       color={isSelected ? BRAND_COLORS.bta.primaryBg : BRAND_COLORS.ui.subtitle}
                     />
-                    <Text style={[styles.optionLabel, isSelected && styles.optionLabelSelected]}>
+                    <Text style={[
+                      styles.optionLabel,
+                      { color: BRAND_COLORS.ui.subtitle },
+                      isSelected && [styles.optionLabelSelected, { color: BRAND_COLORS.bta.primaryBg }]
+                    ]}>
                       {ORDER_TYPE_LABELS[type]}
                     </Text>
                   </View>
@@ -109,18 +118,15 @@ OrderTypeModal.displayName = 'OrderTypeModal';
 
 const styles = StyleSheet.create({
   background: {
-    backgroundColor: BRAND_COLORS.screenBg.warm,
     borderTopLeftRadius: PREORDER_LAYOUT.MODAL_BORDER_RADIUS,
     borderTopRightRadius: PREORDER_LAYOUT.MODAL_BORDER_RADIUS,
   },
   indicator: {
-    backgroundColor: BRAND_COLORS.ui.placeholder,
     width: 40,
     height: 4,
   },
   scrollView: {
     flex: 1,
-    backgroundColor: BRAND_COLORS.screenBg.warm,
   },
   contentContainer: {
     paddingBottom: 20,
@@ -131,13 +137,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     height: PREORDER_LAYOUT.MODAL_HEADER_HEIGHT,
     borderBottomWidth: 1,
-    borderBottomColor: BRAND_COLORS.screenBg.fresh,
     paddingHorizontal: PREORDER_LAYOUT.HEADER_PADDING_HORIZONTAL,
   },
   title: {
     fontSize: TYPOGRAPHY.fontSize.lg,
     fontFamily: TYPOGRAPHY.fontFamily.bodyBold,
-    color: BRAND_COLORS.ui.heading,
   },
   closeButton: {
     position: 'absolute',
@@ -150,7 +154,6 @@ const styles = StyleSheet.create({
   closeText: {
     fontSize: 24,
     fontFamily: TYPOGRAPHY.fontFamily.bodyRegular,
-    color: BRAND_COLORS.ui.subtitle,
   },
   optionsList: {
     padding: PREORDER_LAYOUT.SECTION_PADDING_HORIZONTAL,
@@ -166,11 +169,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     borderRadius: 12,
     borderWidth: 2,
-    borderColor: BRAND_COLORS.screenBg.fresh,
   },
   optionSelected: {
-    borderColor: BRAND_COLORS.bta.primaryBg,
-    backgroundColor: `${BRAND_COLORS.screenBg.fresh}30`,
   },
   optionContent: {
     flexDirection: 'row',
@@ -180,10 +180,8 @@ const styles = StyleSheet.create({
   optionLabel: {
     fontSize: TYPOGRAPHY.fontSize.md,
     fontFamily: TYPOGRAPHY.fontFamily.bodyMedium,
-    color: BRAND_COLORS.ui.subtitle,
   },
   optionLabelSelected: {
     fontFamily: TYPOGRAPHY.fontFamily.bodyBold,
-    color: BRAND_COLORS.bta.primaryBg,
   },
 });

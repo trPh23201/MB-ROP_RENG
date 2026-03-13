@@ -8,7 +8,7 @@ import { clearError, loginWithOtp, registerUser } from '../../../state/slices/au
 import { useAppDispatch, useAppSelector } from '../../../utils/hooks';
 import { IS_IOS } from '../../../utils/platform';
 import { popupService } from '../../layouts/popup/PopupService';
-import { BRAND_COLORS } from '../../theme/colors';
+import { useBrandColors } from '../../theme/BrandColorContext';
 import { OtpVerificationBottomSheet, OtpVerificationRef } from '../otp-verification/OtpVerificationBottomSheet';
 import { RegisterPhoneInput } from './components/RegisterPhoneInput';
 import { REGISTER_TEXT } from './RegisterConstants';
@@ -16,6 +16,7 @@ import { REGISTER_LAYOUT } from './RegisterLayout';
 import { RegisterUIService } from './RegisterService';
 
 export default function RegisterScreen() {
+  const BRAND_COLORS = useBrandColors();
   const router = useRouter();
   const dispatch = useAppDispatch();
   const isLoading = useAppSelector((state) => state.auth.isLoading);
@@ -81,8 +82,8 @@ export default function RegisterScreen() {
 
   return (
     <BottomSheetModalProvider>
-      <SafeAreaView style={styles.container} edges={['top', 'bottom']}>
-        <View style={styles.header}>
+      <SafeAreaView style={[styles.container, { backgroundColor: BRAND_COLORS.screenBg.bold }]} edges={['top', 'bottom']}>
+        <View style={[styles.header, { backgroundColor: BRAND_COLORS.screenBg.bold, borderBottomColor: BRAND_COLORS.screenBg.fresh }]}>
           <TouchableOpacity
             style={styles.backButton}
             onPress={handleGoBack}
@@ -94,13 +95,13 @@ export default function RegisterScreen() {
               color={BRAND_COLORS.bta.primaryText}
             />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>{REGISTER_TEXT.HEADER_TITLE}</Text>
+          <Text style={[styles.headerTitle, { color: BRAND_COLORS.bta.primaryText }]}>{REGISTER_TEXT.HEADER_TITLE}</Text>
           <View style={styles.headerRight} />
         </View>
 
 
         <KeyboardAvoidingView
-          style={styles.keyboardAvoid}
+          style={[styles.keyboardAvoid, { backgroundColor: BRAND_COLORS.screenBg.fresh }]}
           behavior={IS_IOS ? 'padding' : 'height'}
         >
           <ScrollView
@@ -110,11 +111,11 @@ export default function RegisterScreen() {
             showsVerticalScrollIndicator={false}
           >
             <View style={styles.titleSection}>
-              <Text style={styles.welcomeText}>
+              <Text style={[styles.welcomeText, { color: BRAND_COLORS.ui.heading }]}>
                 {REGISTER_TEXT.WELCOME_TEXT}
               </Text>
-              <Text style={styles.brandName}>{REGISTER_TEXT.BRAND_NAME}</Text>
-              <Text style={styles.subtitle}>{REGISTER_TEXT.SUBTITLE}</Text>
+              <Text style={[styles.brandName, { color: BRAND_COLORS.ui.heading }]}>{REGISTER_TEXT.BRAND_NAME}</Text>
+              <Text style={[styles.subtitle, { color: BRAND_COLORS.ui.subtitle }]}>{REGISTER_TEXT.SUBTITLE}</Text>
             </View>
 
             <View style={styles.formContainer}>
@@ -128,14 +129,14 @@ export default function RegisterScreen() {
               />
 
               <View style={styles.loginLinkContainer}>
-                <Text style={styles.hasAccountText}>
+                <Text style={[styles.hasAccountText, { color: BRAND_COLORS.ui.subtitle }]}>
                   {REGISTER_TEXT.HAS_ACCOUNT}
                 </Text>
                 <TouchableOpacity
                   onPress={handleNavigateToLogin}
                   activeOpacity={0.7}
                 >
-                  <Text style={styles.loginLinkText}>
+                  <Text style={[styles.loginLinkText, { color: BRAND_COLORS.bta.primaryBg }]}>
                     {REGISTER_TEXT.LOGIN_LINK}
                   </Text>
                 </TouchableOpacity>
@@ -158,7 +159,6 @@ export default function RegisterScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: BRAND_COLORS.screenBg.bold,
   },
   header: {
     flexDirection: 'row',
@@ -166,8 +166,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: REGISTER_LAYOUT.HEADER_PADDING_HORIZONTAL,
     paddingVertical: REGISTER_LAYOUT.HEADER_PADDING_VERTICAL,
-    backgroundColor: BRAND_COLORS.screenBg.bold,
-    borderBottomColor: BRAND_COLORS.screenBg.fresh,
   },
   backButton: {
     width: REGISTER_LAYOUT.BACK_BUTTON_SIZE,
@@ -178,14 +176,12 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: REGISTER_LAYOUT.HEADER_TITLE_FONT_SIZE,
     fontFamily: 'Phudu-Bold',
-    color: BRAND_COLORS.bta.primaryText,
   },
   headerRight: {
     width: REGISTER_LAYOUT.BACK_BUTTON_SIZE,
   },
   keyboardAvoid: {
     flex: 1,
-    backgroundColor: BRAND_COLORS.screenBg.fresh,
   },
   scrollView: {
     flex: 1,
@@ -202,21 +198,18 @@ const styles = StyleSheet.create({
   welcomeText: {
     fontSize: REGISTER_LAYOUT.WELCOME_FONT_SIZE,
     fontFamily: 'SpaceGrotesk-Medium',
-    color: BRAND_COLORS.ui.heading,
     textAlign: 'center',
     marginBottom: REGISTER_LAYOUT.WELCOME_MARGIN_BOTTOM,
   },
   brandName: {
     fontSize: REGISTER_LAYOUT.BRAND_NAME_FONT_SIZE,
     fontFamily: 'Phudu-Bold',
-    color: BRAND_COLORS.ui.heading,
     textAlign: 'center',
     marginBottom: REGISTER_LAYOUT.BRAND_NAME_MARGIN_BOTTOM,
   },
   subtitle: {
     fontSize: REGISTER_LAYOUT.SUBTITLE_FONT_SIZE,
     fontFamily: 'SpaceGrotesk-Medium',
-    color: BRAND_COLORS.ui.subtitle,
     textAlign: 'center',
   },
   formContainer: {
@@ -232,12 +225,10 @@ const styles = StyleSheet.create({
   hasAccountText: {
     fontSize: REGISTER_LAYOUT.LINK_FONT_SIZE,
     fontFamily: 'SpaceGrotesk-Medium',
-    color: BRAND_COLORS.ui.subtitle,
   },
   loginLinkText: {
     fontSize: REGISTER_LAYOUT.LINK_FONT_SIZE,
     fontFamily: 'SpaceGrotesk-Bold',
-    color: BRAND_COLORS.bta.primaryBg,
     textDecorationLine: 'underline',
   },
 });

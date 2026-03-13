@@ -1,6 +1,7 @@
 import React from 'react';
 import { ActivityIndicator, FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { IAddressSuggestion } from '../../../domain/shared/types';
+import { useBrandColors } from '../../theme/BrandColorContext';
 
 interface MapSearchBarProps {
   suggestions: IAddressSuggestion[];
@@ -19,6 +20,7 @@ export const MapSearchBar: React.FC<MapSearchBarProps> = ({
   placeholder = "Tìm kiếm địa chỉ giao hàng...",
   initialValue
 }) => {
+  const BRAND_COLORS = useBrandColors();
   const [query, setQuery] = React.useState(initialValue || '');
   const [isFocused, setIsFocused] = React.useState(false);
 
@@ -33,9 +35,9 @@ export const MapSearchBar: React.FC<MapSearchBarProps> = ({
 
   return (
     <View style={styles.container}>
-      <View style={styles.inputContainer}>
+      <View style={[styles.inputContainer, { backgroundColor: BRAND_COLORS.background.primary, shadowColor: BRAND_COLORS.background.black }]}>
         <TextInput
-          style={styles.input}
+          style={[styles.input, { color: BRAND_COLORS.text.primary }]}
           placeholder={placeholder}
           value={query}
           onFocus={() => {
@@ -49,11 +51,11 @@ export const MapSearchBar: React.FC<MapSearchBarProps> = ({
           }}
           returnKeyType="search"
         />
-        {isLoading && <ActivityIndicator size="small" color={'#FF6600'} style={styles.loader} />}
+        {isLoading && <ActivityIndicator size="small" color={BRAND_COLORS.bta.primaryBg} style={styles.loader} />}
       </View>
 
       {suggestions.length > 0 && isFocused && (
-        <View style={styles.resultsContainer}>
+        <View style={[styles.resultsContainer, { backgroundColor: BRAND_COLORS.background.primary }]}>
           <FlatList
             data={suggestions}
             keyExtractor={(item) => item.placeId}
@@ -63,13 +65,13 @@ export const MapSearchBar: React.FC<MapSearchBarProps> = ({
                 style={styles.item}
                 onPress={() => handleSelect(item)}
               >
-                <Text style={styles.mainText}>{item.mainText}</Text>
-                <Text style={styles.subText} numberOfLines={1}>
+                <Text style={[styles.mainText, { color: BRAND_COLORS.text.primary }]}>{item.mainText}</Text>
+                <Text style={[styles.subText, { color: BRAND_COLORS.text.secondary }]} numberOfLines={1}>
                   {item.secondaryText}
                 </Text>
               </TouchableOpacity>
             )}
-            ItemSeparatorComponent={() => <View style={styles.separator} />}
+            ItemSeparatorComponent={() => <View style={[styles.separator, { backgroundColor: BRAND_COLORS.border.light }]} />}
           />
         </View>
       )}
@@ -88,27 +90,24 @@ const styles = StyleSheet.create({
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#fff',
     borderRadius: 8,
     paddingHorizontal: 12,
     height: 48,
-    shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 4,
   },
-  input: { flex: 1, fontSize: 16, color: '#333' },
+  input: { flex: 1, fontSize: 16 },
   loader: { marginLeft: 8 },
   resultsContainer: {
     marginTop: 8,
-    backgroundColor: '#fff',
     borderRadius: 8,
     maxHeight: 250,
     elevation: 4,
   },
   item: { padding: 12 },
-  mainText: { fontSize: 14, fontWeight: '600', color: '#000' },
-  subText: { fontSize: 12, color: '#666', marginTop: 2 },
-  separator: { height: 1, backgroundColor: '#eee', marginHorizontal: 12 },
+  mainText: { fontSize: 14, fontWeight: '600' },
+  subText: { fontSize: 12, marginTop: 2 },
+  separator: { height: 1, marginHorizontal: 12 },
 });

@@ -1,7 +1,7 @@
 import { useFocusEffect } from 'expo-router';
 import React, { useCallback, useEffect } from 'react';
 import { KeyboardAvoidingView, StyleProp, View, ViewStyle } from 'react-native';
-import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { BRAND_COLORS } from '../theme/colors';
 import { BaseLayoutProps } from './BaseLayout';
 
@@ -46,9 +46,7 @@ export function BaseFullScreenLayout({
     style,
     testID,
 }: BaseFullScreenLayoutProps) {
-    const insets = useSafeAreaInsets();
-
-    // Mount/Unmount lifecycle
+    
     useEffect(() => {
         onMount?.();
         return () => onUnmount?.();

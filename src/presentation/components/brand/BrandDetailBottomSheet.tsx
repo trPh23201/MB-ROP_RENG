@@ -7,7 +7,7 @@ import React, { forwardRef, useCallback, useMemo } from 'react';
 import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Easing } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { BRAND_COLORS } from '../../theme/colors';
+import { useBrandColors } from '../../theme/BrandColorContext';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const HERO_HEIGHT = SCREEN_WIDTH * 0.7;
@@ -19,6 +19,7 @@ interface BrandDetailBottomSheetProps {
 
 export const BrandDetailBottomSheet = forwardRef<BottomSheetModal, BrandDetailBottomSheetProps>(
     ({ brand, onVisit }, ref) => {
+        const BRAND_COLORS = useBrandColors();
         const insets = useSafeAreaInsets();
         const snapPoints = useMemo(() => ['95%'], []);
 
@@ -55,7 +56,7 @@ export const BrandDetailBottomSheet = forwardRef<BottomSheetModal, BrandDetailBo
                         <View style={styles.handleIndicator} />
                     </View>
                 )}
-                backgroundStyle={styles.sheetBackground}
+                backgroundStyle={[styles.sheetBackground, { backgroundColor: BRAND_COLORS.screenBg.warm }]}
                 animationConfigs={animationConfigs}
             >
                 <View style={styles.sheetBody}>
@@ -63,14 +64,14 @@ export const BrandDetailBottomSheet = forwardRef<BottomSheetModal, BrandDetailBo
                         <View style={styles.heroContainer}>
                             {brand.logoUrl ? (
                                 <Image
-                                    source={brand.logoUrl}
+                                    source={{ uri: brand.logoUrl }}
                                     style={styles.heroImage}
                                     contentFit="cover"
                                     cachePolicy="disk"
                                 />
                             ) : (
-                                <View style={styles.heroPlaceholder}>
-                                    <Text style={styles.heroPlaceholderText}>
+                                <View style={[styles.heroPlaceholder, { backgroundColor: BRAND_COLORS.screenBg.bold }]}>
+                                    <Text style={[styles.heroPlaceholderText, { color: BRAND_COLORS.bta.primaryText }]}>
                                         {brand.name.charAt(0).toUpperCase()}
                                     </Text>
                                 </View>
@@ -85,23 +86,23 @@ export const BrandDetailBottomSheet = forwardRef<BottomSheetModal, BrandDetailBo
                         </View>
 
                         {brand.description ? (
-                            <View style={styles.descriptionCard}>
-                                <Text style={styles.description}>{brand.description}</Text>
+                            <View style={[styles.descriptionCard, { backgroundColor: BRAND_COLORS.background.secondary }]}>
+                                <Text style={[styles.description, { color: BRAND_COLORS.ui.subtitle }]}>{brand.description}</Text>
                             </View>
                         ) : null}
 
-                        <View style={styles.promoCard}>
-                            <Text style={styles.promoTitle}>Khám phá {brand.name}</Text>
-                            <Text style={styles.promoText}>
+                        <View style={[styles.promoCard, { backgroundColor: BRAND_COLORS.screenBg.fresh }]}>
+                            <Text style={[styles.promoTitle, { color: BRAND_COLORS.ui.heading }]}>Khám phá {brand.name}</Text>
+                            <Text style={[styles.promoText, { color: BRAND_COLORS.ui.subtitle }]}>
                                 Thưởng thức hương vị đặc trưng từ {brand.name}. Đặt hàng ngay để nhận ưu đãi!
                             </Text>
                         </View>
                     </BottomSheetScrollView>
 
                     <View style={[styles.footer, { paddingBottom: insets.bottom + 32 }]}>
-                        <TouchableOpacity style={styles.visitButton} onPress={onVisit} activeOpacity={0.85}>
-                            <Text style={styles.visitButtonText}>Ghé thăm</Text>
-                            <Text style={styles.visitButtonArrow}>→</Text>
+                        <TouchableOpacity style={[styles.visitButton, { backgroundColor: BRAND_COLORS.bta.primaryBg, shadowColor: BRAND_COLORS.screenBg.bold }]} onPress={onVisit} activeOpacity={0.85}>
+                            <Text style={[styles.visitButtonText, { color: BRAND_COLORS.bta.primaryText }]}>Ghé thăm</Text>
+                            <Text style={[styles.visitButtonArrow, { color: BRAND_COLORS.bta.primaryText }]}>→</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -112,7 +113,6 @@ export const BrandDetailBottomSheet = forwardRef<BottomSheetModal, BrandDetailBo
 
 const styles = StyleSheet.create({
     sheetBackground: {
-        backgroundColor: BRAND_COLORS.screenBg.warm,
         borderTopLeftRadius: 16,
         borderTopRightRadius: 16,
     },
@@ -152,14 +152,12 @@ const styles = StyleSheet.create({
     heroPlaceholder: {
         width: '100%',
         height: '100%',
-        backgroundColor: BRAND_COLORS.screenBg.bold,
         justifyContent: 'center',
         alignItems: 'center',
     },
     heroPlaceholderText: {
         fontSize: 72,
         fontFamily: 'Phudu-Bold',
-        color: BRAND_COLORS.bta.primaryText,
     },
     heroGradient: {
         position: 'absolute',
@@ -184,19 +182,16 @@ const styles = StyleSheet.create({
     },
     descriptionCard: {
         marginHorizontal: 16,
-        backgroundColor: BRAND_COLORS.background.secondary,
         borderRadius: 16,
         padding: 16,
     },
     description: {
         fontSize: 15,
         fontFamily: 'SpaceGrotesk-Medium',
-        color: BRAND_COLORS.ui.subtitle,
         lineHeight: 22,
     },
     promoCard: {
         marginHorizontal: 16,
-        backgroundColor: BRAND_COLORS.screenBg.fresh,
         borderRadius: 20,
         padding: 24,
         alignItems: 'center',
@@ -205,13 +200,11 @@ const styles = StyleSheet.create({
     promoTitle: {
         fontSize: 20,
         fontFamily: 'Phudu-Bold',
-        color: BRAND_COLORS.ui.heading,
         textAlign: 'center',
     },
     promoText: {
         fontSize: 14,
         fontFamily: 'SpaceGrotesk-Medium',
-        color: BRAND_COLORS.ui.subtitle,
         lineHeight: 20,
         textAlign: 'center',
     },
@@ -220,14 +213,12 @@ const styles = StyleSheet.create({
         paddingTop: 12,
     },
     visitButton: {
-        backgroundColor: BRAND_COLORS.bta.primaryBg,
         paddingVertical: 18,
         borderRadius: 16,
         alignItems: 'center',
         flexDirection: 'row',
         justifyContent: 'center',
         gap: 8,
-        shadowColor: BRAND_COLORS.screenBg.bold,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.3,
         shadowRadius: 8,
@@ -236,12 +227,10 @@ const styles = StyleSheet.create({
     visitButtonText: {
         fontSize: 18,
         fontFamily: 'Phudu-Bold',
-        color: BRAND_COLORS.bta.primaryText,
         letterSpacing: 0.5,
     },
     visitButtonArrow: {
         fontSize: 20,
         fontFamily: 'Phudu-Bold',
-        color: BRAND_COLORS.bta.primaryText,
     },
 });

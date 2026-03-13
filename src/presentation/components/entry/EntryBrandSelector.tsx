@@ -1,5 +1,5 @@
 import { Brand } from '@/src/domain/entities/Brand';
-import { fetchBrands, selectBrands, selectSelectedBrandId } from '@/src/state/slices/brandSlice';
+import { fetchBrands, selectBrand, selectBrands, selectSelectedBrandId } from '@/src/state/slices/brandSlice';
 import { useAppSelector } from '@/src/utils/hooks';
 import { useBrandColor } from '@/src/utils/hooks/useBrandColor';
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
@@ -7,10 +7,12 @@ import { Image } from 'expo-image';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useDispatch } from 'react-redux';
-import { BrandDetailBottomSheet } from '../../../components/brand/BrandDetailBottomSheet';
-import { BRAND_COLORS, DYNAMIC_COLORS } from '../../../theme/colors';
+import { BrandDetailBottomSheet } from '../brand/BrandDetailBottomSheet';
+import { useBrandColors } from '../../theme/BrandColorContext';
+import { ENTRY_LAYOUT } from './EntryLayout';
 
-export function BrandSelector() {
+export function EntryBrandSelector() {
+  const BRAND_COLORS = useBrandColors();
   const dispatch = useDispatch<any>();
   const brands = useAppSelector(selectBrands);
   const selectedBrandId = useAppSelector(selectSelectedBrandId);
@@ -19,8 +21,10 @@ export function BrandSelector() {
   const [selectedBrand, setSelectedBrand] = useState<Brand | null>(null);
 
   useEffect(() => {
-    dispatch(fetchBrands());
-  }, [dispatch]);
+    if (brands.length === 0) {
+      dispatch(fetchBrands());
+    }
+  }, [dispatch, brands.length]);
 
   useEffect(() => {
     if (selectedBrand) {
@@ -36,9 +40,10 @@ export function BrandSelector() {
   const handleVisit = useCallback(async () => {
     if (!selectedBrand) return;
     await applyBrandColors(selectedBrand.id);
+    dispatch(selectBrand(selectedBrand.id));
     bottomSheetRef.current?.dismiss();
     setSelectedBrand(null);
-  }, [selectedBrand, applyBrandColors]);
+  }, [selectedBrand, applyBrandColors, dispatch]);
 
   return (
     <View>
@@ -49,10 +54,10 @@ export function BrandSelector() {
             style={[styles.brandCard, selectedBrandId === brand.id && styles.brandCardActive]}
             onPress={() => handleBrandPress(brand.id)}
           >
-            <View style={[styles.brandPlaceholder, { borderColor: DYNAMIC_COLORS.colorTest.red, backgroundColor: DYNAMIC_COLORS.colorTest.blue }]}>
+            <View style={[styles.brandPlaceholder, { borderColor: BRAND_COLORS.bta.primaryBg, backgroundColor: BRAND_COLORS.screenBg.warm }]}>
               {brand.logoUrl ? (
                 <Image
-                  source={brand.logoUrl}
+                  source={{ uri: brand.logoUrl }}
                   style={styles.brandLogoImage}
                   contentFit="cover"
                   cachePolicy="disk"
@@ -79,23 +84,22 @@ export function BrandSelector() {
 
 const styles = StyleSheet.create({
   scrollContent: {
-    paddingRight: 16,
-    gap: 12,
+    paddingRight: ENTRY_LAYOUT.SECTION_PADDING_HORIZONTAL,
+    gap: ENTRY_LAYOUT.BRAND_SCROLL_GAP,
   },
   brandCard: {
-    width: 80,
-    marginBottom: 5,
-    marginLeft: 5,
+    width: ENTRY_LAYOUT.BRAND_CARD_SIZE,
+    marginBottom: ENTRY_LAYOUT.BRAND_CARD_MARGIN_BOTTOM,
+    marginLeft: ENTRY_LAYOUT.BRAND_CARD_MARGIN_LEFT,
     alignItems: 'center',
   },
   brandCardActive: {
     transform: [{ scale: 1.05 }],
   },
   brandPlaceholder: {
-    width: 80,
-    height: 80,
-    backgroundColor: BRAND_COLORS.primary.beSua,
-    borderRadius: 12,
+    width: ENTRY_LAYOUT.BRAND_CARD_SIZE,
+    height: ENTRY_LAYOUT.BRAND_CARD_SIZE,
+    borderRadius: ENTRY_LAYOUT.BRAND_CARD_BORDER_RADIUS,
     justifyContent: 'center',
     alignItems: 'center',
     overflow: 'hidden',
@@ -112,17 +116,15 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   brandPlaceholderText: {
-    fontSize: 14,
+    fontSize: ENTRY_LAYOUT.BRAND_TEXT_SIZE,
     fontFamily: 'Phudu-Bold',
-    color: BRAND_COLORS.secondary.nauEspresso,
     textAlign: 'center',
-    padding: 8,
+    padding: ENTRY_LAYOUT.BRAND_CARD_PADDING,
   },
   brandNameText: {
     marginTop: 6,
     fontSize: 11,
     fontFamily: 'SpaceGrotesk-Medium',
-    color: BRAND_COLORS.ui.heading,
     textAlign: 'center',
   },
 });

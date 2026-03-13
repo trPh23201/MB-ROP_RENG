@@ -9,7 +9,7 @@ import React, { forwardRef, useCallback, useMemo } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { AppIcon } from '../components/shared/AppIcon';
-import { BRAND_COLORS } from '../theme/colors';
+import { useBrandColors } from '../theme/BrandColorContext';
 import { TYPOGRAPHY } from '../theme/typography';
 
 export interface BaseBottomSheetLayoutProps {
@@ -72,6 +72,7 @@ export const BaseBottomSheetLayout = forwardRef<BottomSheetModal, BaseBottomShee
         },
         ref
     ) => {
+        const BRAND_COLORS = useBrandColors();
         const insets = useSafeAreaInsets();
 
         // Memoize default snap points if not provided
@@ -110,7 +111,7 @@ export const BaseBottomSheetLayout = forwardRef<BottomSheetModal, BaseBottomShee
                 borderTopLeftRadius: 16,
                 borderTopRightRadius: 16,
             }),
-            []
+            [BRAND_COLORS]
         );
 
         const indicatorStyle = useMemo(
@@ -118,7 +119,7 @@ export const BaseBottomSheetLayout = forwardRef<BottomSheetModal, BaseBottomShee
                 backgroundColor: BRAND_COLORS.ui.placeholder,
                 width: 40,
                 height: 4,
-            }), []
+            }), [BRAND_COLORS]
         );
 
 
@@ -138,16 +139,16 @@ export const BaseBottomSheetLayout = forwardRef<BottomSheetModal, BaseBottomShee
                 backgroundStyle={backgroundStyle}
                 handleIndicatorStyle={indicatorStyle}
             >
-                <View style={[styles.header, { borderBottomWidth: title ? 1 : 0 }]}>
+                <View style={[styles.header, { borderBottomWidth: title ? 1 : 0, borderBottomColor: BRAND_COLORS.ui.placeholder }]}>
                     {showClearButton ? (
                         <TouchableOpacity onPress={onClear} hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>
-                            <Text style={styles.clearText}>{clearButtonText}</Text>
+                            <Text style={[styles.clearText, { color: BRAND_COLORS.ui.subtitle }]}>{clearButtonText}</Text>
                         </TouchableOpacity>
                     ) : (
                         <View style={{ width: 30 }} />
                     )}
 
-                    {title && <Text style={styles.title}>{title}</Text>}
+                    {title && <Text style={[styles.title, { color: BRAND_COLORS.ui.heading }]}>{title}</Text>}
 
                     {headerRightComponent ? (
                         headerRightComponent
@@ -173,19 +174,16 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         height: HEADER_HEIGHT,
         paddingHorizontal: 16,
-        borderBottomColor: BRAND_COLORS.ui.placeholder,
     },
     title: {
         fontSize: TYPOGRAPHY.fontSize.md,
         fontFamily: TYPOGRAPHY.fontFamily.bodyBold,
-        color: BRAND_COLORS.ui.heading,
         flex: 1,
         textAlign: 'center',
     },
     clearText: {
         fontSize: TYPOGRAPHY.fontSize.md,
         fontFamily: TYPOGRAPHY.fontFamily.bodyMedium,
-        color: BRAND_COLORS.ui.subtitle,
     },
     closeButton: {
         width: 30,

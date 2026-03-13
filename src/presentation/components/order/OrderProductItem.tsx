@@ -1,12 +1,13 @@
 import React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-import { BRAND_COLORS } from '../../theme/colors';
+import { useBrandColors } from '../../theme/BrandColorContext';
 import { TYPOGRAPHY } from '../../theme/typography';
 import { AppIcon } from '../shared/AppIcon';
 import { OrderProductItemProps } from './OrderInterfaces';
 import { OrderService } from './OrderService';
 
 export function OrderProductItem({ item, onPress, editable = true }: OrderProductItemProps) {
+    const BRAND_COLORS = useBrandColors();
     const optionsText = OrderService.formatOptionsText(item.options);
     const hasToppings = item.options.toppings && item.options.toppings.length > 0;
 
@@ -20,6 +21,7 @@ export function OrderProductItem({ item, onPress, editable = true }: OrderProduc
         <Pressable
             style={({ pressed }) => [
                 styles.container,
+                { backgroundColor: BRAND_COLORS.screenBg.fresh },
                 pressed && editable && { opacity: 0.7 }
             ]}
             onPress={handlePress}
@@ -32,22 +34,22 @@ export function OrderProductItem({ item, onPress, editable = true }: OrderProduc
             )}
 
             <View style={styles.quantityContainer}>
-                <Text style={styles.quantityText}>{item.quantity}x</Text>
+                <Text style={[styles.quantityText, { color: BRAND_COLORS.ui.heading }]}>{item.quantity}x</Text>
             </View>
 
             <View style={styles.productInfo}>
-                <Text style={styles.productName} numberOfLines={1}>
+                <Text style={[styles.productName, { color: BRAND_COLORS.ui.heading }]} numberOfLines={1}>
                     {item.name}
                 </Text>
-                <Text style={styles.productOptions}>{optionsText}</Text>
+                <Text style={[styles.productOptions, { color: BRAND_COLORS.ui.subtitle }]}>{optionsText}</Text>
                 {hasToppings && (
-                    <Text style={styles.productTopping}>
+                    <Text style={[styles.productTopping, { color: BRAND_COLORS.ui.subtitle }]}>
                         + {item.options.toppings.map(t => t.name).join(', ')}
                     </Text>
                 )}
             </View>
 
-            <Text style={styles.productPrice}>
+            <Text style={[styles.productPrice, { color: BRAND_COLORS.ui.heading }]}>
                 {OrderService.formatPrice(item.totalPrice)}
             </Text>
         </Pressable>
@@ -61,7 +63,6 @@ const styles = StyleSheet.create({
         minHeight: 64,
         paddingVertical: 12,
         paddingHorizontal: 16,
-        backgroundColor: BRAND_COLORS.screenBg.fresh,
         gap: 12,
     },
     quantityContainer: {
@@ -72,7 +73,6 @@ const styles = StyleSheet.create({
     quantityText: {
         fontSize: TYPOGRAPHY.fontSize.base,
         fontFamily: TYPOGRAPHY.fontFamily.bodyBold,
-        color: BRAND_COLORS.ui.heading,
     },
     productInfo: {
         flex: 1,
@@ -81,22 +81,18 @@ const styles = StyleSheet.create({
     productName: {
         fontSize: TYPOGRAPHY.fontSize.md,
         fontFamily: TYPOGRAPHY.fontFamily.bodyMedium,
-        color: BRAND_COLORS.ui.heading,
     },
     productOptions: {
         fontSize: TYPOGRAPHY.fontSize.sm,
         fontFamily: TYPOGRAPHY.fontFamily.bodyRegular,
-        color: BRAND_COLORS.ui.subtitle,
     },
     productPrice: {
         fontSize: TYPOGRAPHY.fontSize.lg,
         fontFamily: TYPOGRAPHY.fontFamily.monoBold,
-        color: BRAND_COLORS.ui.heading,
     },
     productTopping: {
         fontSize: TYPOGRAPHY.fontSize.xs,
         fontFamily: TYPOGRAPHY.fontFamily.bodyRegular,
-        color: BRAND_COLORS.ui.subtitle,
         marginTop: 2,
     },
 });

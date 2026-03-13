@@ -5,7 +5,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { AvailableVoucher } from '../../../../domain/entities/PreOrder';
 import { OrderService } from '../../../components/order/OrderService';
 import { BaseBottomSheetLayout } from '../../../layouts/BaseBottomSheetLayout';
-import { BRAND_COLORS } from '../../../theme/colors';
+import { useBrandColors } from '../../../theme/BrandColorContext';
 import { TYPOGRAPHY } from '../../../theme/typography';
 
 export interface VoucherSelectionModalProps {
@@ -16,6 +16,7 @@ export interface VoucherSelectionModalProps {
 
 export const VoucherSelectionModal = forwardRef<BottomSheetModal, VoucherSelectionModalProps>(
     ({ availableVouchers, initialSelectedVouchers, onApply }, ref) => {
+        const BRAND_COLORS = useBrandColors();
         const snapPoints = useMemo(() => ['70%'], []);
         const [selectedCodes, setSelectedCodes] = useState<Set<string>>(new Set());
 
@@ -41,7 +42,7 @@ export const VoucherSelectionModal = forwardRef<BottomSheetModal, VoucherSelecti
 
         const HeaderRight = useMemo(() => (
             <TouchableOpacity onPress={handleApply} hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>
-                <Text style={styles.applyText}>Áp dụng</Text>
+                <Text style={[styles.applyText, { color: BRAND_COLORS.bta.primaryBg }]}>Áp dụng</Text>
             </TouchableOpacity>
         ), [handleApply]);
 
@@ -56,7 +57,7 @@ export const VoucherSelectionModal = forwardRef<BottomSheetModal, VoucherSelecti
                     {availableVouchers.length === 0 ? (
                         <View style={styles.emptyContainer}>
                             <Ionicons name="ticket-outline" size={48} color={BRAND_COLORS.ui.placeholder} />
-                            <Text style={styles.emptyText}>Không có mã khuyến mãi nào khả dụng cho đơn hàng này.</Text>
+                            <Text style={[styles.emptyText, { color: BRAND_COLORS.ui.subtitle }]}>Không có mã khuyến mãi nào khả dụng cho đơn hàng này.</Text>
                         </View>
                     ) : (
                         availableVouchers.map((voucher) => {
@@ -64,20 +65,24 @@ export const VoucherSelectionModal = forwardRef<BottomSheetModal, VoucherSelecti
                             return (
                                 <TouchableOpacity
                                     key={voucher.code}
-                                    style={[styles.voucherCard, isSelected && styles.voucherCardSelected]}
+                                    style={[
+                                        styles.voucherCard,
+                                        { backgroundColor: BRAND_COLORS.screenBg.warm, borderColor: BRAND_COLORS.ui.placeholder },
+                                        isSelected && [styles.voucherCardSelected, { borderColor: BRAND_COLORS.bta.primaryBg, backgroundColor: `${BRAND_COLORS.bta.primaryBg}0A` }]
+                                    ]}
                                     onPress={() => toggleVoucher(voucher.code)}
                                     activeOpacity={0.7}
                                 >
-                                    <View style={styles.voucherIconContainer}>
+                                    <View style={[styles.voucherIconContainer, { backgroundColor: BRAND_COLORS.screenBg.warm }]}>
                                         <Ionicons name="ticket" size={24} color={isSelected ? BRAND_COLORS.bta.primaryBg : BRAND_COLORS.ui.subtitle} />
                                     </View>
                                     <View style={styles.voucherContent}>
-                                        <Text style={styles.voucherName} numberOfLines={1}>{voucher.name || voucher.code}</Text>
+                                        <Text style={[styles.voucherName, { color: BRAND_COLORS.ui.heading }]} numberOfLines={1}>{voucher.name || voucher.code}</Text>
                                         {voucher.description && (
-                                            <Text style={styles.voucherDescription} numberOfLines={2}>{voucher.description}</Text>
+                                            <Text style={[styles.voucherDescription, { color: BRAND_COLORS.ui.subtitle }]} numberOfLines={2}>{voucher.description}</Text>
                                         )}
                                         {voucher.discountAmount > 0 && (
-                                            <Text style={styles.voucherDiscount}>Giảm đ{OrderService.formatPrice(voucher.discountAmount)}</Text>
+                                            <Text style={[styles.voucherDiscount, { color: BRAND_COLORS.bta.primaryBg }]}>Giảm đ{OrderService.formatPrice(voucher.discountAmount)}</Text>
                                         )}
                                     </View>
                                     <View style={styles.radioContainer}>
@@ -101,7 +106,6 @@ const styles = StyleSheet.create({
     applyText: {
         fontSize: TYPOGRAPHY.fontSize.md,
         fontFamily: TYPOGRAPHY.fontFamily.bodyMedium,
-        color: BRAND_COLORS.bta.primaryBg,
     },
     contentContainer: {
         padding: 16,
@@ -117,25 +121,19 @@ const styles = StyleSheet.create({
     emptyText: {
         fontSize: TYPOGRAPHY.fontSize.base,
         fontFamily: TYPOGRAPHY.fontFamily.bodyRegular,
-        color: BRAND_COLORS.ui.subtitle,
         textAlign: 'center',
     },
     voucherCard: {
         flexDirection: 'row',
         padding: 16,
-        backgroundColor: BRAND_COLORS.screenBg.warm,
         borderRadius: 12,
         borderWidth: 1,
-        borderColor: BRAND_COLORS.ui.placeholder,
         alignItems: 'center',
     },
     voucherCardSelected: {
-        borderColor: BRAND_COLORS.bta.primaryBg,
-        backgroundColor: `${BRAND_COLORS.bta.primaryBg}0A`,
     },
     voucherIconContainer: {
         padding: 12,
-        backgroundColor: BRAND_COLORS.screenBg.warm,
         borderRadius: 8,
         marginRight: 12,
     },
@@ -146,17 +144,14 @@ const styles = StyleSheet.create({
     voucherName: {
         fontSize: TYPOGRAPHY.fontSize.base,
         fontFamily: TYPOGRAPHY.fontFamily.bodyBold,
-        color: BRAND_COLORS.ui.heading,
     },
     voucherDescription: {
         fontSize: TYPOGRAPHY.fontSize.sm,
         fontFamily: TYPOGRAPHY.fontFamily.bodyRegular,
-        color: BRAND_COLORS.ui.subtitle,
     },
     voucherDiscount: {
         fontSize: TYPOGRAPHY.fontSize.sm,
         fontFamily: TYPOGRAPHY.fontFamily.bodyMedium,
-        color: BRAND_COLORS.bta.primaryBg,
         marginTop: 2,
     },
     radioContainer: {

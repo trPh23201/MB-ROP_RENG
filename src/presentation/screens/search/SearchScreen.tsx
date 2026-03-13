@@ -6,7 +6,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MOCK_PRODUCTS, Product } from '../../../data/mockProducts';
 import { useAddToCart } from '../../../utils/hooks/useAddToCart';
 import { AppIcon } from '../../components/shared/AppIcon';
-import { BRAND_COLORS } from '../../theme/colors';
+import { useBrandColors } from '../../theme/BrandColorContext';
 import { HEADER_ICONS } from '../../theme/iconConstants';
 import { SEARCH_TEXT } from './SearchConstants';
 import { SearchFilterMode } from './SearchEnums';
@@ -14,6 +14,7 @@ import { SEARCH_LAYOUT } from './SearchLayout';
 import { SearchUIService } from './SearchService';
 
 export default function SearchScreen() {
+  const BRAND_COLORS = useBrandColors();
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const params = useLocalSearchParams();
@@ -69,19 +70,19 @@ export default function SearchScreen() {
 
   const renderItem = useCallback(({ item }: { item: Product }) => (
     <View style={styles.productItem}>
-      <View style={styles.productImage}>
-        <Text style={styles.imagePlaceholder}>{SEARCH_TEXT.IMAGE_PLACEHOLDER}</Text>
+      <View style={[styles.productImage, { backgroundColor: BRAND_COLORS.primary.p1, borderColor: BRAND_COLORS.border.dark }]}>
+        <Text style={[styles.imagePlaceholder, { color: BRAND_COLORS.primary.p3 }]}>{SEARCH_TEXT.IMAGE_PLACEHOLDER}</Text>
         {item.badge && (
-          <View style={styles.badge}>
-            <Text style={styles.badgeText}>{item.badge}</Text>
+          <View style={[styles.badge, { backgroundColor: BRAND_COLORS.secondary.s4 }]}>
+            <Text style={[styles.badgeText, { color: BRAND_COLORS.primary.p1 }]}>{item.badge}</Text>
           </View>
         )}
       </View>
       <View style={styles.productInfo}>
-        <Text style={styles.productName}>{item.name}</Text>
-        <Text style={styles.productPrice}>{item.price.toLocaleString('vi-VN')}đ</Text>
+        <Text style={[styles.productName, { color: BRAND_COLORS.primary.p3 }]}>{item.name}</Text>
+        <Text style={[styles.productPrice, { color: BRAND_COLORS.primary.p3 }]}>{item.price.toLocaleString('vi-VN')}đ</Text>
       </View>
-      <TouchableOpacity style={styles.addButton} onPress={() => handleAddToCart({
+      <TouchableOpacity style={[styles.addButton, { backgroundColor: BRAND_COLORS.primary.p3 }]} onPress={() => handleAddToCart({
         id: item.id,
         menuItemId: item.menuItemId,
         productId: item.productId,
@@ -94,18 +95,18 @@ export default function SearchScreen() {
         discount: item.discount,
         status: 'AVAILABLE'
       })}>
-        <Text style={styles.addIcon}>+</Text>
+        <Text style={[styles.addIcon, { color: BRAND_COLORS.primary.p1 }]}>+</Text>
       </TouchableOpacity>
     </View>
   ), [handleAddToCart]);
 
   return (
-    <View style={[styles.container, { paddingTop: insets.top }]}>
-      <View style={styles.header}>
-        <View style={styles.searchBar}>
+    <View style={[styles.container, { paddingTop: insets.top, backgroundColor: BRAND_COLORS.screenBg.warm }]}>
+      <View style={[styles.header, { borderBottomColor: BRAND_COLORS.secondary.s6 }]}>
+        <View style={[styles.searchBar, { backgroundColor: BRAND_COLORS.primary.p1 }]}>
           <AppIcon name={HEADER_ICONS.SEARCH} size="xs" />
           <TextInput
-            style={styles.searchInput}
+            style={[styles.searchInput, { color: BRAND_COLORS.primary.p3 }]}
             placeholder={SEARCH_TEXT.PLACEHOLDER}
             value={searchQuery}
             onChangeText={handleSearch}
@@ -114,7 +115,7 @@ export default function SearchScreen() {
         </View>
 
         <TouchableOpacity onPress={handleCancel}>
-          <Text style={styles.cancelButton}>{SEARCH_TEXT.CANCEL_BUTTON}</Text>
+          <Text style={[styles.cancelButton, { color: BRAND_COLORS.primary.p3 }]}>{SEARCH_TEXT.CANCEL_BUTTON}</Text>
         </TouchableOpacity>
       </View>
 
@@ -132,7 +133,6 @@ export default function SearchScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: BRAND_COLORS.screenBg.warm,
   },
   header: {
     flexDirection: 'row',
@@ -141,13 +141,11 @@ const styles = StyleSheet.create({
     paddingVertical: SEARCH_LAYOUT.HEADER_PADDING_VERTICAL,
     gap: SEARCH_LAYOUT.HEADER_GAP,
     borderBottomWidth: SEARCH_LAYOUT.HEADER_BORDER_BOTTOM_WIDTH,
-    borderBottomColor: BRAND_COLORS.secondary.nauCaramel,
   },
   searchBar: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: BRAND_COLORS.primary.beSua,
     borderRadius: SEARCH_LAYOUT.SEARCH_BAR_BORDER_RADIUS,
     paddingHorizontal: SEARCH_LAYOUT.SEARCH_BAR_PADDING_HORIZONTAL,
     gap: SEARCH_LAYOUT.SEARCH_BAR_GAP,
@@ -157,13 +155,11 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: SEARCH_LAYOUT.SEARCH_INPUT_FONT_SIZE,
     fontFamily: 'SpaceGrotesk-Regular',
-    color: BRAND_COLORS.primary.xanhReu,
     paddingVertical: 8,
   },
   cancelButton: {
     fontSize: SEARCH_LAYOUT.CANCEL_BUTTON_FONT_SIZE,
     fontFamily: 'SpaceGrotesk-Medium',
-    color: BRAND_COLORS.primary.xanhReu,
   },
   list: {
     padding: SEARCH_LAYOUT.LIST_PADDING,
@@ -171,7 +167,6 @@ const styles = StyleSheet.create({
   productItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: BRAND_COLORS.primary.beSua,
     borderRadius: SEARCH_LAYOUT.ITEM_BORDER_RADIUS,
     padding: SEARCH_LAYOUT.ITEM_PADDING,
     marginBottom: SEARCH_LAYOUT.ITEM_MARGIN_BOTTOM,
@@ -180,23 +175,19 @@ const styles = StyleSheet.create({
   productImage: {
     width: SEARCH_LAYOUT.IMAGE_SIZE,
     height: SEARCH_LAYOUT.IMAGE_SIZE,
-    backgroundColor: BRAND_COLORS.primary.beSua,
     borderRadius: SEARCH_LAYOUT.IMAGE_BORDER_RADIUS,
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: BRAND_COLORS.border.dark,
   },
   imagePlaceholder: {
     fontSize: SEARCH_LAYOUT.IMAGE_PLACEHOLDER_FONT_SIZE,
     fontFamily: 'Phudu-Bold',
-    color: BRAND_COLORS.primary.xanhReu,
   },
   badge: {
     position: 'absolute',
     top: SEARCH_LAYOUT.BADGE_TOP,
     right: SEARCH_LAYOUT.BADGE_RIGHT,
-    backgroundColor: BRAND_COLORS.secondary.hongSua,
     borderRadius: SEARCH_LAYOUT.BADGE_BORDER_RADIUS,
     paddingHorizontal: SEARCH_LAYOUT.BADGE_PADDING_HORIZONTAL,
     paddingVertical: SEARCH_LAYOUT.BADGE_PADDING_VERTICAL,
@@ -204,7 +195,6 @@ const styles = StyleSheet.create({
   badgeText: {
     fontSize: SEARCH_LAYOUT.BADGE_FONT_SIZE,
     fontFamily: 'Phudu-Bold',
-    color: BRAND_COLORS.primary.beSua,
   },
   productInfo: {
     flex: 1,
@@ -212,25 +202,21 @@ const styles = StyleSheet.create({
   productName: {
     fontSize: SEARCH_LAYOUT.PRODUCT_NAME_FONT_SIZE,
     fontFamily: 'SpaceGrotesk-Medium',
-    color: BRAND_COLORS.primary.xanhReu,
     marginBottom: 4,
   },
   productPrice: {
     fontSize: SEARCH_LAYOUT.PRODUCT_PRICE_FONT_SIZE,
     fontFamily: 'Phudu-Bold',
-    color: BRAND_COLORS.primary.xanhReu,
   },
   addButton: {
     width: SEARCH_LAYOUT.ADD_BUTTON_SIZE,
     height: SEARCH_LAYOUT.ADD_BUTTON_SIZE,
-    backgroundColor: BRAND_COLORS.primary.xanhReu,
     borderRadius: SEARCH_LAYOUT.ADD_BUTTON_BORDER_RADIUS,
     justifyContent: 'center',
     alignItems: 'center',
   },
   addIcon: {
     fontSize: SEARCH_LAYOUT.ADD_ICON_FONT_SIZE,
-    color: BRAND_COLORS.primary.beSua,
     fontWeight: 'bold',
   },
 });

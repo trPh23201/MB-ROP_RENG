@@ -1,13 +1,14 @@
 import { Brand } from '@/src/domain/entities/Brand';
 import { useDb } from '@/src/infrastructure/db/sqlite/provider';
 import { popupService } from '@/src/presentation/layouts/popup/PopupService';
-import { useCallback, useMemo, useState } from 'react';
+import { useBrandColorActions } from '@/src/presentation/theme/BrandColorContext';
+import { useCallback, useMemo } from 'react';
 import { BrandColorService } from '../../application/services/BrandColorService';
 
 export function useBrandColor() {
   const db = useDb();
   const service = useMemo(() => new BrandColorService(db), [db]);
-  const [, setColorVersion] = useState(0);
+  const { updateColors, resetColors: contextReset } = useBrandColorActions();
 
   const fetchAndCacheBrand = useCallback(async (brandId: number): Promise<Brand | null> => {
     popupService.loading(true, 'Đang tải thông tin brand...');
@@ -25,25 +26,25 @@ export function useBrandColor() {
   const applyBrandColors = useCallback(async (brandId: number): Promise<boolean> => {
     popupService.loading(true, 'Đang cập nhật giao diện...');
     try {
-      const result = await service.syncColors(brandId);
+      const colorMap = await service.getColorsFromDb(brandId);
+      if (!colorMap) {
+        popupService.loading(false);
+        return false;
+      }
+      // Update colorStore AND trigger Context re-render
+      updateColors(colorMap);
       popupService.loading(false);
-      setColorVersion(v => v + 1);
-      return result;
+      return true;
     } catch (err) {
       console.log('[useBrandColor] applyBrandColors error:', err);
       popupService.loading(false);
       return false;
     }
-  }, [service]);
+  }, [service, updateColors]);
 
-  const resetColors = useCallback(() => {
-    service.resetColors();
-    setColorVersion(v => v + 1);
-  }, [service]);
+  const resetBrandColors = useCallback(() => {
+    contextReset();
+  }, [contextReset]);
 
-  const forceColorUpdate = useCallback(() => {
-    setColorVersion(v => v + 1);
-  }, []);
-
-  return { fetchAndCacheBrand, applyBrandColors, resetColors, forceColorUpdate };
+  return { fetchAndCacheBrand, applyBrandColors, resetColors: resetBrandColors };
 }

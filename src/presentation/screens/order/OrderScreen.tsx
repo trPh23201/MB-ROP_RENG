@@ -11,7 +11,7 @@ import { useAppDispatch, useAppSelector } from '../../../utils/hooks';
 import { MiniCartButton } from '../../components/shared/MiniCartButton';
 import { BaseFullScreenLayout } from '../../layouts/BaseFullScreenLayout';
 import { popupService } from '../../layouts/popup/PopupService';
-import { BRAND_COLORS } from '../../theme/colors';
+import { useBrandColors } from '../../theme/BrandColorContext';
 import PreOrderBottomSheet from '../preorder/PreOrderBottomSheet';
 import { OrderCategoryScroll } from './components/OrderCategoryScroll';
 import { OrderHeader } from './components/OrderHeader';
@@ -19,6 +19,7 @@ import { OrderProductSection } from './components/OrderProductSection';
 import { OrderPromoSection } from './components/OrderPromoSection';
 
 export default function OrderScreen() {
+  const BRAND_COLORS = useBrandColors();
   const insets = useSafeAreaInsets();
   const dispatch = useAppDispatch();
   const handleAddToCart = useAddToCart();
@@ -117,10 +118,10 @@ export default function OrderScreen() {
 
 
   const renderHeader = useCallback(() => (
-    <View style={{ paddingTop: insets.top, backgroundColor: BRAND_COLORS.screenBg.fresh }}>
+    <View style={[{ paddingTop: insets.top }, { backgroundColor: BRAND_COLORS.screenBg.fresh }]}>
       <OrderHeader />
     </View>
-  ), [insets.top]);
+  ), [insets.top, BRAND_COLORS]);
 
   return (
     <BaseFullScreenLayout

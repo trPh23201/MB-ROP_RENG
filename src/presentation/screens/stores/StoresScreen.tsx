@@ -10,7 +10,7 @@ import { fetchMenuByStore } from '../../../state/slices/homeSlice';
 import { clearStoresError, fetchStores, fetchStoresByProduct } from '../../../state/slices/storesSlice';
 import { useAppDispatch, useAppSelector } from '../../../utils/hooks';
 import { popupService } from '../../layouts/popup/PopupService';
-import { BRAND_COLORS } from '../../theme/colors';
+import { useBrandColors } from '../../theme/BrandColorContext';
 import { StoreSection } from './components/StoreSection';
 import { StoresHeader } from './components/StoresHeader';
 import { StoresSearchBar } from './components/StoresSearchBar';
@@ -18,6 +18,7 @@ import { STORES_TEXT } from './StoresConstants';
 import { StoresUIService } from './StoresService';
 
 export default function StoresScreen() {
+  const BRAND_COLORS = useBrandColors();
   const insets = useSafeAreaInsets();
   const router = useRouter();
   const dispatch = useAppDispatch();
@@ -130,11 +131,11 @@ export default function StoresScreen() {
 
   if (loading) {
     return (
-      <View style={[styles.container, { paddingTop: insets.top }]}>
+      <View style={[styles.container, { paddingTop: insets.top }, { backgroundColor: BRAND_COLORS.screenBg.fresh }]}>
         <StoresHeader />
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color={BRAND_COLORS.primary.xanhReu} />
-          <Text style={styles.loadingText}>{STORES_TEXT.LOADING_MESSAGE}</Text>
+          <ActivityIndicator size="large" color={BRAND_COLORS.primary.p3} />
+          <Text style={[styles.loadingText, { color: BRAND_COLORS.secondary.s5 }]}>{STORES_TEXT.LOADING_MESSAGE}</Text>
         </View>
       </View>
     );
@@ -142,11 +143,11 @@ export default function StoresScreen() {
 
   if (error) {
     return (
-      <View style={[styles.container, { paddingTop: insets.top }]}>
+      <View style={[styles.container, { paddingTop: insets.top }, { backgroundColor: BRAND_COLORS.screenBg.fresh }]}>
         <StoresHeader />
         <View style={styles.errorContainer}>
           <Text style={styles.errorText}>{error}</Text>
-          <Text style={styles.retryButton} onPress={handleRetry}>
+          <Text style={[styles.retryButton, { color: BRAND_COLORS.primary.p3 }]} onPress={handleRetry}>
             {STORES_TEXT.RETRY_BUTTON}
           </Text>
         </View>
@@ -155,7 +156,7 @@ export default function StoresScreen() {
   }
 
   return (
-    <View style={[styles.container, { paddingTop: insets.top }]}>
+    <View style={[styles.container, { paddingTop: insets.top }, { backgroundColor: BRAND_COLORS.screenBg.fresh }]}>
       <StoresHeader />
 
       <StoresSearchBar value={searchQuery} onChangeText={setSearchQuery} />
@@ -163,7 +164,7 @@ export default function StoresScreen() {
       <ScrollView showsVerticalScrollIndicator={false}>
         {filteredStores.length === 0 ? (
           <View style={styles.emptyState}>
-            <Text style={styles.emptyText}>
+            <Text style={[styles.emptyText, { color: BRAND_COLORS.secondary.s5 }]}>
               {params.mode === 'select' ? STORES_TEXT.EMPTY_MESSAGE_SELECT : STORES_TEXT.EMPTY_MESSAGE_BROWSE}
             </Text>
           </View>
@@ -192,7 +193,6 @@ export default function StoresScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: BRAND_COLORS.screenBg.fresh,
   },
   loadingContainer: {
     flex: 1,
@@ -203,7 +203,6 @@ const styles = StyleSheet.create({
   loadingText: {
     fontSize: 16,
     fontFamily: 'SpaceGrotesk-Medium',
-    color: BRAND_COLORS.secondary.reuDam,
     marginTop: 12,
   },
   errorContainer: {
@@ -223,7 +222,6 @@ const styles = StyleSheet.create({
   retryButton: {
     fontSize: 16,
     fontFamily: 'SpaceGrotesk-Bold',
-    color: BRAND_COLORS.primary.xanhReu,
   },
   emptyState: {
     flex: 1,
@@ -235,7 +233,6 @@ const styles = StyleSheet.create({
   emptyText: {
     fontSize: 16,
     fontFamily: 'SpaceGrotesk-Medium',
-    color: BRAND_COLORS.secondary.reuDam,
     textAlign: 'center',
   },
 });

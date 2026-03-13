@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
-import { BRAND_COLORS } from '../../../theme/colors';
+import { useBrandColors } from '../../../theme/BrandColorContext';
 
 interface OrderStatusChipProps {
   label: string;
@@ -9,13 +9,22 @@ interface OrderStatusChipProps {
 }
 
 export function OrderStatusChip({ label, isSelected, onPress }: OrderStatusChipProps) {
+  const BRAND_COLORS = useBrandColors();
   return (
     <TouchableOpacity
-      style={[styles.chip, isSelected && styles.chipSelected]}
+      style={[
+        styles.chip,
+        { backgroundColor: BRAND_COLORS.screenBg.warm, borderColor: BRAND_COLORS.ui.placeholder },
+        isSelected && [styles.chipSelected, { backgroundColor: BRAND_COLORS.bta.primaryBg, borderColor: BRAND_COLORS.bta.primaryBg }]
+      ]}
       onPress={onPress}
       activeOpacity={0.7}
     >
-      <Text style={[styles.chipText, isSelected && styles.chipTextSelected]}>
+      <Text style={[
+        styles.chipText,
+        { color: BRAND_COLORS.ui.subtitle },
+        isSelected && [styles.chipTextSelected, { color: BRAND_COLORS.bta.primaryText }]
+      ]}>
         {label}
       </Text>
     </TouchableOpacity>
@@ -27,22 +36,16 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 20,
-    backgroundColor: BRAND_COLORS.screenBg.warm,
     marginRight: 8,
     borderWidth: 1,
-    borderColor: BRAND_COLORS.ui.placeholder,
   },
   chipSelected: {
-    backgroundColor: BRAND_COLORS.bta.primaryBg,
-    borderColor: BRAND_COLORS.bta.primaryBg,
   },
   chipText: {
     fontSize: 14,
-    color: BRAND_COLORS.ui.subtitle,
     fontWeight: '500',
   },
   chipTextSelected: {
-    color: BRAND_COLORS.bta.primaryText,
     fontWeight: '600',
   },
 });

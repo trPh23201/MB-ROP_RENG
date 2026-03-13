@@ -1,9 +1,9 @@
 import React from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
-import { Collection } from '../HomeInterfaces';
+import { useBrandColors } from '../../../theme/BrandColorContext';
 import { HOME_TEXT } from '../HomeConstants';
+import { Collection } from '../HomeInterfaces';
 import { HOME_LAYOUT } from '../HomeLayout';
-import { BRAND_COLORS } from '../../../theme/colors';
 import { CollectionCard } from './CollectionCard';
 
 interface CollectionSectionProps {
@@ -13,9 +13,11 @@ interface CollectionSectionProps {
 
 export function CollectionSection({ collections, onCollectionPress }: CollectionSectionProps) {
 
+  const BRAND_COLORS = useBrandColors();
+
   return (
     <View style={styles.section}>
-      <Text style={styles.sectionTitle}>{HOME_TEXT.COLLECTION_SECTION.TITLE}</Text>
+      <Text style={[styles.sectionTitle, { color: BRAND_COLORS.primary.p3 }]}>{HOME_TEXT.COLLECTION_SECTION.TITLE}</Text>
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
@@ -42,7 +44,6 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: HOME_LAYOUT.SECTION_TITLE_SIZE,
     fontFamily: 'Phudu-Bold',
-    color: BRAND_COLORS.primary.xanhReu,
     marginBottom: HOME_LAYOUT.SECTION_TITLE_MARGIN_BOTTOM,
     paddingHorizontal: HOME_LAYOUT.SECTION_PADDING_HORIZONTAL,
   },

@@ -2,13 +2,14 @@ import { useAuthGuard } from '@/src/utils/hooks/useAuthGuard';
 import { Image } from 'expo-image';
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { BRAND_COLORS } from '../../../theme/colors';
+import { useBrandColors } from '../../../theme/BrandColorContext';
 import { STORES_TEXT } from '../StoresConstants';
 import { StoreCardProps } from '../StoresInterfaces';
 import { STORES_LAYOUT } from '../StoresLayout';
 import { StoresUIService } from '../StoresService';
 
 export function StoreCard({ store, onPress }: StoreCardProps) {
+  const BRAND_COLORS = useBrandColors();
   const handlePress = useAuthGuard(
     () => {
       onPress();
@@ -23,12 +24,12 @@ export function StoreCard({ store, onPress }: StoreCardProps) {
   );
   
   return (
-    <TouchableOpacity style={styles.card} onPress={handlePress} activeOpacity={0.7}>
-      <Image source={store.imageUrl} style={styles.image} contentFit="cover" cachePolicy="disk" />
+    <TouchableOpacity style={[styles.card, { backgroundColor: BRAND_COLORS.primary.p1, borderLeftColor: BRAND_COLORS.secondary.s3 }]} onPress={handlePress} activeOpacity={0.7}>
+      <Image source={{ uri: store.imageUrl }} style={[styles.image, { backgroundColor: BRAND_COLORS.primary.p2 }]} contentFit="cover" cachePolicy="disk" />
       <View style={styles.info}>
-        <Text style={styles.brandName}>{store.brandName}</Text>
-        <Text style={styles.name}>{store.name}</Text>
-        <Text style={styles.distance}>
+        <Text style={[styles.brandName, { color: BRAND_COLORS.secondary.s4 }]}>{store.brandName}</Text>
+        <Text style={[styles.name, { color: BRAND_COLORS.secondary.s5 }]}>{store.name}</Text>
+        <Text style={[styles.distance, { color: BRAND_COLORS.secondary.s3 }]}>
           {STORES_TEXT.DISTANCE_PREFIX} {StoresUIService.formatDistance(store.distanceKm)} {STORES_TEXT.DISTANCE_SUFFIX}
         </Text>
       </View>
@@ -39,14 +40,12 @@ export function StoreCard({ store, onPress }: StoreCardProps) {
 const styles = StyleSheet.create({
   card: {
     flexDirection: 'row',
-    backgroundColor: BRAND_COLORS.primary.beSua,
     borderRadius: STORES_LAYOUT.STORE_CARD_BORDER_RADIUS,
     padding: STORES_LAYOUT.STORE_CARD_PADDING,
     marginBottom: STORES_LAYOUT.STORE_CARD_MARGIN_BOTTOM,
     gap: STORES_LAYOUT.STORE_CARD_GAP,
     borderWidth: 0,
     borderLeftWidth: 4,
-    borderLeftColor: BRAND_COLORS.secondary.nauEspresso,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,
@@ -57,7 +56,6 @@ const styles = StyleSheet.create({
     width: STORES_LAYOUT.STORE_IMAGE_SIZE,
     height: STORES_LAYOUT.STORE_IMAGE_SIZE,
     borderRadius: STORES_LAYOUT.STORE_IMAGE_BORDER_RADIUS,
-    backgroundColor: BRAND_COLORS.primary.xanhBo,
     borderWidth: 0.05,
     shadowColor: '#000',
     shadowOffset: { width: 2, height: 2 },
@@ -72,18 +70,15 @@ const styles = StyleSheet.create({
   brandName: {
     fontSize: STORES_LAYOUT.STORE_BRAND_FONT_SIZE,
     fontFamily: 'SpaceGrotesk-Medium',
-    color: BRAND_COLORS.secondary.hongSua,
     marginBottom: 4,
   },
   name: {
     fontSize: STORES_LAYOUT.STORE_NAME_FONT_SIZE,
     fontFamily: 'Phudu-Bold',
-    color: BRAND_COLORS.secondary.reuDam,
     marginBottom: STORES_LAYOUT.STORE_NAME_MARGIN_BOTTOM,
   },
   distance: {
     fontSize: STORES_LAYOUT.STORE_DISTANCE_FONT_SIZE,
     fontFamily: 'SpaceGrotesk-Medium',
-    color: BRAND_COLORS.secondary.nauEspresso,
   },
 });

@@ -7,7 +7,7 @@ import { logout } from '../../../state/slices/authSlice';
 import { useAppDispatch, useAppSelector } from '../../../utils/hooks';
 import { BaseFullScreenLayout } from '../../layouts/BaseFullScreenLayout';
 import { popupService } from '../../layouts/popup/PopupService';
-import { BRAND_COLORS } from '../../theme/colors';
+import { useBrandColors } from '../../theme/BrandColorContext';
 import { ACCOUNT_MENU, MORE_STRINGS, SUPPORT_MENU } from './MoreConstants';
 import { MenuSectionData } from './MoreInterfaces';
 import { MenuSection } from './components/MenuSection';
@@ -17,6 +17,7 @@ import { UtilityGrid } from './components/UtilityGrid';
 import { VersionFooter } from './components/VersionFooter';
 
 export default function MoreScreen() {
+  const BRAND_COLORS = useBrandColors();
   const dispatch = useAppDispatch();
   const router = useRouter();
   const db = useSQLiteContext();

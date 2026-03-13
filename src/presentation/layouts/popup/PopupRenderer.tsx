@@ -1,11 +1,12 @@
 import React, { useContext, useEffect } from 'react';
 import { ActivityIndicator, BackHandler, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { BRAND_COLORS } from '../../theme/colors';
+import { useBrandColors } from '../../theme/BrandColorContext';
 import { TYPOGRAPHY } from '../../theme/typography';
 import { PopupContext } from './PopupContext';
 import { popupService } from './PopupService';
 
 export function PopupRenderer() {
+    const BRAND_COLORS = useBrandColors();
     const { state, dispatch } = useContext(PopupContext);
     const { current, isVisible, isAnimating } = state;
 
@@ -52,9 +53,9 @@ export function PopupRenderer() {
             case 'alert':
                 return (
                     <View style={styles.card}>
-                        {config.title && <Text style={styles.title}>{config.title}</Text>}
-                        <Text style={styles.message}>{config.message}</Text>
-                        <TouchableOpacity style={styles.buttonMain} onPress={() => popupService.resolve(id, undefined)}>
+                        {config.title && <Text style={[styles.title, { color: BRAND_COLORS.text.primary }]}>{config.title}</Text>}
+                        <Text style={[styles.message, { color: BRAND_COLORS.text.secondary }]}>{config.message}</Text>
+                        <TouchableOpacity style={[styles.buttonMain, { backgroundColor: BRAND_COLORS.primary.p3 }]} onPress={() => popupService.resolve(id, undefined)}>
                             <Text style={styles.buttonMainText}>{config.buttonText || 'Đóng'}</Text>
                         </TouchableOpacity>
                     </View>
@@ -63,17 +64,17 @@ export function PopupRenderer() {
             case 'confirm':
                 return (
                     <View style={styles.card}>
-                        {config.title && <Text style={styles.title}>{config.title}</Text>}
-                        <Text style={styles.message}>{config.message}</Text>
+                        {config.title && <Text style={[styles.title, { color: BRAND_COLORS.text.primary }]}>{config.title}</Text>}
+                        <Text style={[styles.message, { color: BRAND_COLORS.text.secondary }]}>{config.message}</Text>
                         <View style={styles.buttonRow}>
-                            <TouchableOpacity style={styles.buttonSecondary} onPress={handleCancel}>
-                                <Text style={styles.buttonSecondaryText}>{config.cancelText || 'Hủy'}</Text>
+                            <TouchableOpacity style={[styles.buttonSecondary, { backgroundColor: BRAND_COLORS.background.paper, borderColor: BRAND_COLORS.border.medium }]} onPress={handleCancel}>
+                                <Text style={[styles.buttonSecondaryText, { color: BRAND_COLORS.text.primary }]}>{config.cancelText || 'Hủy'}</Text>
                             </TouchableOpacity>
                             <View style={{ width: 12 }} />
                             <TouchableOpacity
                                 style={[
                                     styles.buttonMain,
-                                    { flex: 1 },
+                                    { flex: 1, backgroundColor: BRAND_COLORS.primary.p3 },
                                     config.confirmStyle === 'destructive' && { backgroundColor: BRAND_COLORS.semantic.error }
                                 ]}
                                 onPress={handleConfirm}
@@ -134,14 +135,12 @@ const styles = StyleSheet.create({
     title: {
         fontSize: TYPOGRAPHY.fontSize.lg,
         fontFamily: TYPOGRAPHY.fontFamily.heading,
-        color: BRAND_COLORS.text.primary,
         marginBottom: 8,
         textAlign: 'center',
     },
     message: {
         fontSize: TYPOGRAPHY.fontSize.md,
         fontFamily: TYPOGRAPHY.fontFamily.bodyRegular,
-        color: BRAND_COLORS.text.secondary,
         textAlign: 'center',
         marginBottom: 24,
     },
@@ -151,7 +150,6 @@ const styles = StyleSheet.create({
     },
     buttonMain: {
         width: '50%',
-        backgroundColor: BRAND_COLORS.primary.xanhReu,
         paddingVertical: 12,
         borderRadius: 8,
         alignItems: 'center',
@@ -163,15 +161,12 @@ const styles = StyleSheet.create({
     },
     buttonSecondary: {
         flex: 1,
-        backgroundColor: BRAND_COLORS.background.paper,
         paddingVertical: 12,
         borderRadius: 8,
         alignItems: 'center',
         borderWidth: 1,
-        borderColor: BRAND_COLORS.border.medium,
     },
     buttonSecondaryText: {
-        color: BRAND_COLORS.text.primary,
         fontFamily: TYPOGRAPHY.fontFamily.bodyMedium,
         fontSize: TYPOGRAPHY.fontSize.md,
     },

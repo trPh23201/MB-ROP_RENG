@@ -8,8 +8,12 @@ import React, { useEffect, useState } from 'react';
 import { Text, View } from 'react-native';
 import { SPLASH_CONSTANTS } from './constants';
 import { splashStyles } from './styles';
+import { useBrandColorActions } from '../../theme/BrandColorContext';
+import { useBrandColors } from '../../theme/BrandColorContext';
 
 export default function SplashScreen() {
+  const BRAND_COLORS = useBrandColors();
+  const { updateColors } = useBrandColorActions();
   const router = useRouter();
   const db = useDb();
   const isReady = useAppSelector(selectIsAppReady);
@@ -35,16 +39,21 @@ export default function SplashScreen() {
 
     console.log(`[SplashScreen] Syncing colors for brand ${selectedBrandId}...`);
     const brandColorService = new BrandColorService(db);
-    brandColorService.syncColors(selectedBrandId)
-      .then((applied: boolean) => {
-        console.log(`[SplashScreen] Colors synced from DB: ${applied}`);
+    brandColorService.getColorsFromDb(selectedBrandId)
+      .then((colorMap) => {
+        if (colorMap) {
+          updateColors(colorMap);
+          console.log(`[SplashScreen] Colors applied via Context for brand ${selectedBrandId}`);
+        } else {
+          console.log(`[SplashScreen] No colors in DB for brand ${selectedBrandId}, using defaults`);
+        }
         setColorsSynced(true);
       })
       .catch((err: Error) => {
         console.log('[SplashScreen] Color sync error:', err);
         setColorsSynced(true);
       });
-  }, [selectedBrandId, db]);
+  }, [selectedBrandId, db, updateColors]);
 
   useEffect(() => {
     console.log(`[SplashScreen] Navigation check: isReady=${isReady}, minTime=${minTimeElapsed}, colorsSynced=${colorsSynced}, brandId=${selectedBrandId}`);
@@ -60,15 +69,15 @@ export default function SplashScreen() {
   }, [isReady, minTimeElapsed, colorsSynced, selectedBrandId, router]);
 
   return (
-    <View style={splashStyles.container}>
+    <View style={[splashStyles.container, { backgroundColor: BRAND_COLORS.screenBg.bold }]}>
       <View style={splashStyles.logoContainer}>
-        <View style={splashStyles.logoPlaceholder}>
-          <Text style={splashStyles.logoText}>LOGO{'\n'}RỐP RẺNG</Text>
+        <View style={[splashStyles.logoPlaceholder, { backgroundColor: BRAND_COLORS.primary.p3 }]}>
+          <Text style={[splashStyles.logoText, { color: BRAND_COLORS.primary.p1 }]}>LOGO{'\n'}RỐP RẺNG</Text>
         </View>
         <Text
           style={[
             splashStyles.brandName,
-            { fontFamily: 'Phudu-Bold' }
+            { fontFamily: 'Phudu-Bold', color: BRAND_COLORS.primary.p3 }
           ]}
         >
           {SPLASH_CONSTANTS.BRAND_NAME}
@@ -76,7 +85,7 @@ export default function SplashScreen() {
         <Text
           style={[
             splashStyles.tagline,
-            { fontFamily: 'SpaceGrotesk-Medium' }
+            { fontFamily: 'SpaceGrotesk-Medium', color: BRAND_COLORS.primary.p3 }
           ]}
         >
           {SPLASH_CONSTANTS.TAGLINE}

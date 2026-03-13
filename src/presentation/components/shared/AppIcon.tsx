@@ -2,7 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import { StyleProp, TextStyle } from 'react-native';
 import { iconService, IoniconsName } from '../../../infrastructure/icons';
-import { BRAND_COLORS } from '../../theme/colors';
+import { useBrandColors } from '../../theme/BrandColorContext';
 
 export type IconSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | number;
 
@@ -28,14 +28,16 @@ interface AppIconProps {
  * <AppIcon name="cafe" size={24} color="#custom" />
  * ```
  */
-export function AppIcon({ name, size = 'md', color = BRAND_COLORS.primary.xanhReu, style}: AppIconProps) {
+export function AppIcon({ name, size = 'md', color, style }: AppIconProps) {
   const iconSize = typeof size === 'number' ? size : iconService.getIconSize(size);
+  const BRAND_COLORS = useBrandColors();
+  const finalColor = color ?? BRAND_COLORS.primary.p3;
 
   return (
     <Ionicons
       name={name}
       size={iconSize}
-      color={color}
+      color={finalColor}
       style={style}
     />
   );

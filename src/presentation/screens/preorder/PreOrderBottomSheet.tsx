@@ -17,6 +17,7 @@ import { OrderProductList } from '../../components/order/OrderProductList';
 import { OrderTypeSelector } from '../../components/order/OrderTypeSelector';
 import { BaseBottomSheetLayout } from '../../layouts/BaseBottomSheetLayout';
 import { popupService } from '../../layouts/popup/PopupService';
+import { useBrandColors } from '../../theme/BrandColorContext';
 import { CartItem } from '../order/OrderInterfaces';
 import { PREORDER_TEXT } from './PreOrderConstants';
 import { PreOrderBottomSheetProps, PreOrderState } from './PreOrderInterfaces';
@@ -28,6 +29,7 @@ import { PaymentTypeSelector } from './components/PaymentTypeSelector';
 import { VoucherSelectionModal } from './components/VoucherSelectionModal';
 
 export default function PreOrderBottomSheet({ visible, onClose, onOrderSuccess }: PreOrderBottomSheetProps) {
+  const BRAND_COLORS = useBrandColors();
   const dispatch = useAppDispatch();
   const bottomSheetRef = useRef<BottomSheetModal>(null);
   const orderTypeModalRef = useRef<BottomSheetModal>(null);
@@ -199,7 +201,7 @@ export default function PreOrderBottomSheet({ visible, onClose, onOrderSuccess }
         onButtonPress={handlePlaceOrder}
       />
     );
-  }, [preOrderState.orderType, totalItems, serverFinalTotal, handlePlaceOrder]);
+  }, [preOrderState.orderType, totalItems, serverFinalTotal, handlePlaceOrder, BRAND_COLORS]);
 
   return (
     <>

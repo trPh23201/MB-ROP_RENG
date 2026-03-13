@@ -4,13 +4,11 @@
  */
 
 import { StyleSheet } from 'react-native';
-import { BRAND_COLORS } from '../../theme/colors';
 
 export const preOrderStyles = StyleSheet.create({
   // Common
   divider: {
     height: 1,
-    backgroundColor: BRAND_COLORS.ui.placeholder,
   },
   
   // Shadows

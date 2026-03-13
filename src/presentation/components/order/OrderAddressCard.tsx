@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { OrderType } from '../../../domain/shared';
-import { BRAND_COLORS } from '../../theme/colors';
+import { useBrandColors } from '../../theme/BrandColorContext';
 import { TYPOGRAPHY } from '../../theme/typography';
 import { AppIcon } from '../shared/AppIcon';
 import { ORDER_TEXT } from './OrderConstants';
@@ -9,6 +9,7 @@ import { OrderAddressCardProps } from './OrderInterfaces';
 
 
 export function OrderAddressCard({ orderType, address, onChangeAddress, editable = true }: OrderAddressCardProps) {
+    const BRAND_COLORS = useBrandColors();
     if (orderType !== OrderType.DELIVERY) {
         return null;
     }
@@ -18,16 +19,16 @@ export function OrderAddressCard({ orderType, address, onChangeAddress, editable
     return (
         <View style={styles.container}>
             <View style={styles.header}>
-                <Text style={styles.headerTitle}>{ORDER_TEXT.ADDRESS_HEADER_TITLE}</Text>
+                <Text style={[styles.headerTitle, { color: BRAND_COLORS.ui.heading }]}>{ORDER_TEXT.ADDRESS_HEADER_TITLE}</Text>
                 {editable && onChangeAddress && (
                     <TouchableOpacity onPress={onChangeAddress} hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
-                        <Text style={styles.changeText}>{ORDER_TEXT.ADDRESS_CHANGE_BUTTON}</Text>
+                        <Text style={[styles.changeText, { color: BRAND_COLORS.bta.primaryBg }]}>{ORDER_TEXT.ADDRESS_CHANGE_BUTTON}</Text>
                     </TouchableOpacity>
                 )}
             </View>
 
             <TouchableOpacity
-                style={styles.card}
+                style={[styles.card, { backgroundColor: BRAND_COLORS.screenBg.fresh, borderColor: BRAND_COLORS.ui.placeholder }]}
                 onPress={editable ? onChangeAddress : undefined}
                 activeOpacity={editable ? 0.7 : 1}
                 disabled={!editable}
@@ -43,15 +44,15 @@ export function OrderAddressCard({ orderType, address, onChangeAddress, editable
                 <View style={styles.contentContainer}>
                     {hasAddress ? (
                         <>
-                            <Text style={styles.addressName} numberOfLines={1}>
+                            <Text style={[styles.addressName, { color: BRAND_COLORS.ui.heading }]} numberOfLines={1}>
                                 {address.name}
                             </Text>
-                            <Text style={styles.addressFull} numberOfLines={1}>
+                            <Text style={[styles.addressFull, { color: BRAND_COLORS.ui.subtitle }]} numberOfLines={1}>
                                 {address.full}
                             </Text>
                         </>
                     ) : (
-                        <Text style={styles.placeholder}>{ORDER_TEXT.ADDRESS_PLACEHOLDER}</Text>
+                        <Text style={[styles.placeholder, { color: BRAND_COLORS.ui.placeholder }]}>{ORDER_TEXT.ADDRESS_PLACEHOLDER}</Text>
                     )}
                 </View>
 
@@ -77,22 +78,18 @@ const styles = StyleSheet.create({
     headerTitle: {
         fontSize: TYPOGRAPHY.fontSize.md,
         fontFamily: TYPOGRAPHY.fontFamily.bodyBold,
-        color: BRAND_COLORS.ui.heading,
     },
     changeText: {
         fontSize: TYPOGRAPHY.fontSize.md,
         fontFamily: TYPOGRAPHY.fontFamily.bodyMedium,
-        color: BRAND_COLORS.bta.primaryBg,
     },
     card: {
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: BRAND_COLORS.screenBg.fresh,
         borderRadius: 12,
         paddingVertical: 14,
         paddingHorizontal: 14,
         borderWidth: 3,
-        borderColor: BRAND_COLORS.ui.placeholder,
         shadowColor: '#000000',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.06,
@@ -118,17 +115,14 @@ const styles = StyleSheet.create({
     addressName: {
         fontSize: 16,
         fontWeight: '700',
-        color: BRAND_COLORS.ui.heading,
         marginBottom: 2,
     },
     addressFull: {
         fontSize: 13,
-        color: BRAND_COLORS.ui.subtitle,
         lineHeight: 18,
     },
     placeholder: {
         fontSize: 15,
-        color: BRAND_COLORS.ui.placeholder,
         fontStyle: 'italic',
     },
     arrowContainer: {

@@ -4,7 +4,7 @@ import React, { forwardRef, useCallback, useImperativeHandle, useMemo, useRef, u
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Product } from '../../../domain/entities/Product';
-import { BRAND_COLORS } from '../../theme/colors';
+import { useBrandColors } from '../../theme/BrandColorContext';
 import { TYPOGRAPHY } from '../../theme/typography';
 import { TOPPING_TEXT } from './OrderConstants';
 import { Topping } from './OrderInterfaces';
@@ -21,6 +21,7 @@ interface AddToppingBottomSheetProps {
 }
 
 export const AddToppingBottomSheet = forwardRef<AddToppingRef, AddToppingBottomSheetProps>(({ onApply, availableToppings = [] }, ref) => {
+    const BRAND_COLORS = useBrandColors();
     const insets = useSafeAreaInsets();
     const sheetRef = useRef<BottomSheetModal>(null);
     const [selectedToppings, setSelectedToppings] = useState<Topping[]>([]);
@@ -67,21 +68,21 @@ export const AddToppingBottomSheet = forwardRef<AddToppingRef, AddToppingBottomS
             enableDynamicSizing={false}
             enableDismissOnClose={true}
             backdropComponent={renderBackdrop}
-            backgroundStyle={styles.bottomSheetBackground}
-            handleIndicatorStyle={styles.indicator}
+            backgroundStyle={[styles.bottomSheetBackground, { backgroundColor: BRAND_COLORS.primary.p1 }]}
+            handleIndicatorStyle={[styles.indicator, { backgroundColor: BRAND_COLORS.secondary.s3 }]}
             index={0}
             stackBehavior="push"
         >
-            <View style={styles.header}>
+            <View style={[styles.header, { borderBottomColor: BRAND_COLORS.ui.placeholder }]}>
                 <TouchableOpacity onPress={() => sheetRef.current?.dismiss()} style={styles.backButton}>
                     <Ionicons name="chevron-back" size={24} color={BRAND_COLORS.ui.subtitle} />
                 </TouchableOpacity>
                 <View style={styles.headerTitleContainer}>
-                    <Text style={styles.title}>{TOPPING_TEXT.TITLE}</Text>
-                    <Text style={styles.subtitle}>{TOPPING_TEXT.SUBTITLE}</Text>
+                    <Text style={[styles.title, { color: BRAND_COLORS.ui.heading }]}>{TOPPING_TEXT.TITLE}</Text>
+                    <Text style={[styles.subtitle, { color: BRAND_COLORS.ui.subtitle }]}>{TOPPING_TEXT.SUBTITLE}</Text>
                 </View>
                 <TouchableOpacity onPress={handleApply} style={styles.applyHeaderButton}>
-                    <Text style={styles.applyHeaderText}>Áp dụng</Text>
+                    <Text style={[styles.applyHeaderText, { color: BRAND_COLORS.secondary.s3 }]}>Áp dụng</Text>
                 </TouchableOpacity>
             </View>
 
@@ -92,17 +93,17 @@ export const AddToppingBottomSheet = forwardRef<AddToppingRef, AddToppingBottomS
                     return (
                         <TouchableOpacity
                             key={mappedTopping.id}
-                            style={styles.toppingItem}
+                            style={[styles.toppingItem, { borderBottomColor: BRAND_COLORS.ui.placeholder }]}
                             onPress={() => handleToggleTopping(mappedTopping)}
                             disabled={!isSelected && selectedToppings.length >= 3}
                         >
-                            <View style={[styles.checkbox, isSelected && styles.checkboxSelected]}>
+                            <View style={[styles.checkbox, { borderColor: BRAND_COLORS.ui.placeholder }, isSelected && styles.checkboxSelected, isSelected && { backgroundColor: BRAND_COLORS.secondary.s3, borderColor: BRAND_COLORS.secondary.s3 }]}>
                                 {isSelected && <Ionicons name="checkmark" size={16} color={BRAND_COLORS.bta.primaryText} />}
                             </View>
-                            <Text style={[styles.toppingName, !isSelected && selectedToppings.length >= 3 && styles.toppingDisabled]}>
+                            <Text style={[styles.toppingName, { color: BRAND_COLORS.ui.heading }, !isSelected && selectedToppings.length >= 3 && styles.toppingDisabled, !isSelected && selectedToppings.length >= 3 && { color: BRAND_COLORS.ui.placeholder }]}>
                                 {topping.name}
                             </Text>
-                            <Text style={styles.toppingPrice}>{OrderService.formatPrice(topping.price)}</Text>
+                            <Text style={[styles.toppingPrice, { color: BRAND_COLORS.ui.heading }]}>{OrderService.formatPrice(topping.price)}</Text>
                         </TouchableOpacity>
                     );
                 })}
@@ -115,12 +116,10 @@ AddToppingBottomSheet.displayName = 'AddToppingBottomSheet';
 
 const styles = StyleSheet.create({
     bottomSheetBackground: {
-        backgroundColor: BRAND_COLORS.primary.beSua,
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20,
     },
     indicator: {
-        backgroundColor: BRAND_COLORS.secondary.nauEspresso,
         width: 40,
     },
     header: {
@@ -129,7 +128,6 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         paddingVertical: 10,
         borderBottomWidth: 1,
-        borderBottomColor: BRAND_COLORS.ui.placeholder,
     },
     backButton: {
         padding: 4,
@@ -142,12 +140,10 @@ const styles = StyleSheet.create({
     title: {
         fontSize: TYPOGRAPHY.fontSize.base,
         fontFamily: TYPOGRAPHY.fontFamily.bodyBold,
-        color: BRAND_COLORS.ui.heading,
     },
     subtitle: {
         fontSize: TYPOGRAPHY.fontSize.xs,
         fontFamily: TYPOGRAPHY.fontFamily.bodyRegular,
-        color: BRAND_COLORS.ui.subtitle,
     },
     applyHeaderButton: {
         paddingHorizontal: 6,
@@ -156,7 +152,6 @@ const styles = StyleSheet.create({
     applyHeaderText: {
         fontSize: TYPOGRAPHY.fontSize.base,
         fontFamily: TYPOGRAPHY.fontFamily.bodyBold,
-        color: BRAND_COLORS.secondary.nauEspresso,
     },
     contentWrapper: {
         paddingHorizontal: 16,
@@ -167,7 +162,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingVertical: 10,
         borderBottomWidth: 1,
-        borderBottomColor: BRAND_COLORS.ui.placeholder,
         gap: 12,
     },
     checkbox: {
@@ -175,26 +169,20 @@ const styles = StyleSheet.create({
         height: 20,
         borderRadius: 4,
         borderWidth: 2,
-        borderColor: BRAND_COLORS.ui.placeholder,
         justifyContent: 'center',
         alignItems: 'center',
     },
     checkboxSelected: {
-        backgroundColor: BRAND_COLORS.secondary.nauEspresso,
-        borderColor: BRAND_COLORS.secondary.nauEspresso,
     },
     toppingName: {
         flex: 1,
         fontSize: TYPOGRAPHY.fontSize.base,
         fontFamily: TYPOGRAPHY.fontFamily.bodyRegular,
-        color: BRAND_COLORS.ui.heading,
     },
     toppingDisabled: {
-        color: BRAND_COLORS.ui.placeholder,
     },
     toppingPrice: {
         fontSize: TYPOGRAPHY.fontSize.base,
         fontFamily: TYPOGRAPHY.fontFamily.monoBold,
-        color: BRAND_COLORS.ui.heading,
     },
 });

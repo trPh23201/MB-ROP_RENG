@@ -1,3 +1,4 @@
+import { useBrandColors } from '@/src/presentation/theme/BrandColorContext';
 import React from 'react';
 import { Text, View } from 'react-native';
 import { MenuSectionData } from '../MoreInterfaces';
@@ -7,9 +8,10 @@ import { MenuItem } from './MenuItem';
 interface Props { section: MenuSectionData; onItemPress: (id: string) => void; }
 
 export const MenuSection = ({ section, onItemPress }: Props) => {
+  const BRAND_COLORS = useBrandColors();
   return (
-    <View style={styles.sectionContainer}>
-      {section.title && <Text style={styles.sectionTitle}>{section.title}</Text>}
+    <View style={[styles.sectionContainer, { backgroundColor: BRAND_COLORS.screenBg.warm }]}>
+      {section.title && <Text style={[styles.sectionTitle, { color: BRAND_COLORS.ui.heading }]}>{section.title}</Text>}
       {section.items.map((item, index) => (
         <MenuItem
           key={item.id}

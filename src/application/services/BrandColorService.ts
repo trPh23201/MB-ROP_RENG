@@ -1,11 +1,8 @@
 import { Brand } from '@/src/domain/entities/Brand';
 import { BrandColorDbItem, BrandColorRepository } from '@/src/infrastructure/db/sqlite/repositories/BrandColorRepository';
 import { brandRepository } from '@/src/infrastructure/repositories/BrandRepositoryImpl';
-import { BRAND_COLORS, DYNAMIC_COLORS } from '@/src/presentation/theme/colors';
+import { updateColorStore, resetColorStore } from '@/src/presentation/theme/colors';
 import { SQLiteDatabase } from 'expo-sqlite';
-
-const ORIGINAL_BRAND_COLORS = JSON.parse(JSON.stringify(BRAND_COLORS));
-const ORIGINAL_DYNAMIC_COLORS = JSON.parse(JSON.stringify(DYNAMIC_COLORS));
 
 export class BrandColorService {
   private readonly repo: BrandColorRepository;
@@ -15,40 +12,40 @@ export class BrandColorService {
   }
 
   async fetchAndCacheBrand(brandId: number): Promise<Brand> {
-    const hasCache = await this.repo.hasColors(brandId);
     const brand = await brandRepository.getBrandById(brandId);
 
-    if (!hasCache) {
-      const colorDbItems: BrandColorDbItem[] = brand.colors.map(c => ({
-        id: c.id,
-        brand_id: brandId,
-        color_name: c.colorName,
-        hex_code: c.hexCode,
-        rgb_code: null,
-        is_active: 1,
-        sort_order: 0,
-        synced_at: Date.now(),
-      }));
-      await this.repo.saveColors(brandId, colorDbItems);
-      console.log(`[BrandColorService] Fetched & saved brand ${brandId} to DB`);
-    } else {
-      console.log(`[BrandColorService] Using cached colors for brand ${brandId}`);
-    }
+    // Always upsert colors from API (INSERT OR REPLACE handles duplicates)
+    const colorDbItems: BrandColorDbItem[] = brand.colors.map(c => ({
+      id: c.id,
+      brand_id: brandId,
+      color_name: c.colorName,
+      hex_code: c.hexCode,
+      rgb_code: null,
+      is_active: 1,
+      sort_order: 0,
+      synced_at: Date.now(),
+    }));
+    await this.repo.saveColors(brandId, colorDbItems);
+    console.log(`[BrandColorService] Synced ${colorDbItems.length} colors for brand ${brandId} to DB`);
 
     return brand;
   }
 
-  async syncColors(brandId: number): Promise<boolean> {
+  /**
+   * Read colors from DB and apply to colorStore via Proxy.
+   * Returns the colorMap so the caller (hook) can pass it to context's updateColors().
+   */
+  async getColorsFromDb(brandId: number): Promise<Map<string, string> | null> {
     const hasData = await this.repo.hasColors(brandId);
     if (!hasData) {
       console.log(`[BrandColorService] No colors in DB for brand ${brandId}`);
-      return false;
+      return null;
     }
 
     const dbColors = await this.repo.getColorsByBrandId(brandId);
     if (dbColors.length === 0) {
       console.log(`[BrandColorService] No active colors for brand ${brandId}`);
-      return false;
+      return null;
     }
 
     const colorMap = new Map<string, string>();
@@ -57,72 +54,25 @@ export class BrandColorService {
       console.log(`[BrandColorService] ${color.color_name} → ${color.hex_code}`);
     }
 
-    this.applyColors(colorMap);
-    console.log(`[BrandColorService] Sync complete: ${dbColors.length} colors applied`);
+    console.log(`[BrandColorService] Read ${dbColors.length} colors from DB for brand ${brandId}`);
+    return colorMap;
+  }
+
+  /**
+   * Legacy method: read from DB and apply directly to colorStore.
+   * For use when context is not available.
+   */
+  async syncColors(brandId: number): Promise<boolean> {
+    const colorMap = await this.getColorsFromDb(brandId);
+    if (!colorMap) return false;
+
+    updateColorStore(colorMap);
+    console.log(`[BrandColorService] Sync complete: ${colorMap.size} colors applied`);
     return true;
   }
 
-  applyColors(colorMap: Map<string, string>): void {
-    if (colorMap.size === 0) return;
-
-    let applied = 0;
-
-    for (const [colorName, hexCode] of colorMap) {
-      if (colorName.includes('.')) {
-        const parts = colorName.split('.');
-        let target: any = BRAND_COLORS;
-        for (let i = 0; i < parts.length - 1; i++) {
-          target = target?.[parts[i]];
-        }
-        if (target && parts[parts.length - 1] in target) {
-          target[parts[parts.length - 1]] = hexCode;
-          applied++;
-        }
-        continue;
-      }
-
-      let found = false;
-      for (const group of Object.values(BRAND_COLORS)) {
-        if (typeof group === 'object' && group !== null && colorName in group) {
-          (group as any)[colorName] = hexCode;
-          applied++;
-          found = true;
-          break;
-        }
-      }
-      if (!found) {
-        for (const group of Object.values(DYNAMIC_COLORS)) {
-          if (typeof group === 'object' && group !== null && colorName in group) {
-            (group as any)[colorName] = hexCode;
-            applied++;
-            break;
-          }
-        }
-      }
-    }
-
-    console.log(`[BrandColorService] Applied ${applied}/${colorMap.size} colors`);
-  }
-
   resetColors(): void {
-    for (const groupKey of Object.keys(ORIGINAL_BRAND_COLORS)) {
-      const original = ORIGINAL_BRAND_COLORS[groupKey];
-      const current = (BRAND_COLORS as any)[groupKey];
-      if (typeof original === 'object' && original !== null && current) {
-        for (const key of Object.keys(original)) {
-          current[key] = original[key];
-        }
-      }
-    }
-    for (const groupKey of Object.keys(ORIGINAL_DYNAMIC_COLORS)) {
-      const original = ORIGINAL_DYNAMIC_COLORS[groupKey];
-      const current = (DYNAMIC_COLORS as any)[groupKey];
-      if (typeof original === 'object' && original !== null && current) {
-        for (const key of Object.keys(original)) {
-          current[key] = original[key];
-        }
-      }
-    }
+    resetColorStore();
     console.log('[BrandColorService] Reset to original colors');
   }
 }

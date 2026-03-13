@@ -8,19 +8,22 @@ import { router } from 'expo-router';
 import React, { useCallback, useEffect, useState } from 'react';
 import { ActivityIndicator, FlatList, ListRenderItem, RefreshControl, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useAppSelector } from '../../../utils/hooks';
+import {
+  CategoryItem,
+  EntryBrandSelector,
+  EntryCategoryScroll,
+  EntryProductCard,
+  EntryPromoBanner,
+  EntryQuickActions,
+  EntrySearchBar,
+  ProductCardData,
+} from '../../components/entry';
 import { AppIcon } from '../../components/shared/AppIcon';
 import { MiniCartButton } from '../../components/shared/MiniCartButton';
 import { BaseFullScreenLayout } from '../../layouts/BaseFullScreenLayout';
-import { BRAND_COLORS } from '../../theme/colors';
+import { useBrandColors } from '../../theme/BrandColorContext';
 import { HEADER_ICONS } from '../../theme/iconConstants';
 import PreOrderBottomSheet from '../preorder/PreOrderBottomSheet';
-import { CategoryItem } from '../welcome/components/CategoryScroll';
-import { ProductCard, ProductCardData } from '../welcome/components/ProductCard';
-import { AuthenticatedPromoBanner } from './components/AuthenticatedPromoBanner';
-import { HomeBrandSelector } from './components/HomeBrandSelector';
-import { HomeCategoryScroll } from './components/HomeCategoryGrid';
-import { HomeQuickActions } from './components/HomeQuickActions';
-import { HomeSearchBar } from './components/HomeSearchBar';
 import { LocationBanner } from './components/LocationBanner';
 import { HOME_TEXT } from './HomeConstants';
 import { HOME_LAYOUT } from './HomeLayout';
@@ -35,6 +38,7 @@ const CATEGORY_ICONS: Record<string, string> = {
 };
 
 export default function HomeScreen() {
+  const BRAND_COLORS = useBrandColors();
   const handleAddToCart = useAddToCart();
 
   const cachedLocation = useAppSelector(selectAppLocation);
@@ -97,6 +101,15 @@ export default function HomeScreen() {
     handleAddToCart(productForCart);
   }, [handleAddToCart]);
 
+  const handleQuickActionPress = useCallback((actionId: string, label: string) => {
+    console.log(`[HomeQuickActions] Selected: ${label} (${actionId})`);
+    // TODO: Navigate to store selection or order flow
+  }, []);
+
+  const handleBannerPress = useCallback((promoId: string) => {
+    console.log(`[AuthenticatedPromoBanner] Clicked: Promo ${promoId}`);
+  }, []);
+
   const handleRetry = useCallback(() => {
     clearError();
     refresh();
@@ -120,7 +133,7 @@ export default function HomeScreen() {
   const showMiniCart = isAuthenticated && totalItems > 0;
 
   const renderProduct: ListRenderItem<typeof products[0]> = useCallback(
-    ({ item }) => <ProductCard product={item} onPress={handleProductPress} />,
+    ({ item }) => <EntryProductCard product={item} onPress={handleProductPress} />,
     [handleProductPress]
   );
 
@@ -162,44 +175,44 @@ export default function HomeScreen() {
         />
 
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Lựa chọn thương hiệu</Text>
-          <HomeBrandSelector />
+          <Text style={[styles.sectionTitle, { color: BRAND_COLORS.primary.p3 }]}>Lựa chọn thương hiệu</Text>
+          <EntryBrandSelector />
         </View>
         <View style={styles.section}>
-          <HomeQuickActions />
+          <EntryQuickActions onActionPress={handleQuickActionPress} />
         </View>
         <View style={styles.section}>
-          <AuthenticatedPromoBanner />
+          <EntryPromoBanner onBannerPress={handleBannerPress} autoScroll />
         </View>
         <View style={styles.section}>
-          <HomeSearchBar />
+          <EntrySearchBar />
         </View>
         {categories.length > 0 && (
-          <HomeCategoryScroll categories={categories} />
+          <EntryCategoryScroll categories={categories} layout="grid" />
         )}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>{HOME_TEXT.PRODUCT_SECTION_TITLE}</Text>
+          <Text style={[styles.sectionTitle, { color: BRAND_COLORS.primary.p3 }]}>{HOME_TEXT.PRODUCT_SECTION_TITLE}</Text>
         </View>
       </>
     ),
-    [categories, locationError, userAddress, handleLocationPress]
+    [categories, locationError, userAddress, handleLocationPress, BRAND_COLORS]
   );
 
   const ListFooter = useCallback(
     () =>
       isLoadingMore ? (
         <View style={styles.loadingMore}>
-          <ActivityIndicator size="small" color={BRAND_COLORS.primary.xanhReu} />
-          <Text style={styles.loadingMoreText}>Đang tải thêm...</Text>
+          <ActivityIndicator size="small" color={BRAND_COLORS.primary.p3} />
+          <Text style={[styles.loadingMoreText, { color: BRAND_COLORS.text.secondary }]}>Đang tải thêm...</Text>
         </View>
       ) : !hasMore && products.length > 0 ? (
         <View style={styles.endList}>
-          <Text style={styles.endListText}>Đã hiển thị tất cả sản phẩm</Text>
+          <Text style={[styles.endListText, { color: BRAND_COLORS.text.secondary }]}>Đã hiển thị tất cả sản phẩm</Text>
         </View>
       ) : (
         <View style={{ height: 100 }} />
       ),
-    [isLoadingMore, hasMore, products.length]
+    [isLoadingMore, hasMore, products.length, BRAND_COLORS]
   );
 
   const ListEmpty = useCallback(
@@ -209,16 +222,16 @@ export default function HomeScreen() {
           <Text style={styles.errorText}>
             {error.includes('404') ? 'Không tìm thấy cửa hàng ở khu vực này' : error}
           </Text>
-          <TouchableOpacity style={styles.retryButton} onPress={handleRetry}>
+          <TouchableOpacity style={[styles.retryButton, { backgroundColor: BRAND_COLORS.primary.p3 }]} onPress={handleRetry}>
             <Text style={styles.retryText}>Thử lại</Text>
           </TouchableOpacity>
         </View>
       ) : (
         <View style={styles.emptyContainer}>
-          <Text style={styles.emptyText}>Không có sản phẩm</Text>
+          <Text style={[styles.emptyText, { color: BRAND_COLORS.text.secondary }]}>Không có sản phẩm</Text>
         </View>
       ),
-    [error, handleRetry]
+    [error, handleRetry, BRAND_COLORS]
   );
 
   const isInitialLoading = (isLoading && products.length === 0) || !cachedLocation;
@@ -227,32 +240,32 @@ export default function HomeScreen() {
     () => (
       <View style={styles.header}>
         <View style={styles.greeting}>
-          <AppIcon name={HEADER_ICONS.GREETING} size="lg" style={styles.greetingIcon} />
-          <Text style={styles.greetingText} numberOfLines={1}>
+          <AppIcon name={HEADER_ICONS.GREETING} size="lg" style={[styles.greetingIcon, { color: BRAND_COLORS.primary.p1 }]} />
+          <Text style={[styles.greetingText, { color: BRAND_COLORS.primary.p1 }]} numberOfLines={1}>
             {userName}
             {HOME_TEXT.HEADER.GREETING_SUFFIX}
           </Text>
         </View>
         <View style={styles.headerIcons}>
-          <TouchableOpacity style={styles.voucherBadge}>
+          <TouchableOpacity style={[styles.voucherBadge, { backgroundColor: BRAND_COLORS.primary.p1 }]}>
             <AppIcon name={HEADER_ICONS.VOUCHER} size="sm" />
-            <Text style={styles.voucherCount}>{voucherCount}</Text>
+            <Text style={[styles.voucherCount, { color: BRAND_COLORS.primary.p3 }]}>{voucherCount}</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.iconButton}>
+          <TouchableOpacity style={[styles.iconButton, { backgroundColor: BRAND_COLORS.primary.p1 }]}>
             <AppIcon name={HEADER_ICONS.NOTIFICATION} size="sm" />
           </TouchableOpacity>
         </View>
       </View>
     ),
-    [userName, voucherCount]
+    [userName, voucherCount, BRAND_COLORS]
   );
 
   return (
     <LinearGradient
       colors={[
-        BRAND_COLORS.primary.xanhReu,
-        BRAND_COLORS.primary.xanhBo,
-        BRAND_COLORS.primary.beSua,
+        BRAND_COLORS.primary.p3,
+        BRAND_COLORS.primary.p2,
+        BRAND_COLORS.primary.p1,
         '#FFFFFF',
       ]}
       style={styles.container}
@@ -264,8 +277,8 @@ export default function HomeScreen() {
       >
         {isInitialLoading ? (
           <View style={styles.loadingContainer}>
-            <ActivityIndicator size="large" color={BRAND_COLORS.primary.xanhReu} />
-            <Text style={styles.loadingText}>
+            <ActivityIndicator size="large" color={BRAND_COLORS.primary.p3} />
+            <Text style={[styles.loadingText, { color: BRAND_COLORS.primary.p3 }]}>
               {!cachedLocation ? 'Đang xác định vị trí...' : 'Đang tải menu...'}
             </Text>
           </View>
@@ -284,8 +297,8 @@ export default function HomeScreen() {
               <RefreshControl
                 refreshing={refreshing}
                 onRefresh={handleRefresh}
-                colors={[BRAND_COLORS.primary.xanhReu]}
-                tintColor={BRAND_COLORS.primary.xanhReu}
+                colors={[BRAND_COLORS.primary.p3]}
+                tintColor={BRAND_COLORS.primary.p3}
               />
             }
             onEndReached={(!error && products.length > 0) ? loadMore : null}
@@ -321,17 +334,15 @@ const styles = StyleSheet.create({
     gap: HOME_LAYOUT.GREETING_GAP,
     flex: 1,
   },
-  greetingIcon: { color: BRAND_COLORS.primary.beSua },
+  greetingIcon: {  },
   greetingText: {
     fontSize: HOME_LAYOUT.GREETING_TEXT_SIZE,
     fontFamily: 'Phudu-Bold',
-    color: BRAND_COLORS.primary.beSua,
   },
   headerIcons: { flexDirection: 'row', alignItems: 'center', gap: 12 },
   voucherBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: BRAND_COLORS.primary.beSua,
     paddingHorizontal: HOME_LAYOUT.VOUCHER_BADGE_PADDING_HORIZONTAL,
     paddingVertical: HOME_LAYOUT.VOUCHER_BADGE_PADDING_VERTICAL,
     borderRadius: HOME_LAYOUT.VOUCHER_BADGE_BORDER_RADIUS,
@@ -340,13 +351,11 @@ const styles = StyleSheet.create({
   voucherCount: {
     fontSize: HOME_LAYOUT.VOUCHER_BADGE_FONT_SIZE,
     fontFamily: 'SpaceGrotesk-Bold',
-    color: BRAND_COLORS.primary.xanhReu,
   },
   iconButton: {
     width: HOME_LAYOUT.HEADER_ICON_SIZE,
     height: HOME_LAYOUT.HEADER_ICON_SIZE,
     borderRadius: HOME_LAYOUT.HEADER_ICON_BORDER_RADIUS,
-    backgroundColor: BRAND_COLORS.primary.beSua,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -356,7 +365,6 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: HOME_LAYOUT.SECTION_TITLE_SIZE,
     fontFamily: 'Phudu-Bold',
-    color: BRAND_COLORS.primary.xanhReu,
     marginBottom: HOME_LAYOUT.SECTION_TITLE_MARGIN_BOTTOM,
   },
   loadingContainer: {
@@ -368,7 +376,6 @@ const styles = StyleSheet.create({
   loadingText: {
     fontSize: 16,
     fontFamily: 'SpaceGrotesk-Medium',
-    color: BRAND_COLORS.primary.xanhReu,
   },
   loadingMore: {
     flexDirection: 'row',
@@ -380,7 +387,6 @@ const styles = StyleSheet.create({
   loadingMoreText: {
     fontSize: 14,
     fontFamily: 'SpaceGrotesk-Regular',
-    color: BRAND_COLORS.text.secondary,
   },
   endList: {
     paddingVertical: 20,
@@ -389,7 +395,6 @@ const styles = StyleSheet.create({
   endListText: {
     fontSize: 14,
     fontFamily: 'SpaceGrotesk-Regular',
-    color: BRAND_COLORS.text.secondary,
   },
   errorContainer: { padding: 40, alignItems: 'center', gap: 12 },
   errorText: {
@@ -401,7 +406,6 @@ const styles = StyleSheet.create({
   retryButton: {
     paddingHorizontal: 24,
     paddingVertical: 12,
-    backgroundColor: BRAND_COLORS.primary.xanhReu,
     borderRadius: 8,
   },
   retryText: {
@@ -413,23 +417,19 @@ const styles = StyleSheet.create({
   emptyText: {
     fontSize: 14,
     fontFamily: 'SpaceGrotesk-Regular',
-    color: BRAND_COLORS.text.secondary,
   },
   userLocationInfo: {
     padding: 12,
-    backgroundColor: BRAND_COLORS.primary.beSua,
     marginBottom: 8,
     borderRadius: 8,
   },
   storeName: {
     fontSize: 14,
     fontFamily: 'SpaceGrotesk-Bold',
-    color: BRAND_COLORS.primary.xanhReu,
   },
   userLocationText: {
     fontSize: 12,
     fontFamily: 'SpaceGrotesk-Regular',
-    color: BRAND_COLORS.secondary.nauEspresso,
     marginTop: 4,
   },
 });

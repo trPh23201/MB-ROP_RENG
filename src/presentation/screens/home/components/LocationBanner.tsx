@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { AppIcon } from '../../../components/shared/AppIcon';
-import { BRAND_COLORS } from '../../../theme/colors';
+import { useBrandColors } from '../../../theme/BrandColorContext';
 
 interface LocationBannerProps {
   userAddress?: string;
@@ -10,6 +10,7 @@ interface LocationBannerProps {
 }
 
 export function LocationBanner({ userAddress, locationError, onPress }: LocationBannerProps) {
+  const BRAND_COLORS = useBrandColors();
   if (locationError) {
     return (
       <View style={styles.errorBanner}>
@@ -25,20 +26,20 @@ export function LocationBanner({ userAddress, locationError, onPress }: Location
 
   return (
     <TouchableOpacity
-      style={styles.addressBanner}
+      style={[styles.addressBanner, { backgroundColor: BRAND_COLORS.primary.p1 }]}
       onPress={onPress}
       activeOpacity={0.7}
     >
       <View style={styles.addressContent}>
-        <AppIcon name="location" size="md" style={styles.locationIcon} />
+        <AppIcon name="location" size="md" style={[styles.locationIcon, { color: BRAND_COLORS.primary.p3 }]} />
         <View style={styles.addressTextContainer}>
-          <Text style={styles.addressLabel}>Vị trí hiện tại</Text>
-          <Text style={styles.addressText} numberOfLines={1}>
+          <Text style={[styles.addressLabel, { color: BRAND_COLORS.text.secondary }]}>Vị trí hiện tại</Text>
+          <Text style={[styles.addressText, { color: BRAND_COLORS.primary.p3 }]} numberOfLines={1}>
             {userAddress}
           </Text>
         </View>
       </View>
-      <AppIcon name="chevron-forward" size="sm" style={styles.chevronIcon} />
+      <AppIcon name="chevron-forward" size="sm" style={[styles.chevronIcon, { color: BRAND_COLORS.text.secondary }]} />
     </TouchableOpacity>
   );
 }
@@ -68,7 +69,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     padding: 12,
-    backgroundColor: BRAND_COLORS.primary.beSua,
     borderRadius: 12,
     marginBottom: 16,
     shadowColor: '#000',
@@ -84,7 +84,6 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   locationIcon: {
-    color: BRAND_COLORS.primary.xanhReu,
   },
   addressTextContainer: {
     flex: 1,
@@ -92,15 +91,12 @@ const styles = StyleSheet.create({
   addressLabel: {
     fontSize: 11,
     fontFamily: 'SpaceGrotesk-Regular',
-    color: BRAND_COLORS.text.secondary,
     marginBottom: 2,
   },
   addressText: {
     fontSize: 14,
     fontFamily: 'SpaceGrotesk-Medium',
-    color: BRAND_COLORS.primary.xanhReu,
   },
   chevronIcon: {
-    color: BRAND_COLORS.text.secondary,
   },
 });
