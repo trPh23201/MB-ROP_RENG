@@ -19,14 +19,8 @@ interface EntryCategoryScrollProps {
   layout?: 'single-row' | 'grid';
 }
 
-export function EntryCategoryScroll({
-  categories,
-  selectedId,
-  onCategoryPress,
-  layout = 'single-row',
-}: EntryCategoryScrollProps) {
+export function EntryCategoryScroll({categories, selectedId, onCategoryPress, layout = 'single-row'}: EntryCategoryScrollProps) {
   const BRAND_COLORS = useBrandColors();
-  console.log(`[EntryCategoryScroll] render — p1=${BRAND_COLORS.primary.p1}, p3=${BRAND_COLORS.primary.p3}`);
   const router = useRouter();
 
   const handlePress = (categoryId: string) => {

@@ -1,7 +1,7 @@
 import { Brand } from '@/src/domain/entities/Brand';
 import { BrandColorDbItem, BrandColorRepository } from '@/src/infrastructure/db/sqlite/repositories/BrandColorRepository';
 import { brandRepository } from '@/src/infrastructure/repositories/BrandRepositoryImpl';
-import { updateColorStore, resetColorStore } from '@/src/presentation/theme/colors';
+import { resetColorStore, updateColorStore } from '@/src/presentation/theme/colors';
 import { SQLiteDatabase } from 'expo-sqlite';
 
 export class BrandColorService {
@@ -14,7 +14,6 @@ export class BrandColorService {
   async fetchAndCacheBrand(brandId: number): Promise<Brand> {
     const brand = await brandRepository.getBrandById(brandId);
 
-    // Always upsert colors from API (INSERT OR REPLACE handles duplicates)
     const colorDbItems: BrandColorDbItem[] = brand.colors.map(c => ({
       id: c.id,
       brand_id: brandId,
@@ -31,10 +30,6 @@ export class BrandColorService {
     return brand;
   }
 
-  /**
-   * Read colors from DB and apply to colorStore via Proxy.
-   * Returns the colorMap so the caller (hook) can pass it to context's updateColors().
-   */
   async getColorsFromDb(brandId: number): Promise<Map<string, string> | null> {
     const hasData = await this.repo.hasColors(brandId);
     if (!hasData) {
@@ -58,10 +53,6 @@ export class BrandColorService {
     return colorMap;
   }
 
-  /**
-   * Legacy method: read from DB and apply directly to colorStore.
-   * For use when context is not available.
-   */
   async syncColors(brandId: number): Promise<boolean> {
     const colorMap = await this.getColorsFromDb(brandId);
     if (!colorMap) return false;

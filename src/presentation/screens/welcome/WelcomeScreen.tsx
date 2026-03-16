@@ -8,85 +8,16 @@ import { router } from 'expo-router';
 import React, { useCallback, useMemo, useState } from 'react';
 import { ActivityIndicator, FlatList, ListRenderItem, RefreshControl, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import {
-  CategoryItem,
-  EntryBrandSelector,
-  EntryCategoryScroll,
-  EntryProductCard,
-  EntryPromoBanner,
-  EntryQuickActions,
-  EntrySearchBar,
-  ProductCardData,
-} from '../../components/entry';
+import { CategoryItem, EntryProductCard, ProductCardData } from '../../components/entry';
 import { AppIcon } from '../../components/shared/AppIcon';
 import { useBrandColors } from '../../theme/BrandColorContext';
 import { HEADER_ICONS } from '../../theme/iconConstants';
-import { LoginCard } from './components/LoginCard';
+import { WelcomeListHeader } from './components/WelcomeListHeader';
 import { WELCOME_TEXT } from './WelcomeConstants';
+import { WelcomeUIService } from './WelcomeService';
 
 const PAGE_LIMIT = 10;
 const LOAD_MORE_THRESHOLD = 0.5;
-
-const CATEGORY_ICONS: Record<string, string> = {
-  '1': 'cafe',
-  '2': 'leaf-outline',
-  '3': 'snow-outline',
-};
-
-interface WelcomeListHeaderProps {
-  categories: CategoryItem[];
-  selectedCategoryId: string | null;
-  handleCategoryPress: (categoryId: string) => void;
-  handleQuickActionPress: (actionId: string, label: string) => void;
-  handleBannerPress: (promoId: string) => void;
-}
-
-function WelcomeListHeader({
-  categories,
-  selectedCategoryId,
-  handleCategoryPress,
-  handleQuickActionPress,
-  handleBannerPress,
-}: WelcomeListHeaderProps) {
-  const BRAND_COLORS = useBrandColors();
-
-  return (
-    <>
-      <View style={styles.section}>
-        <Text style={[styles.sectionTitle, { color: BRAND_COLORS.primary.p3 }]}>{WELCOME_TEXT.BRAND_SECTION.TITLE}</Text>
-        <EntryBrandSelector />
-      </View>
-      <View style={styles.section}>
-        <LoginCard />
-      </View>
-      <View style={styles.section}>
-        <EntryQuickActions onActionPress={handleQuickActionPress} />
-      </View>
-      <View style={styles.section}>
-        <EntryPromoBanner onBannerPress={handleBannerPress} autoScroll />
-      </View>
-      <View style={styles.section}>
-        <EntrySearchBar />
-      </View>
-      {categories.length > 0 && (
-        <View style={styles.section}>
-          <EntryCategoryScroll
-            categories={categories}
-            selectedId={selectedCategoryId}
-            onCategoryPress={handleCategoryPress}
-          />
-        </View>
-      )}
-      <View style={styles.section}>
-        <Text style={[styles.sectionTitle, { color: BRAND_COLORS.primary.p3 }]}>
-          {selectedCategoryId
-            ? categories.find((c) => c.id === selectedCategoryId)?.name || 'Sản phẩm'
-            : 'Tất cả sản phẩm'}
-        </Text>
-      </View>
-    </>
-  );
-}
 
 export default function WelcomeScreen() {
   const BRAND_COLORS = useBrandColors();
@@ -98,16 +29,7 @@ export default function WelcomeScreen() {
     lng: APP_DEFAULT_LOCATION.longitude,
   };
 
-  const {
-    products,
-    isLoading,
-    isLoadingMore,
-    hasMore,
-    error,
-    refresh,
-    loadMore,
-    clearError,
-  } = useHomeData({
+  const {products, isLoading, isLoadingMore, hasMore, error, refresh, loadMore, clearError} = useHomeData({
     lat: currentLocation.lat,
     lng: currentLocation.lng,
     limit: PAGE_LIMIT,
@@ -159,24 +81,9 @@ export default function WelcomeScreen() {
     setSelectedCategoryId((prev) => (prev === categoryId ? null : categoryId));
   }, []);
 
-  const categories: CategoryItem[] = useMemo(() => {
-    const map = new Map<string, CategoryItem>();
-    products.forEach((p) => {
-      if (!map.has(p.categoryId)) {
-        map.set(p.categoryId, {
-          id: p.categoryId,
-          name: `Danh mục ${p.categoryId}`,
-          icon: CATEGORY_ICONS[p.categoryId] || 'cafe-outline',
-        });
-      }
-    });
-    return Array.from(map.values());
-  }, [products]);
+  const categories: CategoryItem[] = useMemo(() => WelcomeUIService.extractCategories(products), [products]);
 
-  const filteredProducts = useMemo(() => {
-    if (!selectedCategoryId) return products;
-    return products.filter((p) => p.categoryId === selectedCategoryId);
-  }, [products, selectedCategoryId]);
+  const filteredProducts = useMemo(() => WelcomeUIService.filterProducts(products, selectedCategoryId), [products, selectedCategoryId]);
 
   const renderProduct: ListRenderItem<typeof products[0]> = useCallback(
     ({ item }) => <EntryProductCard product={item} onPress={handleProductPress} />,
