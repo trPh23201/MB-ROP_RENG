@@ -1,5 +1,7 @@
 export * from './ConfirmOrderUseCase';
 export * from './CreatePreOrderUseCase';
+export * from './GetBrandByIdUseCase';
+export * from './GetBrandsUseCase';
 export * from './GetHomeMenuUseCase';
 export * from './GetStoresByProductUseCase';
 export * from './GetStoresUseCase';

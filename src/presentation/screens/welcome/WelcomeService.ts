@@ -1,14 +1,13 @@
-/**
- * Welcome Screen - UI Service
- * Purpose: Business logic for welcome screen UI interactions
- */
-
 import { Category, Product } from '../../../data/mockProducts';
+import { CategoryItem, ProductCardData } from '../../components/entry';
+
+const CATEGORY_ICONS: Record<string, string> = {
+  '1': 'cafe',
+  '2': 'leaf-outline',
+  '3': 'snow-outline',
+};
 
 export class WelcomeUIService {
-  /**
-   * Group products by category for organized display
-   */
   static groupProductsByCategory(
     categories: Category[],
     products: Product[]
@@ -19,41 +18,22 @@ export class WelcomeUIService {
     }));
   }
 
-  /**
-   * Format price for display
-   */
-  static formatPrice(price: number): string {
-    return `${price.toLocaleString('vi-VN')}đ`;
+  static extractCategories(products: ProductCardData[]): CategoryItem[] {
+    const map = new Map<string, CategoryItem>();
+    products.forEach((p) => {
+      if (!map.has(p.categoryId)) {
+        map.set(p.categoryId, {
+          id: p.categoryId,
+          name: `Danh mục ${p.categoryId}`,
+          icon: CATEGORY_ICONS[p.categoryId] || 'cafe-outline',
+        });
+      }
+    });
+    return Array.from(map.values());
   }
 
-  /**
-   * Calculate promo banner pagination index
-   */
-  static calculateBannerIndex(scrollPosition: number, bannerWidth: number): number {
-    return Math.round(scrollPosition / bannerWidth);
-  }
-
-  /**
-   * Handle quick action selection
-   */
-  static handleQuickActionPress(actionId: string, label: string): void {
-    console.log(`Quick action selected: ${label} (${actionId})`);
-    // Future: Navigate to specific flow or open modal
-  }
-
-  /**
-   * Handle brand selection
-   */
-  static handleBrandPress(brandId: string, brandName: string): void {
-    console.log(`Brand selected: ${brandName} (${brandId})`);
-    // Future: Switch brand context
-  }
-
-  /**
-   * Handle promo banner press
-   */
-  static handlePromoPress(promoId: string): void {
-    console.log(`Promo clicked: ${promoId}`);
-    // Future: Open promo details
+  static filterProducts<T extends ProductCardData>(products: T[], selectedCategoryId: string | null): T[] {
+    if (!selectedCategoryId) return products;
+    return products.filter((p) => p.categoryId === selectedCategoryId);
   }
 }

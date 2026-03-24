@@ -1,4 +1,4 @@
-import { selectAppLocation, selectIsDataStale, updateDataTimestamp } from '@/src/state/slices/appSlice';
+import { selectAppLocation, selectDataFetchedAt, STALE_THRESHOLD_MS, updateDataTimestamp } from '@/src/state/slices/appSlice';
 import { fetchHomeMenu, fetchVouchers } from '@/src/state/slices/homeSlice';
 import { store } from '@/src/state/store';
 import { BaseBackgroundService } from '../BackgroundService.base';
@@ -17,7 +17,9 @@ export class HomeDataBackgroundService extends BaseBackgroundService {
 
     async onForeground(): Promise<void> {
         const state = store.getState();
-        if (selectIsDataStale(state)) {
+        const dataFetchedAt = selectDataFetchedAt(state);
+        const isStale = !dataFetchedAt || (Date.now() - dataFetchedAt > STALE_THRESHOLD_MS);
+        if (isStale) {
             console.log('[HomeDataBackgroundService] Data stale, refreshing...');
             await this.fetchData();
         } else {

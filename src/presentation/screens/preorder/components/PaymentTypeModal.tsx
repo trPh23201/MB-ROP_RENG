@@ -5,7 +5,7 @@ import { BottomSheetDefaultBackdropProps } from '@gorhom/bottom-sheet/lib/typesc
 import React, { forwardRef, useCallback, useMemo } from 'react';
 import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { PaymentMethod } from '../../../../domain/shared';
-import { BRAND_COLORS } from '../../../theme/colors';
+import { useBrandColors } from '../../../theme/BrandColorContext';
 import { TYPOGRAPHY } from '../../../theme/typography';
 import { PAYMENT_METHOD_LABELS, PREORDER_TEXT } from '../PreOrderConstants';
 import { PREORDER_LAYOUT } from '../PreOrderLayout';
@@ -21,6 +21,7 @@ const MODAL_HEIGHT = WINDOW_HEIGHT * 0.6;
 
 export const PaymentTypeModal = forwardRef<BottomSheetModal, PaymentTypeModalProps>(
   ({ selectedMethod, onSelectMethod }, ref) => {
+    const BRAND_COLORS = useBrandColors();
     const snapPoints = useMemo(() => [MODAL_HEIGHT], []);
     const paymentMethods = useMemo(
       () => [PaymentMethod.CASH, PaymentMethod.VNPAY, PaymentMethod.MOMO],
@@ -51,8 +52,8 @@ export const PaymentTypeModal = forwardRef<BottomSheetModal, PaymentTypeModalPro
         ref={ref}
         snapPoints={snapPoints}
         backdropComponent={renderBackdrop}
-        handleIndicatorStyle={styles.indicator}
-        backgroundStyle={styles.background}
+        handleIndicatorStyle={[styles.indicator, { backgroundColor: BRAND_COLORS.ui.placeholder }]}
+        backgroundStyle={[styles.background, { backgroundColor: BRAND_COLORS.screenBg.warm }]}
         stackBehavior="push"
         enablePanDownToClose={true}
         enableDynamicSizing={false}
@@ -61,14 +62,14 @@ export const PaymentTypeModal = forwardRef<BottomSheetModal, PaymentTypeModalPro
         animateOnMount={true}
       >
         <BottomSheetScrollView
-          style={styles.scrollView}
+          style={[styles.scrollView, { backgroundColor: BRAND_COLORS.screenBg.warm }]}
           contentContainerStyle={styles.contentContainer}
           showsVerticalScrollIndicator={false}
         >
           <View style={styles.header}>
             <Text style={styles.title}>{PREORDER_TEXT.PAYMENT_MODAL_TITLE}</Text>
             <TouchableOpacity onPress={handleClose} style={styles.closeButton}>
-              <AppIcon name="close" size={PREORDER_LAYOUT.HEADER_BUTTON_SIZE} color={BRAND_COLORS.text.secondary} />
+              <AppIcon name="close" size={PREORDER_LAYOUT.HEADER_BUTTON_SIZE} color={BRAND_COLORS.ui.subtitle} />
             </TouchableOpacity>
           </View>
 
@@ -83,7 +84,8 @@ export const PaymentTypeModal = forwardRef<BottomSheetModal, PaymentTypeModalPro
                   key={method}
                   style={[
                     styles.option,
-                    isSelected && styles.optionSelected,
+                    { backgroundColor: BRAND_COLORS.screenBg.warm, borderColor: BRAND_COLORS.ui.placeholder },
+                    isSelected && [styles.optionSelected, { borderColor: BRAND_COLORS.bta.primaryBg, backgroundColor: `${BRAND_COLORS.screenBg.fresh}30` }],
                     !isAvailable && styles.optionDisabled,
                   ]}
                   onPress={() => {
@@ -99,21 +101,22 @@ export const PaymentTypeModal = forwardRef<BottomSheetModal, PaymentTypeModalPro
                       name={iconName as any}
                       size={PREORDER_LAYOUT.ORDER_TYPE_ICON_SIZE}
                       color={
-                        !isAvailable ? BRAND_COLORS.text.tertiary : isSelected ? BRAND_COLORS.primary.xanhReu : BRAND_COLORS.text.secondary
+                        !isAvailable ? BRAND_COLORS.ui.placeholder : isSelected ? BRAND_COLORS.bta.primaryBg : BRAND_COLORS.ui.subtitle
                       }
                     />
                     <View style={styles.labelContainer}>
                       <Text
                         style={[
                           styles.optionLabel,
-                          isSelected && styles.optionLabelSelected,
-                          !isAvailable && styles.optionLabelDisabled,
+                          { color: BRAND_COLORS.ui.heading },
+                          isSelected && [styles.optionLabelSelected, { color: BRAND_COLORS.bta.primaryBg }],
+                          !isAvailable && [styles.optionLabelDisabled, { color: BRAND_COLORS.ui.placeholder }],
                         ]}
                       >
                         {PAYMENT_METHOD_LABELS[method]}
                       </Text>
                       {!isAvailable && (
-                        <Text style={styles.comingSoonText}>Đang phát triển</Text>
+                        <Text style={[styles.comingSoonText, { color: BRAND_COLORS.ui.placeholder }]}>Đang phát triển</Text>
                       )}
                     </View>
                   </View>
@@ -121,7 +124,7 @@ export const PaymentTypeModal = forwardRef<BottomSheetModal, PaymentTypeModalPro
                     <Ionicons
                       name="checkmark-circle"
                       size={24}
-                      color={BRAND_COLORS.primary.xanhReu}
+                      color={BRAND_COLORS.bta.primaryBg}
                     />
                   )}
                 </TouchableOpacity>
@@ -138,18 +141,15 @@ PaymentTypeModal.displayName = 'PaymentTypeModal';
 
 const styles = StyleSheet.create({
   background: {
-    backgroundColor: BRAND_COLORS.background.default,
     borderTopLeftRadius: PREORDER_LAYOUT.MODAL_BORDER_RADIUS,
     borderTopRightRadius: PREORDER_LAYOUT.MODAL_BORDER_RADIUS,
   },
   indicator: {
-    backgroundColor: BRAND_COLORS.border.medium,
     width: 40,
     height: 4,
   },
   scrollView: {
     flex: 1,
-    backgroundColor: BRAND_COLORS.background.default,
   },
   contentContainer: {
     paddingBottom: 20,
@@ -160,13 +160,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     height: PREORDER_LAYOUT.MODAL_HEADER_HEIGHT,
     borderBottomWidth: 1,
-    borderBottomColor: BRAND_COLORS.border.light,
     paddingHorizontal: PREORDER_LAYOUT.HEADER_PADDING_HORIZONTAL,
   },
   title: {
     fontSize: TYPOGRAPHY.fontSize.lg,
     fontFamily: TYPOGRAPHY.fontFamily.bodyBold,
-    color: BRAND_COLORS.text.primary,
   },
   closeButton: {
     position: 'absolute',
@@ -179,7 +177,6 @@ const styles = StyleSheet.create({
   closeText: {
     fontSize: 24,
     fontFamily: TYPOGRAPHY.fontFamily.bodyRegular,
-    color: BRAND_COLORS.text.secondary,
   },
   optionsList: {
     padding: PREORDER_LAYOUT.SECTION_PADDING_HORIZONTAL,
@@ -192,14 +189,10 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     minHeight: PREORDER_LAYOUT.MODAL_OPTION_HEIGHT,
     padding: PREORDER_LAYOUT.MODAL_OPTION_PADDING,
-    backgroundColor: BRAND_COLORS.background.primary,
     borderRadius: 12,
     borderWidth: 2,
-    borderColor: BRAND_COLORS.border.light,
   },
   optionSelected: {
-    borderColor: BRAND_COLORS.primary.xanhReu,
-    backgroundColor: `${BRAND_COLORS.primary.beSua}40`,
   },
   optionDisabled: {
     opacity: 0.5,
@@ -216,18 +209,14 @@ const styles = StyleSheet.create({
   optionLabel: {
     fontSize: TYPOGRAPHY.fontSize.md,
     fontFamily: TYPOGRAPHY.fontFamily.bodyMedium,
-    color: BRAND_COLORS.text.primary,
   },
   optionLabelSelected: {
     fontFamily: TYPOGRAPHY.fontFamily.bodyBold,
-    color: BRAND_COLORS.primary.xanhReu,
   },
   optionLabelDisabled: {
-    color: BRAND_COLORS.text.tertiary,
   },
   comingSoonText: {
     fontSize: TYPOGRAPHY.fontSize.sm,
     fontFamily: TYPOGRAPHY.fontFamily.bodyRegular,
-    color: BRAND_COLORS.text.tertiary,
   },
 });

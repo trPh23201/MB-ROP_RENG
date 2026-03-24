@@ -1,11 +1,12 @@
 import { useRouter } from 'expo-router';
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { BRAND_COLORS } from '../../../theme/colors';
+import { useBrandColors } from '../../../theme/BrandColorContext';
 import { DEALS_TEXT } from '../DealsConstants';
 import { DEALS_LAYOUT } from '../DealsLayout';
 
 export function LoginPromptCard() {
+  const BRAND_COLORS = useBrandColors();
   const router = useRouter();
 
   const handleLoginPress = () => {
@@ -13,10 +14,10 @@ export function LoginPromptCard() {
   };
 
   return (
-    <View style={styles.card}>
-      <Text style={styles.text}>{DEALS_TEXT.LOGIN_PROMPT}</Text>
+    <View style={[styles.card, { backgroundColor: BRAND_COLORS.bta.primaryBg }]}>
+      <Text style={[styles.text, { color: BRAND_COLORS.bta.primaryText }]}>{DEALS_TEXT.LOGIN_PROMPT}</Text>
       <TouchableOpacity style={styles.button} onPress={handleLoginPress} activeOpacity={0.8}>
-        <Text style={styles.buttonText}>{DEALS_TEXT.LOGIN_BUTTON}</Text>
+        <Text style={[styles.buttonText, { color: BRAND_COLORS.bta.primaryText }]}>{DEALS_TEXT.LOGIN_BUTTON}</Text>
       </TouchableOpacity>
     </View>
   );
@@ -27,7 +28,6 @@ const styles = StyleSheet.create({
     marginHorizontal: DEALS_LAYOUT.LOGIN_CARD_MARGIN_HORIZONTAL,
     marginTop: DEALS_LAYOUT.LOGIN_CARD_MARGIN_TOP,
     marginBottom: DEALS_LAYOUT.LOGIN_CARD_MARGIN_BOTTOM,
-    backgroundColor: '#FF8C00',
     borderRadius: DEALS_LAYOUT.LOGIN_CARD_BORDER_RADIUS,
     padding: DEALS_LAYOUT.LOGIN_CARD_PADDING,
     minHeight: DEALS_LAYOUT.LOGIN_CARD_MIN_HEIGHT,
@@ -42,7 +42,6 @@ const styles = StyleSheet.create({
   text: {
     fontSize: DEALS_LAYOUT.LOGIN_TEXT_SIZE,
     fontFamily: 'SpaceGrotesk-Medium',
-    color: BRAND_COLORS.background.default,
     textAlign: 'center',
     marginBottom: 24,
     lineHeight: 24,
@@ -56,6 +55,5 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: DEALS_LAYOUT.LOGIN_BUTTON_SIZE,
     fontFamily: 'Phudu-Bold',
-    color: BRAND_COLORS.background.default,
   },
 });

@@ -64,10 +64,11 @@ export class PreOrderService {
     store: any,
     deliveryAddress: DeliveryAddress | null,
     cartItems: CartItem[],
-    preOrderState: PreOrderState
+    preOrderState: PreOrderState,
+    vouchers: { code: string }[] = []
   ): CreatePreOrderParams {
     const items: PreOrderItem[] = cartItems.map(item => ({
-      menuItemId: item.product.id,
+      menuItemId: item.product.menuItemId?.toString() || item.product.id,
       quantity: item.quantity,
       size: item.customizations.size,
       ice: item.customizations.ice,
@@ -95,7 +96,7 @@ export class PreOrderService {
       paymentMethod: preOrderState.paymentMethod,
       items,
       promotions: [],
-      vouchers: [],
+      vouchers: vouchers.map(v => ({ voucher_code: v.code })),
     };
   }
 
@@ -148,8 +149,8 @@ export class PreOrderService {
       items: cartItems.map((item, index) => ({
         id: syntheticId + index,
         orderId: syntheticId,
-        productId: parseInt(item.product.id) || 0,
-        menuItemId: parseInt(item.product.id) || 0,
+        productId: item.product.productId || parseInt(item.product.id) || 0,
+        menuItemId: item.product.menuItemId || parseInt(item.product.id) || 0,
         name: item.product.name,
         quantity: item.quantity,
         unitPrice: item.product.price,

@@ -1,7 +1,8 @@
-import { BRAND_COLORS } from '@/src/presentation/theme/colors';
+import { useBrandColors } from '@/src/presentation/theme/BrandColorContext';
 import BottomSheet, { BottomSheetBackdrop, BottomSheetView } from '@gorhom/bottom-sheet';
+import { Image } from 'expo-image';
 import React, { useCallback, useMemo, useRef } from 'react';
-import { Image, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Collection } from '../HomeInterfaces';
 
@@ -11,6 +12,7 @@ interface CollectionModalProps {
 }
 
 export function CollectionModal({ collection, onClose }: CollectionModalProps) {
+  const BRAND_COLORS = useBrandColors();
   const bottomSheetRef = useRef<BottomSheet>(null);
 
   const snapPoints = useMemo(() => {
@@ -48,24 +50,23 @@ export function CollectionModal({ collection, onClose }: CollectionModalProps) {
         enableDynamicSizing={false}
         backdropComponent={renderBackdrop}
         onChange={handleSheetChanges}
-        backgroundStyle={styles.background}
+        backgroundStyle={[styles.background, { backgroundColor: BRAND_COLORS.screenBg.warm }]}
         handleIndicatorStyle={styles.indicator}
       >
         <BottomSheetView style={styles.contentContainer}>
-          <Image source={{ uri: collection.bannerImage }} style={styles.bannerImage} />
+          <Image source={{ uri: collection.bannerImage }} style={styles.bannerImage} contentFit="cover" cachePolicy="disk" />
           
           <View style={styles.content}>
-            <Text style={styles.title}>{collection.title}</Text>
+            <Text style={[styles.title, { color: BRAND_COLORS.primary.p3 }]}>{collection.title}</Text>
             
-            <View style={styles.promoCodeContainer}>
+            <View style={[styles.promoCodeContainer, { backgroundColor: BRAND_COLORS.primary.p1 }]}>
               <Text style={styles.promoCodeLabel}>Code: </Text>
-              <Text style={styles.promoCodeValue}>COLLECTION2024</Text>
+              <Text style={[styles.promoCodeValue, { color: BRAND_COLORS.primary.p3 }]}>COLLECTION2024</Text>
             </View>
 
-            <Text style={styles.description}>{collection.description}</Text>
+            <Text style={[styles.description, { color: BRAND_COLORS.secondary.s3 }]}>{collection.description}</Text>
             
             {/* List sản phẩm trong collection (Placeholder) */}
-            {/* Bạn có thể map collection.products vào đây */}
           </View>
         </BottomSheetView>
       </BottomSheet>
@@ -79,7 +80,6 @@ const styles = StyleSheet.create({
     zIndex: 999,
   },
   background: {
-    backgroundColor: BRAND_COLORS.background.default,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
   },
@@ -94,8 +94,7 @@ const styles = StyleSheet.create({
   bannerImage: {
     width: '100%',
     height: 200,
-    resizeMode: 'cover',
-    borderTopLeftRadius: 24, // Bo góc theo sheet
+    borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
   },
   content: {
@@ -105,20 +104,17 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontFamily: 'Phudu-Bold',
-    color: BRAND_COLORS.primary.xanhReu,
     marginBottom: 8,
   },
   description: {
     fontSize: 16,
     fontFamily: 'SpaceGrotesk-Medium',
-    color: BRAND_COLORS.primary.xanhReu,
     lineHeight: 24,
     marginBottom: 16,
   },
   promoCodeContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: BRAND_COLORS.primary.beSua,
     padding: 12,
     borderRadius: 8,
     marginBottom: 16,
@@ -127,12 +123,10 @@ const styles = StyleSheet.create({
   promoCodeLabel: {
     fontSize: 14,
     fontFamily: 'SpaceGrotesk-Medium',
-    color: BRAND_COLORS.secondary.reuDam,
   },
   promoCodeValue: {
     fontSize: 16,
     fontFamily: 'Phudu-Bold',
-    color: BRAND_COLORS.primary.xanhReu,
     marginLeft: 4,
   },
 });

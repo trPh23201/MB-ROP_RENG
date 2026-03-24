@@ -4,7 +4,7 @@ import { OrderDisplayItem } from './OrderInterfaces';
 export class OrderMapper {
     static mapCartItemToDisplayItem(item: CartItem): OrderDisplayItem {
         return {
-            id: item.product.id,
+            id: item.id,
             name: item.product.name,
             quantity: item.quantity,
             unitPrice: item.product.price,

@@ -1,7 +1,8 @@
 import { useAuthGuard } from '@/src/utils/hooks/useAuthGuard';
+import { Image } from 'expo-image';
 import React from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { BRAND_COLORS } from '../../../theme/colors';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { useBrandColors } from '../../../theme/BrandColorContext';
 import { Collection } from '../HomeInterfaces';
 import { HOME_LAYOUT } from '../HomeLayout';
 
@@ -11,6 +12,7 @@ interface CollectionCardProps {
 }
 
 export function CollectionCard({ collection, onPress }: CollectionCardProps) {
+  const BRAND_COLORS = useBrandColors();
   const guardedPress = useAuthGuard(
     onPress,
     'VIEW_COLLECTION',
@@ -22,10 +24,10 @@ export function CollectionCard({ collection, onPress }: CollectionCardProps) {
 
   return (
     <TouchableOpacity style={styles.card} onPress={guardedPress} activeOpacity={0.8}>
-      <Image source={{ uri: collection.bannerImage }} style={styles.image} />
+      <Image source={{ uri: collection.bannerImage }} style={styles.image} contentFit="cover" cachePolicy="disk" />
       <View style={styles.overlay}>
-        <Text style={styles.title}>{collection.title}</Text>
-        <Text style={styles.description} numberOfLines={2}>
+        <Text style={[styles.title, { color: BRAND_COLORS.background.default }]}>{collection.title}</Text>
+        <Text style={[styles.description, { color: BRAND_COLORS.background.default }]} numberOfLines={2}>
           {collection.description}
         </Text>
       </View>
@@ -60,12 +62,10 @@ const styles = StyleSheet.create({
   title: {
     fontSize: HOME_LAYOUT.COLLECTION_TITLE_FONT_SIZE,
     fontFamily: 'Phudu-Bold',
-    color: BRAND_COLORS.background.default,
     marginBottom: 4,
   },
   description: {
     fontSize: HOME_LAYOUT.COLLECTION_DESC_FONT_SIZE,
     fontFamily: 'SpaceGrotesk-Medium',
-    color: BRAND_COLORS.background.default,
   },
 });

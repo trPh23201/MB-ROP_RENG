@@ -3,12 +3,14 @@ import { selectAppLocation } from '@/src/state/slices/appSlice';
 import { setSelectedStore } from '@/src/state/slices/orderCartSlice';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { ActivityIndicator, Alert, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Store } from '../../../data/mockStores';
+import { fetchMenuByStore } from '../../../state/slices/homeSlice';
 import { clearStoresError, fetchStores, fetchStoresByProduct } from '../../../state/slices/storesSlice';
 import { useAppDispatch, useAppSelector } from '../../../utils/hooks';
-import { BRAND_COLORS } from '../../theme/colors';
+import { popupService } from '../../layouts/popup/PopupService';
+import { useBrandColors } from '../../theme/BrandColorContext';
 import { StoreSection } from './components/StoreSection';
 import { StoresHeader } from './components/StoresHeader';
 import { StoresSearchBar } from './components/StoresSearchBar';
@@ -16,6 +18,7 @@ import { STORES_TEXT } from './StoresConstants';
 import { StoresUIService } from './StoresService';
 
 export default function StoresScreen() {
+  const BRAND_COLORS = useBrandColors();
   const insets = useSafeAreaInsets();
   const router = useRouter();
   const dispatch = useAppDispatch();
@@ -27,6 +30,7 @@ export default function StoresScreen() {
   const totalItems = useAppSelector((state) => state.orderCart.totalItems);
   const { stores: apiStores, loading, error } = useAppSelector((state) => state.stores);
   const userLocation = cachedLocation ?? { lat: APP_DEFAULT_LOCATION.latitude, lng: APP_DEFAULT_LOCATION.longitude };
+  const hasFetchedRef = React.useRef(false);
 
   useEffect(() => {
     if (!cachedLocation) return;
@@ -42,10 +46,11 @@ export default function StoresScreen() {
           refresh: true,
         })
       );
-    } else if (apiStores.length === 0) {
+    } else if (!hasFetchedRef.current) {
+      hasFetchedRef.current = true;
       dispatch(fetchStores({ page: 1, refresh: true }));
     }
-  }, [dispatch, params.mode, params.productId, cachedLocation, userLocation.lat, userLocation.lng, apiStores.length]);
+  }, [dispatch, params.mode, params.productId, cachedLocation, userLocation.lat, userLocation.lng]);
 
   const uiStores = useMemo<Store[]>(() => {
     return apiStores.map(apiStore =>
@@ -68,39 +73,39 @@ export default function StoresScreen() {
     [filteredStores]
   );
 
-  const handleStorePress = useCallback((store: Store) => {
+  const handleStorePress = useCallback(async (store: Store) => {
     console.log(`[StoresScreen] Store pressed: ${store.name}`);
 
     if (selectedStore && selectedStore.id !== store.id && totalItems > 0) {
-      Alert.alert(
-        STORES_TEXT.ALERT_TITLE,
+      const confirmed = await popupService.confirm(
         STORES_TEXT.ALERT_MESSAGE(totalItems),
-        [
-          {
-            text: STORES_TEXT.ALERT_CANCEL,
-            style: 'cancel',
-            onPress: () => console.log('[StoresScreen] User cancelled store switch'),
-          },
-          {
-            text: STORES_TEXT.ALERT_CONFIRM,
-            style: 'destructive',
-            onPress: () => {
-              console.log('[StoresScreen] User confirmed, clearing cart and switching store');
-              dispatch(setSelectedStore(store));
-
-              if (params.mode === 'select') {
-                router.replace('/(tabs)/order');
-              }
-            },
-          },
-        ]
+        {
+          title: STORES_TEXT.ALERT_TITLE,
+          confirmText: STORES_TEXT.ALERT_CONFIRM,
+          cancelText: STORES_TEXT.ALERT_CANCEL,
+          confirmStyle: 'destructive',
+        }
       );
+
+      if (!confirmed) {
+        console.log('[StoresScreen] User cancelled store switch');
+        return;
+      }
+
+      console.log('[StoresScreen] User confirmed, clearing cart and switching store');
+      dispatch(setSelectedStore(store));
+      dispatch(fetchMenuByStore(Number(store.id)));
+
+      if (params.mode === 'select') {
+        router.replace('/(tabs)/order');
+      }
       return;
     }
 
     if (params.mode === 'select') {
       console.log('[StoresScreen] Setting store and navigating to Order');
       dispatch(setSelectedStore(store));
+      dispatch(fetchMenuByStore(Number(store.id)));
       router.replace('/(tabs)/order');
     }
   }, [selectedStore, totalItems, dispatch, router, params.mode]);
@@ -126,11 +131,11 @@ export default function StoresScreen() {
 
   if (loading) {
     return (
-      <View style={[styles.container, { paddingTop: insets.top }]}>
+      <View style={[styles.container, { paddingTop: insets.top }, { backgroundColor: BRAND_COLORS.screenBg.fresh }]}>
         <StoresHeader />
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color={BRAND_COLORS.primary.xanhReu} />
-          <Text style={styles.loadingText}>{STORES_TEXT.LOADING_MESSAGE}</Text>
+          <ActivityIndicator size="large" color={BRAND_COLORS.primary.p3} />
+          <Text style={[styles.loadingText, { color: BRAND_COLORS.secondary.s5 }]}>{STORES_TEXT.LOADING_MESSAGE}</Text>
         </View>
       </View>
     );
@@ -138,11 +143,11 @@ export default function StoresScreen() {
 
   if (error) {
     return (
-      <View style={[styles.container, { paddingTop: insets.top }]}>
+      <View style={[styles.container, { paddingTop: insets.top }, { backgroundColor: BRAND_COLORS.screenBg.fresh }]}>
         <StoresHeader />
         <View style={styles.errorContainer}>
           <Text style={styles.errorText}>{error}</Text>
-          <Text style={styles.retryButton} onPress={handleRetry}>
+          <Text style={[styles.retryButton, { color: BRAND_COLORS.primary.p3 }]} onPress={handleRetry}>
             {STORES_TEXT.RETRY_BUTTON}
           </Text>
         </View>
@@ -151,7 +156,7 @@ export default function StoresScreen() {
   }
 
   return (
-    <View style={[styles.container, { paddingTop: insets.top }]}>
+    <View style={[styles.container, { paddingTop: insets.top }, { backgroundColor: BRAND_COLORS.screenBg.fresh }]}>
       <StoresHeader />
 
       <StoresSearchBar value={searchQuery} onChangeText={setSearchQuery} />
@@ -159,7 +164,7 @@ export default function StoresScreen() {
       <ScrollView showsVerticalScrollIndicator={false}>
         {filteredStores.length === 0 ? (
           <View style={styles.emptyState}>
-            <Text style={styles.emptyText}>
+            <Text style={[styles.emptyText, { color: BRAND_COLORS.secondary.s5 }]}>
               {params.mode === 'select' ? STORES_TEXT.EMPTY_MESSAGE_SELECT : STORES_TEXT.EMPTY_MESSAGE_BROWSE}
             </Text>
           </View>
@@ -188,7 +193,6 @@ export default function StoresScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: BRAND_COLORS.background.default,
   },
   loadingContainer: {
     flex: 1,
@@ -199,7 +203,6 @@ const styles = StyleSheet.create({
   loadingText: {
     fontSize: 16,
     fontFamily: 'SpaceGrotesk-Medium',
-    color: BRAND_COLORS.primary.xanhReu,
     marginTop: 12,
   },
   errorContainer: {
@@ -219,7 +222,6 @@ const styles = StyleSheet.create({
   retryButton: {
     fontSize: 16,
     fontFamily: 'SpaceGrotesk-Bold',
-    color: BRAND_COLORS.primary.xanhReu,
   },
   emptyState: {
     flex: 1,
@@ -231,7 +233,6 @@ const styles = StyleSheet.create({
   emptyText: {
     fontSize: 16,
     fontFamily: 'SpaceGrotesk-Medium',
-    color: BRAND_COLORS.primary.xanhReu,
     textAlign: 'center',
   },
 });

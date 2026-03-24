@@ -1,9 +1,11 @@
+import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from "expo-router";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { ActivityIndicator, FlatList, RefreshControl, StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator, Dimensions, FlatList, RefreshControl, StyleSheet, Text, View } from "react-native";
 import { Order } from "../../../domain/entities/Order";
 import { useAppSelector } from "../../../utils/hooks";
 import { BaseAuthenticatedLayout } from "../../layouts/BaseAuthenticatedLayout";
+import { useBrandColors } from '../../theme/BrandColorContext';
 import { ITEMS_PER_PAGE, ORDER_HISTORY_STRINGS, STATUS_CHIPS } from "./OrderHistoryConstants";
 import { OrderStatus } from "./OrderHistoryEnums";
 import { StatusChipData } from "./OrderHistoryInterfaces";
@@ -12,8 +14,9 @@ import { OrderHistoryItem } from "./components/OrderHistoryItem";
 import { OrderStatusChip } from "./components/OrderStatusChip";
 
 export default function OrderHistoryScreen() {
+  const BRAND_COLORS = useBrandColors();
   const router = useRouter();
-  const { user } = useAppSelector((state) => state.auth);
+  const user = useAppSelector((state) => state.auth.user);
   const service = useMemo(() => new OrderHistoryService(), []);
 
   const [allOrders, setAllOrders] = useState<Order[]>([]);
@@ -120,7 +123,7 @@ export default function OrderHistoryScreen() {
 
   const renderStatusChips = useCallback(() => {
     return (
-      <View style={styles.chipsContainer}>
+      <View style={[styles.chipsContainer, { backgroundColor: BRAND_COLORS.screenBg.fresh, borderBottomColor: BRAND_COLORS.ui.placeholder }]}>
         <FlatList
           horizontal
           data={selectedStatuses}
@@ -140,45 +143,49 @@ export default function OrderHistoryScreen() {
   }, [selectedStatuses, handleChipPress]);
 
   const renderEmpty = useCallback(() => {
-    if (loading) return null;
+    if (loading) {
+      return (
+        <View style={styles.emptyContainer}>
+          <ActivityIndicator size="large" color={BRAND_COLORS.bta.primaryBg} />
+          <Text style={[styles.loadingText, { color: BRAND_COLORS.ui.subtitle }]}>{ORDER_HISTORY_STRINGS.LOADING}</Text>
+        </View>
+      );
+    }
     return (
       <View style={styles.emptyContainer}>
-        <Text style={styles.emptyTitle}>{ORDER_HISTORY_STRINGS.EMPTY_TITLE}</Text>
-        <Text style={styles.emptyMessage}>{ORDER_HISTORY_STRINGS.EMPTY_MESSAGE}</Text>
+        <View style={styles.emptyIconContainer}>
+          <Ionicons name="receipt-outline" size={120} color={BRAND_COLORS.ui.heading} />
+        </View>
+        <Text style={[styles.emptyTitle, { color: BRAND_COLORS.ui.heading }]}>{ORDER_HISTORY_STRINGS.EMPTY_TITLE}</Text>
+        <Text style={[styles.emptyMessage, { color: BRAND_COLORS.ui.subtitle }]}>{ORDER_HISTORY_STRINGS.EMPTY_MESSAGE}</Text>
       </View>
     );
-  }, [loading]);
+  }, [loading, BRAND_COLORS]);
 
   const renderFooter = useCallback(() => {
     if (!loadingMore) return null;
     return (
       <View style={styles.footerLoader}>
-        <ActivityIndicator size="small" color="#606A37" />
+        <ActivityIndicator size="small" color={BRAND_COLORS.bta.primaryBg} />
       </View>
     );
   }, [loadingMore]);
 
-  if (loading && !refreshing) {
-    return (
-      <BaseAuthenticatedLayout>
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#606A37" />
-          <Text style={styles.loadingText}>{ORDER_HISTORY_STRINGS.LOADING}</Text>
-        </View>
-      </BaseAuthenticatedLayout>
-    );
-  }
+
 
   return (
-    <BaseAuthenticatedLayout safeAreaEdges={['left', 'right']}>
+    <BaseAuthenticatedLayout backgroundColor={BRAND_COLORS.screenBg.fresh} safeAreaEdges={['left', 'right']}>
       {renderStatusChips()}
       <FlatList
         data={filteredOrders}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={(item, index) => `${item.id}-${index}`}
         renderItem={({ item }) => <OrderHistoryItem order={item} onPress={() => handleOrderPress(item)} />}
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={handleRefresh} colors={["#606A37"]} />}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={handleRefresh} colors={[BRAND_COLORS.bta.primaryBg]} />}
         onEndReached={handleLoadMore}
         onEndReachedThreshold={0.5}
+        initialNumToRender={10}
+        maxToRenderPerBatch={10}
+        windowSize={5}
         ListEmptyComponent={renderEmpty}
         ListFooterComponent={renderFooter}
         contentContainerStyle={filteredOrders.length === 0 ? styles.emptyList : undefined}
@@ -196,33 +203,34 @@ const styles = StyleSheet.create({
   loadingText: {
     marginTop: 12,
     fontSize: 14,
-    color: "#666666",
   },
   chipsContainer: {
     paddingVertical: 12,
-    backgroundColor: "#FFFFFF",
     borderBottomWidth: 1,
-    borderBottomColor: "#F0F0F0",
   },
   chipsContent: {
     paddingHorizontal: 16,
   },
   emptyContainer: {
-    flex: 1,
+    height: Dimensions.get('window').height * 0.7,
     justifyContent: "center",
     alignItems: "center",
     paddingHorizontal: 32,
-    paddingTop: 80,
+  },
+  emptyIconContainer: {
+    width: 120,
+    height: 120,
+    marginBottom: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   emptyTitle: {
     fontSize: 18,
     fontWeight: "600",
-    color: "#333333",
     marginBottom: 8,
   },
   emptyMessage: {
     fontSize: 14,
-    color: "#666666",
     textAlign: "center",
     lineHeight: 20,
   },

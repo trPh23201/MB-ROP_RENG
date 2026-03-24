@@ -28,7 +28,7 @@ export class PreOrderMapper {
         size: item.size,
         ice: item.ice,
         sweetness: item.sweetness,
-        toppings: item.toppings,
+        toppings: item.toppings.map(t => ({ toppingIds: Number(t.id) })),
       })),
       vouchers: params.vouchers,
       promotions: params.promotions,
@@ -41,11 +41,18 @@ export class PreOrderMapper {
     const { order } = dto;
     return {
       preorderId: 0,
-      subtotal: order.subtotal,
-      discountAmount: order.discount_amount,
-      deliveryFee: order.delivery_fee,
-      finalAmount: order.total,
+      subtotal: order.summary.subtotal,
+      discountAmount: order.summary.discount_amount,
+      deliveryFee: order.summary.delivery_fee,
+      finalAmount: order.summary.total,
       createdAt: new Date(),
+      availableVouchers: order.available_vouchers?.map(v => ({
+        code: v.code,
+        name: v.name,
+        description: v.description,
+        discountAmount: v.discount_amount,
+        type: v.type,
+      }))
     };
   }
 
@@ -53,10 +60,10 @@ export class PreOrderMapper {
     const { order } = dto;
     return {
       preorderId: order.order_id,
-      subtotal: order.subtotal,
-      discountAmount: order.discount_amount,
-      deliveryFee: order.delivery_fee,
-      finalAmount: order.total,
+      subtotal: order.summary.subtotal,
+      discountAmount: order.summary.discount_amount,
+      deliveryFee: order.summary.delivery_fee,
+      finalAmount: order.summary.total,
       createdAt: new Date(),
     };
   }
@@ -69,6 +76,7 @@ export class PreOrderMapper {
       deliveryFee: entity.deliveryFee,
       finalAmount: entity.finalAmount,
       createdAt: entity.createdAt.toISOString(),
+      availableVouchers: entity.availableVouchers,
     };
   }
 }

@@ -19,6 +19,8 @@ export class AuthMapper {
       availablePoint: dto.available_point,
       currentLevelId: dto.current_level_id,
       nextLevelId: dto.next_level_id,
+      otp: dto.otp,
+      store: dto.store,
       createdAt: new Date(dto.created_at),
       updatedAt: dto.updated_at ? new Date(dto.updated_at) : null,
     };
@@ -39,6 +41,8 @@ export class AuthMapper {
       availablePoint: user.availablePoint,
       currentLevelId: user.currentLevelId,
       nextLevelId: user.nextLevelId,
+      otp: user.otp,
+      store: user.store,
       createdAt: user.createdAt.toISOString(),
       updatedAt: user.updatedAt?.toISOString() ?? null,
       isNewUser: UserService.isNewUser(user),
@@ -60,6 +64,8 @@ export interface SerializableUser {
   availablePoint: number;
   currentLevelId: number | null;
   nextLevelId: number | null;
+  otp?: string;
+  store?: any | null;
   createdAt: string;
   updatedAt: string | null;
   isNewUser: boolean;

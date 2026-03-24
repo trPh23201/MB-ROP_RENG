@@ -2,12 +2,13 @@ import { Ionicons } from '@expo/vector-icons';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { useRouter } from 'expo-router';
 import React, { useEffect, useRef, useState } from 'react';
-import { Alert, KeyboardAvoidingView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { KeyboardAvoidingView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { clearError, loginWithOtp, registerUser } from '../../../state/slices/authSlice';
 import { useAppDispatch, useAppSelector } from '../../../utils/hooks';
 import { IS_IOS } from '../../../utils/platform';
-import { BRAND_COLORS } from '../../theme/colors';
+import { popupService } from '../../layouts/popup/PopupService';
+import { useBrandColors } from '../../theme/BrandColorContext';
 import { OtpVerificationBottomSheet, OtpVerificationRef } from '../otp-verification/OtpVerificationBottomSheet';
 import { RegisterPhoneInput } from './components/RegisterPhoneInput';
 import { REGISTER_TEXT } from './RegisterConstants';
@@ -15,11 +16,13 @@ import { REGISTER_LAYOUT } from './RegisterLayout';
 import { RegisterUIService } from './RegisterService';
 
 export default function RegisterScreen() {
+  const BRAND_COLORS = useBrandColors();
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const { isLoading, error, otpSent, otpPhone } = useAppSelector(
-    (state) => state.auth
-  );
+  const isLoading = useAppSelector((state) => state.auth.isLoading);
+  const error = useAppSelector((state) => state.auth.error);
+  const otpSent = useAppSelector((state) => state.auth.otpSent);
+  const otpPhone = useAppSelector((state) => state.auth.otpPhone);
 
   const [phoneNumber, setPhoneNumber] = useState('');
   const otpModalRef = useRef<OtpVerificationRef>(null);
@@ -34,29 +37,18 @@ export default function RegisterScreen() {
 
   useEffect(() => {
     if (error) {
-      if (RegisterUIService.isPhoneExistedError(error)) {
-        Alert.alert(
-          REGISTER_TEXT.PHONE_EXISTED_TITLE,
-          REGISTER_TEXT.PHONE_EXISTED_MESSAGE,
-          [
-            {
-              text: REGISTER_TEXT.PHONE_EXISTED_OK,
-              onPress: () => {
-                dispatch(clearError());
-              },
-            },
-          ]
-        );
-      } else {
-        Alert.alert('Lỗi', error, [
-          {
-            text: 'OK',
-            onPress: () => {
-              dispatch(clearError());
-            },
-          },
-        ]);
-      }
+      const handleError = async () => {
+        if (RegisterUIService.isPhoneExistedError(error)) {
+          await popupService.alert(
+            REGISTER_TEXT.PHONE_EXISTED_MESSAGE,
+            { title: REGISTER_TEXT.PHONE_EXISTED_TITLE, buttonText: REGISTER_TEXT.PHONE_EXISTED_OK }
+          );
+        } else {
+          await popupService.alert(error, { title: 'Lỗi' });
+        }
+        dispatch(clearError());
+      };
+      handleError();
     }
   }, [error, dispatch]);
 
@@ -90,8 +82,8 @@ export default function RegisterScreen() {
 
   return (
     <BottomSheetModalProvider>
-      <SafeAreaView style={styles.container} edges={['top', 'bottom']}>
-        <View style={styles.header}>
+      <SafeAreaView style={[styles.container, { backgroundColor: BRAND_COLORS.screenBg.bold }]} edges={['top', 'bottom']}>
+        <View style={[styles.header, { backgroundColor: BRAND_COLORS.screenBg.bold, borderBottomColor: BRAND_COLORS.screenBg.fresh }]}>
           <TouchableOpacity
             style={styles.backButton}
             onPress={handleGoBack}
@@ -100,16 +92,16 @@ export default function RegisterScreen() {
             <Ionicons
               name="arrow-back"
               size={24}
-              color={BRAND_COLORS.primary.xanhReu}
+              color={BRAND_COLORS.bta.primaryText}
             />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>{REGISTER_TEXT.HEADER_TITLE}</Text>
+          <Text style={[styles.headerTitle, { color: BRAND_COLORS.bta.primaryText }]}>{REGISTER_TEXT.HEADER_TITLE}</Text>
           <View style={styles.headerRight} />
         </View>
 
 
         <KeyboardAvoidingView
-          style={styles.keyboardAvoid}
+          style={[styles.keyboardAvoid, { backgroundColor: BRAND_COLORS.screenBg.fresh }]}
           behavior={IS_IOS ? 'padding' : 'height'}
         >
           <ScrollView
@@ -119,11 +111,11 @@ export default function RegisterScreen() {
             showsVerticalScrollIndicator={false}
           >
             <View style={styles.titleSection}>
-              <Text style={styles.welcomeText}>
+              <Text style={[styles.welcomeText, { color: BRAND_COLORS.ui.heading }]}>
                 {REGISTER_TEXT.WELCOME_TEXT}
               </Text>
-              <Text style={styles.brandName}>{REGISTER_TEXT.BRAND_NAME}</Text>
-              <Text style={styles.subtitle}>{REGISTER_TEXT.SUBTITLE}</Text>
+              <Text style={[styles.brandName, { color: BRAND_COLORS.ui.heading }]}>{REGISTER_TEXT.BRAND_NAME}</Text>
+              <Text style={[styles.subtitle, { color: BRAND_COLORS.ui.subtitle }]}>{REGISTER_TEXT.SUBTITLE}</Text>
             </View>
 
             <View style={styles.formContainer}>
@@ -137,14 +129,14 @@ export default function RegisterScreen() {
               />
 
               <View style={styles.loginLinkContainer}>
-                <Text style={styles.hasAccountText}>
+                <Text style={[styles.hasAccountText, { color: BRAND_COLORS.ui.subtitle }]}>
                   {REGISTER_TEXT.HAS_ACCOUNT}
                 </Text>
                 <TouchableOpacity
                   onPress={handleNavigateToLogin}
                   activeOpacity={0.7}
                 >
-                  <Text style={styles.loginLinkText}>
+                  <Text style={[styles.loginLinkText, { color: BRAND_COLORS.bta.primaryBg }]}>
                     {REGISTER_TEXT.LOGIN_LINK}
                   </Text>
                 </TouchableOpacity>
@@ -167,7 +159,6 @@ export default function RegisterScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: BRAND_COLORS.background.default,
   },
   header: {
     flexDirection: 'row',
@@ -175,8 +166,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: REGISTER_LAYOUT.HEADER_PADDING_HORIZONTAL,
     paddingVertical: REGISTER_LAYOUT.HEADER_PADDING_VERTICAL,
-    borderBottomWidth: 1,
-    borderBottomColor: '#E0E0E0',
   },
   backButton: {
     width: REGISTER_LAYOUT.BACK_BUTTON_SIZE,
@@ -187,7 +176,6 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: REGISTER_LAYOUT.HEADER_TITLE_FONT_SIZE,
     fontFamily: 'Phudu-Bold',
-    color: BRAND_COLORS.primary.xanhReu,
   },
   headerRight: {
     width: REGISTER_LAYOUT.BACK_BUTTON_SIZE,
@@ -210,21 +198,18 @@ const styles = StyleSheet.create({
   welcomeText: {
     fontSize: REGISTER_LAYOUT.WELCOME_FONT_SIZE,
     fontFamily: 'SpaceGrotesk-Medium',
-    color: BRAND_COLORS.primary.xanhReu,
     textAlign: 'center',
     marginBottom: REGISTER_LAYOUT.WELCOME_MARGIN_BOTTOM,
   },
   brandName: {
     fontSize: REGISTER_LAYOUT.BRAND_NAME_FONT_SIZE,
     fontFamily: 'Phudu-Bold',
-    color: BRAND_COLORS.primary.xanhReu,
     textAlign: 'center',
     marginBottom: REGISTER_LAYOUT.BRAND_NAME_MARGIN_BOTTOM,
   },
   subtitle: {
     fontSize: REGISTER_LAYOUT.SUBTITLE_FONT_SIZE,
     fontFamily: 'SpaceGrotesk-Medium',
-    color: '#666666',
     textAlign: 'center',
   },
   formContainer: {
@@ -240,12 +225,10 @@ const styles = StyleSheet.create({
   hasAccountText: {
     fontSize: REGISTER_LAYOUT.LINK_FONT_SIZE,
     fontFamily: 'SpaceGrotesk-Medium',
-    color: BRAND_COLORS.primary.xanhReu,
   },
   loginLinkText: {
     fontSize: REGISTER_LAYOUT.LINK_FONT_SIZE,
     fontFamily: 'SpaceGrotesk-Bold',
-    color: BRAND_COLORS.primary.xanhReu,
     textDecorationLine: 'underline',
   },
 });

@@ -5,8 +5,8 @@ import { ScrollView, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedbac
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { scheduleOnRN } from 'react-native-worklets';
-import { BRAND_COLORS } from '../../theme/colors';
-import { OtpVerificationRef, OtpVerificationBottomSheet } from '../otp-verification/OtpVerificationBottomSheet';
+import { useBrandColors } from '../../theme/BrandColorContext';
+import { OtpVerificationBottomSheet, OtpVerificationRef } from '../otp-verification/OtpVerificationBottomSheet';
 import { PhoneInput } from './components/PhoneInput';
 import { SocialButton } from './components/SocialButton';
 import { LOGIN_TEXT } from './LoginConstants';
@@ -15,6 +15,7 @@ import { LOGIN_LAYOUT } from './LoginLayout';
 import { LoginUIService } from './LoginService';
 
 export default function LoginScreen() {
+  const BRAND_COLORS = useBrandColors();
   const router = useRouter();
   const [phoneNumber, setPhoneNumber] = React.useState('');
   const [isSendingOtp, setIsSendingOtp] = React.useState(false);
@@ -73,16 +74,14 @@ export default function LoginScreen() {
   return (
     <BottomSheetModalProvider>
       <View style={styles.container}>
-        {/* Backdrop */}
         <Animated.View style={[styles.backdrop, animatedBackdropStyle]}>
           <TouchableWithoutFeedback onPress={handleDismiss}>
             <View style={styles.backdropTouchable} />
           </TouchableWithoutFeedback>
         </Animated.View>
 
-        {/* Modal Content */}
-        <Animated.View style={[styles.modalWrapper, animatedModalStyle]}>
-          <SafeAreaView style={styles.safeArea} edges={['top', 'bottom']}>
+        <Animated.View style={[styles.modalWrapper, animatedModalStyle, { backgroundColor: BRAND_COLORS.screenBg.fresh }]}>
+          <SafeAreaView style={[styles.safeArea, { backgroundColor: BRAND_COLORS.screenBg.fresh }]} edges={['top', 'bottom']}>
             <ScrollView contentContainerStyle={styles.scrollContent}>
               <View style={styles.closeContainer}>
                 <TouchableOpacity
@@ -90,23 +89,23 @@ export default function LoginScreen() {
                   onPress={handleDismiss}
                   activeOpacity={0.7}
                 >
-                  <Text style={styles.closeButton}>
+                  <Text style={[styles.closeButton, { color: BRAND_COLORS.bta.primaryBg }]}>
                     {LOGIN_TEXT.CLOSE_BUTTON}
                   </Text>
                 </TouchableOpacity>
               </View>
 
-              <View style={styles.heroContainer}>
-                <Text style={styles.heroPlaceholder}>
+              <View style={[styles.heroContainer, { backgroundColor: BRAND_COLORS.screenBg.warm }]}>
+                <Text style={[styles.heroPlaceholder, { color: BRAND_COLORS.ui.heading }]}>
                   {LOGIN_TEXT.IMAGE_PLACEHOLDER}
                 </Text>
               </View>
 
               <View style={styles.formContainer}>
-                <Text style={styles.welcomeText}>
+                <Text style={[styles.welcomeText, { color: BRAND_COLORS.ui.heading }]}>
                   {LOGIN_TEXT.WELCOME_TEXT}
                 </Text>
-                <Text style={styles.brandName}>{LOGIN_TEXT.BRAND_NAME}</Text>
+                <Text style={[styles.brandName, { color: BRAND_COLORS.ui.heading }]}>{LOGIN_TEXT.BRAND_NAME}</Text>
 
                 <PhoneInput
                   value={phoneNumber}
@@ -117,22 +116,21 @@ export default function LoginScreen() {
                   autoFocusDelay={LOGIN_LAYOUT.KEYBOARD_FOCUS_DELAY}
                 />
 
-                {/* Register Link */}
                 <View style={styles.registerLinkContainer}>
-                  <Text style={styles.noAccountText}>
+                  <Text style={[styles.noAccountText, { color: BRAND_COLORS.ui.subtitle }]}>
                     {LOGIN_TEXT.NO_ACCOUNT}
                   </Text>
                   <TouchableOpacity
                     onPress={handleNavigateToRegister}
                     activeOpacity={0.7}
                   >
-                    <Text style={styles.registerLinkText}>
+                    <Text style={[styles.registerLinkText, { color: BRAND_COLORS.bta.primaryBg }]}>
                       {LOGIN_TEXT.REGISTER_LINK}
                     </Text>
                   </TouchableOpacity>
                 </View>
 
-                <Text style={styles.divider}>{LOGIN_TEXT.DIVIDER_TEXT}</Text>
+                <Text style={[styles.divider, { color: BRAND_COLORS.ui.placeholder }]}>{LOGIN_TEXT.DIVIDER_TEXT}</Text>
 
                 <SocialButton
                   provider={LoginProvider.FACEBOOK}
@@ -172,11 +170,9 @@ const styles = StyleSheet.create({
   },
   modalWrapper: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: BRAND_COLORS.background.default,
   },
   safeArea: {
     flex: 1,
-    backgroundColor: BRAND_COLORS.background.default,
   },
   scrollContent: {
     flexGrow: 1,
@@ -199,19 +195,16 @@ const styles = StyleSheet.create({
   closeButton: {
     fontSize: LOGIN_LAYOUT.CLOSE_BUTTON_FONT_SIZE,
     marginBottom: 2,
-    color: BRAND_COLORS.primary.xanhReu,
     fontFamily: 'SpaceGrotesk-Bold',
   },
   heroContainer: {
     height: LOGIN_LAYOUT.HERO_HEIGHT,
-    backgroundColor: BRAND_COLORS.primary.beSua,
     justifyContent: 'center',
     alignItems: 'center',
   },
   heroPlaceholder: {
     fontSize: LOGIN_LAYOUT.HERO_FONT_SIZE,
     fontFamily: 'SpaceGrotesk-Medium',
-    color: BRAND_COLORS.primary.xanhReu,
     textAlign: 'center',
   },
   formContainer: {
@@ -222,14 +215,12 @@ const styles = StyleSheet.create({
   welcomeText: {
     fontSize: LOGIN_LAYOUT.WELCOME_FONT_SIZE,
     fontFamily: 'SpaceGrotesk-Medium',
-    color: BRAND_COLORS.primary.xanhReu,
     textAlign: 'center',
     marginBottom: LOGIN_LAYOUT.WELCOME_TEXT_MARGIN_BOTTOM,
   },
   brandName: {
     fontSize: LOGIN_LAYOUT.BRAND_NAME_FONT_SIZE,
     fontFamily: 'Phudu-Bold',
-    color: BRAND_COLORS.primary.xanhReu,
     textAlign: 'center',
     marginBottom: LOGIN_LAYOUT.BRAND_NAME_MARGIN_BOTTOM,
     letterSpacing: LOGIN_LAYOUT.BRAND_NAME_LETTER_SPACING,
@@ -237,7 +228,6 @@ const styles = StyleSheet.create({
   divider: {
     fontSize: LOGIN_LAYOUT.DIVIDER_FONT_SIZE,
     fontFamily: 'SpaceGrotesk-Medium',
-    color: '#999999',
     textAlign: 'center',
     marginVertical: LOGIN_LAYOUT.DIVIDER_MARGIN_VERTICAL,
   },
@@ -251,12 +241,10 @@ const styles = StyleSheet.create({
   noAccountText: {
     fontSize: 14,
     fontFamily: 'SpaceGrotesk-Medium',
-    color: BRAND_COLORS.primary.xanhReu,
   },
   registerLinkText: {
     fontSize: 14,
     fontFamily: 'SpaceGrotesk-Bold',
-    color: BRAND_COLORS.primary.xanhReu,
     textDecorationLine: 'underline',
   },
 });

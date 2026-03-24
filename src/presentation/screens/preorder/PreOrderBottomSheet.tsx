@@ -5,7 +5,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { StyleSheet } from 'react-native';
 import { OrderType, PaymentMethod } from '../../../domain/shared';
 import { clearCart } from '../../../state/slices/orderCartSlice';
-import { selectPreOrderType, setOrderType } from '../../../state/slices/preOrderSlice';
+import { resetPreOrder, selectLastOrder, selectPreOrderType, selectSelectedVouchers, setOrderType, setSelectedVouchers } from '../../../state/slices/preOrderSlice';
 import { useAppDispatch, useAppSelector } from '../../../utils/hooks';
 import { OrderAddressCard } from '../../components/order/OrderAddressCard';
 import { OrderFooter } from '../../components/order/OrderFooter';
@@ -17,6 +17,7 @@ import { OrderProductList } from '../../components/order/OrderProductList';
 import { OrderTypeSelector } from '../../components/order/OrderTypeSelector';
 import { BaseBottomSheetLayout } from '../../layouts/BaseBottomSheetLayout';
 import { popupService } from '../../layouts/popup/PopupService';
+import { useBrandColors } from '../../theme/BrandColorContext';
 import { CartItem } from '../order/OrderInterfaces';
 import { PREORDER_TEXT } from './PreOrderConstants';
 import { PreOrderBottomSheetProps, PreOrderState } from './PreOrderInterfaces';
@@ -25,41 +26,38 @@ import { PreOrderService } from './PreOrderService';
 import { OrderTypeModal } from './components/OrderTypeModal';
 import { PaymentTypeModal } from './components/PaymentTypeModal';
 import { PaymentTypeSelector } from './components/PaymentTypeSelector';
+import { VoucherSelectionModal } from './components/VoucherSelectionModal';
 
 export default function PreOrderBottomSheet({ visible, onClose, onOrderSuccess }: PreOrderBottomSheetProps) {
+  const BRAND_COLORS = useBrandColors();
   const dispatch = useAppDispatch();
   const bottomSheetRef = useRef<BottomSheetModal>(null);
   const orderTypeModalRef = useRef<BottomSheetModal>(null);
   const paymentModalRef = useRef<BottomSheetModal>(null);
   const editProductModalRef = useRef<OrderProductEditRef>(null);
+  const voucherModalRef = useRef<BottomSheetModal>(null);
   const { totalItems, totalPrice, selectedStore } = useAppSelector((state) => state.orderCart);
   const deliveryAddress = useAppSelector(selectSelectedAddress);
   const user = useAppSelector((state) => state.auth.user);
   const cartItems = useAppSelector((state) => state.orderCart.items);
-  const { confirmedOrder } = useAppSelector((state) => state.confirmOrder);
+  const lastOrder = useAppSelector(selectLastOrder);
   const globalOrderType = useAppSelector(selectPreOrderType);
+  const selectedVouchers = useAppSelector(selectSelectedVouchers);
 
-  const [preOrderState, setPreOrderState] = useState<PreOrderState>({
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>(PaymentMethod.CASH);
+
+  // Derive preOrderState directly from Redux — no useEffect sync needed
+  const preOrderState: PreOrderState = useMemo(() => ({
     orderType: globalOrderType,
-    paymentMethod: PaymentMethod.CASH,
-    shippingFee: 0,
-  });
-
-  useEffect(() => {
-    if (confirmedOrder) {
-      setPreOrderState(prev => ({
-        ...prev,
-        shippingFee: confirmedOrder.deliveryFee
-      }));
-    }
-  }, [confirmedOrder]);
-
-  useEffect(() => {
-    setPreOrderState(prev => ({ ...prev, orderType: globalOrderType }));
-  }, [globalOrderType]);
+    paymentMethod,
+    shippingFee: lastOrder?.deliveryFee ?? 0,
+  }), [globalOrderType, paymentMethod, lastOrder]);
 
   const [isNavigatingToAddress, setIsNavigatingToAddress] = useState(false);
-  const finalTotal = confirmedOrder ? confirmedOrder.finalAmount : PreOrderService.calculateTotalPrice(totalPrice, preOrderState.shippingFee);
+  const serverSubtotal = lastOrder?.subtotal ?? totalPrice;
+  const serverShippingFee = lastOrder?.deliveryFee ?? 0;
+  const serverDiscountAmount = lastOrder?.discountAmount ?? 0;
+  const serverFinalTotal = lastOrder?.finalAmount ?? totalPrice;
   const displayItems = useMemo(() => OrderMapper.mapCartItemsToDisplayItems(cartItems), [cartItems]);
 
   const snapPoints = useMemo(() => ['90%'], []);
@@ -111,7 +109,7 @@ export default function PreOrderBottomSheet({ visible, onClose, onOrderSuccess }
   );
 
   const handlePaymentMethodChange = useCallback((method: PaymentMethod) => {
-    setPreOrderState((prev) => ({ ...prev, paymentMethod: method }));
+    setPaymentMethod(method);
     paymentModalRef.current?.dismiss();
   }, []);
 
@@ -128,13 +126,24 @@ export default function PreOrderBottomSheet({ visible, onClose, onOrderSuccess }
 
     if (confirmed) {
       dispatch(clearCart());
+      dispatch(resetPreOrder());
       bottomSheetRef.current?.dismiss();
     }
   }, [dispatch]);
 
+  const handleCartEmpty = useCallback(() => {
+    dispatch(resetPreOrder());
+    bottomSheetRef.current?.dismiss();
+  }, [dispatch]);
+
   const handlePromotionPress = useCallback(() => {
-    popupService.alert(PREORDER_TEXT.COMING_SOON_MESSAGE, { title: 'Coming Soon' });
+    voucherModalRef.current?.present();
   }, []);
+
+  const handleApplyVouchers = useCallback(async (newSelectedVouchers: { code: string }[]) => {
+    voucherModalRef.current?.dismiss();
+    dispatch(setSelectedVouchers(newSelectedVouchers));
+  }, [dispatch]);
 
   const handlePlaceOrder = useCallback(async () => {
     if (preOrderState.orderType === OrderType.DELIVERY && !deliveryAddress) {
@@ -187,12 +196,12 @@ export default function PreOrderBottomSheet({ visible, onClose, onOrderSuccess }
         {...props}
         orderType={preOrderState.orderType}
         totalItems={totalItems}
-        totalPrice={finalTotal}
+        totalPrice={serverFinalTotal}
         buttonText={PREORDER_TEXT.PLACE_ORDER_BUTTON}
         onButtonPress={handlePlaceOrder}
       />
     );
-  }, [preOrderState.orderType, totalItems, finalTotal, handlePlaceOrder]);
+  }, [preOrderState.orderType, totalItems, serverFinalTotal, handlePlaceOrder, BRAND_COLORS]);
 
   return (
     <>
@@ -235,8 +244,9 @@ export default function PreOrderBottomSheet({ visible, onClose, onOrderSuccess }
           />
 
           <OrderPriceSection
-            subtotal={totalPrice}
-            shippingFee={preOrderState.shippingFee}
+            subtotal={serverSubtotal}
+            shippingFee={serverShippingFee}
+            discountAmount={serverDiscountAmount}
             onPromotionPress={handlePromotionPress}
             showPromotionButton={true}
           />
@@ -249,7 +259,14 @@ export default function PreOrderBottomSheet({ visible, onClose, onOrderSuccess }
 
       <PaymentTypeModal ref={paymentModalRef} selectedMethod={preOrderState.paymentMethod} onSelectMethod={handlePaymentMethodChange} />
 
-      <OrderProductEditBottomSheet ref={editProductModalRef} />
+      <VoucherSelectionModal
+        ref={voucherModalRef}
+        availableVouchers={lastOrder?.availableVouchers || []}
+        initialSelectedVouchers={selectedVouchers}
+        onApply={handleApplyVouchers}
+      />
+
+      <OrderProductEditBottomSheet ref={editProductModalRef} onCartEmpty={handleCartEmpty} />
     </>
   );
 }

@@ -4,16 +4,16 @@ import { BRAND_COLORS } from './src/presentation/theme/colors';
 const tokens = createTokens({
   color: {
     // Primary colors
-    beSua: BRAND_COLORS.primary.beSua,
-    xanhBo: BRAND_COLORS.primary.xanhBo,
-    xanhReu: BRAND_COLORS.primary.xanhReu,
+    p1: BRAND_COLORS.primary.p1,
+    p2: BRAND_COLORS.primary.p2,
+    p3: BRAND_COLORS.primary.p3,
     // Secondary colors
-    xanhChanh: BRAND_COLORS.secondary.xanhChanh,
-    xanhNeon: BRAND_COLORS.secondary.xanhNeon,
-    nauEspresso: BRAND_COLORS.secondary.nauEspresso,
-    hongSua: BRAND_COLORS.secondary.hongSua,
-    reuDam: BRAND_COLORS.secondary.reuDam,
-    nauCaramel: BRAND_COLORS.secondary.nauCaramel,
+    s1: BRAND_COLORS.secondary.s1,
+    s2: BRAND_COLORS.secondary.s2,
+    s3: BRAND_COLORS.secondary.s3,
+    s4: BRAND_COLORS.secondary.s4,
+    s5: BRAND_COLORS.secondary.s5,
+    s6: BRAND_COLORS.secondary.s6,
     // System colors
     background: BRAND_COLORS.background.default,
     white: BRAND_COLORS.background.default,
@@ -73,7 +73,7 @@ const config = createTamagui({
   themes: {
     light: {
       background: BRAND_COLORS.background.default,
-      color: BRAND_COLORS.primary.xanhReu,
+      color: BRAND_COLORS.primary.p3,
     },
   },
 });

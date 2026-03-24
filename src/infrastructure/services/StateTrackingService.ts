@@ -4,7 +4,7 @@ import { PreOrderService } from "../../presentation/screens/preorder/PreOrderSer
 import { setConfirmedOrder } from "../../state/slices/confirmOrderSlice";
 import { setDeliveryAddress } from "../../state/slices/deliverySlice";
 import { addToCart, clearCart, removeCartItem, removeItem, updateCartItem } from "../../state/slices/orderCartSlice";
-import { createPreOrder, setOrderType } from "../../state/slices/preOrderSlice";
+import { createPreOrder, setOrderType, setSelectedVouchers } from "../../state/slices/preOrderSlice";
 import { AppDispatch, RootState } from "../../state/store";
 
 export class StateTrackingService {
@@ -22,7 +22,8 @@ export class StateTrackingService {
                     removeItem,
                     clearCart,
                     setDeliveryAddress,
-                    setOrderType
+                    setOrderType,
+                    setSelectedVouchers
                 )(action);
 
                 if (!isTargetAction) return false;
@@ -36,8 +37,9 @@ export class StateTrackingService {
 
                 const isAddressChanged = JSON.stringify(current.delivery.selectedAddress) !== JSON.stringify(original.delivery.selectedAddress);
                 const isOrderTypeChanged = current.preOrder.orderType !== original.preOrder.orderType;
+                const isVoucherChanged = current.preOrder.selectedVouchers !== original.preOrder.selectedVouchers;
 
-                return isCartChanged || isAddressChanged || isOrderTypeChanged;
+                return isCartChanged || isAddressChanged || isOrderTypeChanged || isVoucherChanged;
             },
             effect: async (action, listenerApi) => {
                 listenerApi.cancelActiveListeners();
@@ -49,7 +51,7 @@ export class StateTrackingService {
                 const { store } = state.home;
                 const { items } = state.orderCart;
                 const { selectedAddress } = state.delivery;
-                const { orderType } = state.preOrder;
+                const { orderType, selectedVouchers } = state.preOrder;
 
                 if (!user?.uuid || !store || items.length === 0) {
                     console.log("[StateTracking] Checks failed, skipping API call.");
@@ -70,7 +72,8 @@ export class StateTrackingService {
                         store,
                         selectedAddress,
                         items,
-                        currentPreOrderState
+                        currentPreOrderState,
+                        selectedVouchers
                     );
 
                     const resultAction = await listenerApi.dispatch(createPreOrder(payload));

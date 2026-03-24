@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { ActivityIndicator, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import { BRAND_COLORS } from '../../../theme/colors';
+import { useBrandColors } from '../../../theme/BrandColorContext';
 import { REGISTER_PHONE_CONFIG, REGISTER_TEXT } from '../RegisterConstants';
 import { REGISTER_LAYOUT } from '../RegisterLayout';
 import { RegisterUIService } from '../RegisterService';
@@ -15,6 +15,7 @@ interface RegisterPhoneInputProps {
 }
 
 export function RegisterPhoneInput({value, onChangeText, onSubmit, isValid, autoFocusDelay = 0, isLoading = false}: RegisterPhoneInputProps) {
+  const BRAND_COLORS = useBrandColors();
   const inputRef = useRef<TextInput>(null);
 
   useEffect(() => {
@@ -33,14 +34,14 @@ export function RegisterPhoneInput({value, onChangeText, onSubmit, isValid, auto
 
   return (
     <View style={styles.container}>
-      <View style={styles.inputContainer}>
-        <View style={styles.countryCode}>
+      <View style={[styles.inputContainer, { borderColor: BRAND_COLORS.ui.placeholder }]}>
+        <View style={[styles.countryCode, { borderRightColor: BRAND_COLORS.ui.placeholder, backgroundColor: BRAND_COLORS.screenBg.warm }]}>
           <Text style={styles.flag}>{REGISTER_PHONE_CONFIG.FLAG_EMOJI}</Text>
-          <Text style={styles.code}>{REGISTER_PHONE_CONFIG.COUNTRY_CODE}</Text>
+          <Text style={[styles.code, { color: BRAND_COLORS.ui.heading }]}>{REGISTER_PHONE_CONFIG.COUNTRY_CODE}</Text>
         </View>
         <TextInput
           ref={inputRef}
-          style={styles.input}
+          style={[styles.input, { color: BRAND_COLORS.ui.heading }]}
           placeholder={REGISTER_TEXT.PHONE_PLACEHOLDER}
           placeholderTextColor="#CCCCCC"
           value={value}
@@ -54,15 +55,15 @@ export function RegisterPhoneInput({value, onChangeText, onSubmit, isValid, auto
       </View>
 
       <TouchableOpacity
-        style={[styles.button, isValid && !isLoading && styles.buttonActive]}
+        style={[styles.button, isValid && !isLoading && { backgroundColor: BRAND_COLORS.bta.primaryBg }]}
         onPress={onSubmit}
         disabled={!isValid || isLoading}
         activeOpacity={0.8}
       >
         {isLoading ? (
-          <ActivityIndicator color={BRAND_COLORS.background.default} />
+          <ActivityIndicator color={BRAND_COLORS.bta.primaryText} />
         ) : (
-          <Text style={[styles.buttonText, isValid && styles.buttonTextActive]}>
+          <Text style={[styles.buttonText, { color: BRAND_COLORS.ui.subtitle }, isValid && { color: BRAND_COLORS.bta.primaryText }]}>
             {REGISTER_TEXT.REGISTER_BUTTON}
           </Text>
         )}
@@ -78,10 +79,9 @@ const styles = StyleSheet.create({
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: BRAND_COLORS.background.default,
+    backgroundColor: '#FFFFFF',
     borderRadius: REGISTER_LAYOUT.INPUT_BORDER_RADIUS,
     borderWidth: REGISTER_LAYOUT.INPUT_BORDER_WIDTH,
-    borderColor: '#E0E0E0',
     overflow: 'hidden',
   },
   countryCode: {
@@ -90,8 +90,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: REGISTER_LAYOUT.INPUT_PADDING_HORIZONTAL,
     paddingVertical: REGISTER_LAYOUT.INPUT_PADDING_VERTICAL,
     borderRightWidth: 1,
-    borderRightColor: '#E0E0E0',
-    backgroundColor: '#F5F5F5',
   },
   flag: {
     fontSize: 20,
@@ -100,7 +98,6 @@ const styles = StyleSheet.create({
   code: {
     fontSize: REGISTER_LAYOUT.INPUT_FONT_SIZE,
     fontFamily: 'SpaceGrotesk-Medium',
-    color: BRAND_COLORS.primary.xanhReu,
   },
   input: {
     flex: 1,
@@ -108,24 +105,16 @@ const styles = StyleSheet.create({
     paddingVertical: REGISTER_LAYOUT.INPUT_PADDING_VERTICAL,
     fontSize: REGISTER_LAYOUT.INPUT_FONT_SIZE,
     fontFamily: 'SpaceGrotesk-Medium',
-    color: BRAND_COLORS.primary.xanhReu,
   },
   button: {
-    backgroundColor: '#E0E0E0',
+    backgroundColor: '#FFFFFF',
     borderRadius: REGISTER_LAYOUT.BUTTON_BORDER_RADIUS,
     paddingVertical: REGISTER_LAYOUT.BUTTON_PADDING_VERTICAL,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  buttonActive: {
-    backgroundColor: BRAND_COLORS.primary.xanhReu,
-  },
   buttonText: {
     fontSize: REGISTER_LAYOUT.BUTTON_FONT_SIZE,
     fontFamily: 'Phudu-Bold',
-    color: '#999999',
-  },
-  buttonTextActive: {
-    color: BRAND_COLORS.background.default,
   },
 });

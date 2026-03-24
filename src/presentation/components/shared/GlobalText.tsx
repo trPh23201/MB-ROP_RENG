@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text as RNText, TextProps as RNTextProps, StyleSheet } from 'react-native';
-import { BRAND_COLORS } from '../../theme/colors';
+import { useBrandColors } from '../../theme/BrandColorContext';
 import { TYPOGRAPHY } from '../../theme/typography';
 
 interface GlobalTextProps extends RNTextProps {
@@ -12,10 +12,11 @@ interface GlobalTextProps extends RNTextProps {
 export function GlobalText({
   variant = 'body',
   weight = 'medium',
-  color = BRAND_COLORS.primary.xanhReu,
+  color = BRAND_COLORS.primary.p3,
   style,
   ...props
 }: GlobalTextProps) {
+  const BRAND_COLORS = useBrandColors();
   const getFontFamily = () => {
     switch (variant) {
       case 'heading':

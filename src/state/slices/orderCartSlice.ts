@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { randomUUID } from 'expo-crypto';
-import { Product } from '../../data/mockProducts';
 import { Store } from '../../data/mockStores';
+import { Product } from '../../domain/entities/Product';
 import { CART_DEFAULTS, CartItem, CartItemCustomization } from '../../presentation/screens/order/OrderInterfaces';
 import { logoutUser } from './authSlice';
 
@@ -37,7 +37,6 @@ const isSameCustomizations = (a: CartItemCustomization, b: CartItemCustomization
   if (a.sweetness !== b.sweetness) return false;
   if (a.toppings.length !== b.toppings.length) return false;
 
-  // Compare toppings by ID (sorted to avoid order issues)
   const aToppingIds = a.toppings.map(t => t.id).sort();
   const bToppingIds = b.toppings.map(t => t.id).sort();
   return aToppingIds.every((id, i) => id === bToppingIds[i]);
@@ -71,13 +70,6 @@ const orderCartSlice = createSlice({
       }
 
       state.selectedStore = action.payload;
-
-      // TODO: Persist selected store to AsyncStorage for app restart
-      // Implementation: AsyncStorage.setItem('selected_store', JSON.stringify(action.payload))
-
-      // TODO: Re-fetch menu if new store is outside current lat/lng range
-      // Check if new store coordinates differ significantly from current menu fetch
-      // If difference > threshold, dispatch fetchHomeMenu with new coordinates
     },
 
     addToCart: (state, action: PayloadAction<Product>) => {
@@ -112,23 +104,19 @@ const orderCartSlice = createSlice({
       const index = state.items.findIndex((item) => item.id === updatedItem.id);
       if (index === -1) return;
 
-      // Check for duplicate item with same customizations (excluding self)
       const duplicateItem = findDuplicateItem(
         state.items,
         updatedItem.product.id,
         updatedItem.customizations,
-        updatedItem.id // Exclude self
+        updatedItem.id
       );
 
       if (duplicateItem) {
-        // MERGE: Combine quantities into duplicate item
         duplicateItem.quantity += updatedItem.quantity;
         duplicateItem.finalPrice = calculateFinalPrice(duplicateItem);
 
-        // Remove the original item
         state.items = state.items.filter(item => item.id !== updatedItem.id);
       } else {
-        // UPDATE IN PLACE: No duplicate found
         const updated = { ...updatedItem };
         updated.finalPrice = calculateFinalPrice(updated);
         state.items[index] = updated;
@@ -138,22 +126,13 @@ const orderCartSlice = createSlice({
     },
 
     removeCartItem: (state, action: PayloadAction<string>) => {
-      const item = state.items.find((i) => i.id === action.payload);
-      if (!item) return;
-
       state.items = state.items.filter((i) => i.id !== action.payload);
-      state.totalItems -= item.quantity;
-      state.totalPrice -= item.finalPrice;
+      recalculateTotals(state);
     },
 
     removeItem: (state, action: PayloadAction<string>) => {
-      const productId = action.payload;
-      const item = state.items.find((i) => i.product.id === productId);
-      if (!item) return;
-
-      state.items = state.items.filter((i) => i.product.id !== productId);
-      state.totalItems -= item.quantity;
-      state.totalPrice -= item.finalPrice;
+      state.items = state.items.filter((i) => i.product.id !== action.payload);
+      recalculateTotals(state);
     },
 
     clearCart: (state) => {

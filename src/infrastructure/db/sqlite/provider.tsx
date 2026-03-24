@@ -12,7 +12,8 @@ export async function migrateDbIfNeeded(db: SQLite.SQLiteDatabase) {
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       user_id TEXT NOT NULL,
       store_id TEXT NOT NULL,
-      product_id TEXT NOT NULL,
+      product_id INTEGER NOT NULL,
+      menu_item_id INTEGER DEFAULT 0,
       quantity INTEGER NOT NULL DEFAULT 1,
       created_at INTEGER NOT NULL,
       UNIQUE(user_id, store_id, product_id)
@@ -22,6 +23,25 @@ export async function migrateDbIfNeeded(db: SQLite.SQLiteDatabase) {
   // Index for fast queries
   await db.execAsync(`
     CREATE INDEX IF NOT EXISTS idx_cart_user_store ON cart_items(user_id, store_id);
+  `);
+
+  // Brand colors table - offline-first, synced from API
+  await db.execAsync(`
+    CREATE TABLE IF NOT EXISTS brand_colors (
+      id INTEGER PRIMARY KEY,
+      brand_id INTEGER NOT NULL,
+      color_name TEXT NOT NULL,
+      hex_code TEXT NOT NULL,
+      rgb_code TEXT,
+      is_active INTEGER NOT NULL DEFAULT 1,
+      sort_order INTEGER NOT NULL DEFAULT 0,
+      synced_at INTEGER NOT NULL,
+      UNIQUE(brand_id, color_name)
+    );
+  `);
+
+  await db.execAsync(`
+    CREATE INDEX IF NOT EXISTS idx_brand_colors_brand ON brand_colors(brand_id);
   `);
 }
 

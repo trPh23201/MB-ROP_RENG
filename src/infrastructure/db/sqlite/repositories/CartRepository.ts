@@ -7,7 +7,8 @@ export interface CartDbItem {
   id: number;
   user_id: string;
   store_id: string;
-  product_id: string;
+  product_id: number;
+  menu_item_id: number;
   quantity: number;
   created_at: number;
 }
@@ -16,9 +17,10 @@ export class CartRepository {
   constructor(private readonly db: SQLiteDatabase) {}
 
   async addItem(userId: string, storeId: string, product: Product, quantity: number = 1): Promise<void> {
+    const productIdNum = product.productId || parseInt(product.id) || 0;
     const existing = await this.db.getFirstAsync<CartDbItem>(
       'SELECT * FROM cart_items WHERE user_id = ? AND store_id = ? AND product_id = ?',
-      [userId, storeId, product.id]
+      [userId, storeId, productIdNum]
     );
 
     if (existing) {
@@ -28,8 +30,8 @@ export class CartRepository {
       );
     } else {
       await this.db.runAsync(
-        'INSERT INTO cart_items (user_id, store_id, product_id, quantity, created_at) VALUES (?, ?, ?, ?, ?)',
-        [userId, storeId, product.id, quantity, Date.now()]
+        'INSERT INTO cart_items (user_id, store_id, product_id, menu_item_id, quantity, created_at) VALUES (?, ?, ?, ?, ?, ?)',
+        [userId, storeId, productIdNum, product.menuItemId || 0, quantity, Date.now()]
       );
     }
   }
@@ -42,14 +44,14 @@ export class CartRepository {
 
     await this.db.runAsync(
       'UPDATE cart_items SET quantity = ? WHERE user_id = ? AND store_id = ? AND product_id = ?',
-      [quantity, userId, storeId, productId]
+      [quantity, userId, storeId, parseInt(productId) || 0]
     );
   }
 
   async removeItem(userId: string, storeId: string, productId: string): Promise<void> {
     await this.db.runAsync(
       'DELETE FROM cart_items WHERE user_id = ? AND store_id = ? AND product_id = ?',
-      [userId, storeId, productId]
+      [userId, storeId, parseInt(productId) || 0]
     );
   }
 
@@ -61,8 +63,17 @@ export class CartRepository {
 
     return rows
       .map((row) => {
-        const product = productsMap.get(row.product_id);
+        let product = productsMap.get(String(row.product_id));
         if (!product) return null;
+        
+        if (row.menu_item_id) {
+            product = {
+                ...product,
+                menuItemId: row.menu_item_id || product.menuItemId,
+                productId: row.product_id || product.productId
+            };
+        }
+
         return {
           product,
           quantity: row.quantity,

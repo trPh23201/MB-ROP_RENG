@@ -1,15 +1,11 @@
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { BRAND_COLORS } from '../../theme/colors';
+import { useBrandColors } from '../../theme/BrandColorContext';
 import { TYPOGRAPHY } from '../../theme/typography';
 import { ORDER_TEXT } from './OrderConstants';
 import { OrderProductListProps } from './OrderInterfaces';
 import { OrderProductItem } from './OrderProductItem';
 
-/**
- * Shared product list component for order display.
- * Used in both Pre-order and Confirm Order screens.
- */
 export function OrderProductList({
     items,
     title = ORDER_TEXT.PRODUCT_LIST_TITLE,
@@ -19,21 +15,22 @@ export function OrderProductList({
     editable = true,
     emptyText = ORDER_TEXT.EMPTY_PRODUCT_TEXT,
 }: OrderProductListProps) {
+    const BRAND_COLORS = useBrandColors();
     if (items.length === 0) {
         return (
             <View style={styles.emptyContainer}>
-                <Text style={styles.emptyText}>{emptyText}</Text>
+                <Text style={[styles.emptyText, { color: BRAND_COLORS.ui.placeholder }]}>{emptyText}</Text>
             </View>
         );
     }
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, { backgroundColor: BRAND_COLORS.screenBg.fresh, borderColor: BRAND_COLORS.ui.placeholder }]}>
             <View style={styles.header}>
-                <Text style={styles.title}>{title}</Text>
+                <Text style={[styles.title, { color: BRAND_COLORS.ui.heading }]}>{title}</Text>
                 {showAddButton && onAddMore && (
                     <TouchableOpacity onPress={onAddMore} activeOpacity={0.7}>
-                        <Text style={styles.addButton}>{ORDER_TEXT.ADD_MORE_BUTTON}</Text>
+                        <Text style={[styles.addButton, { color: BRAND_COLORS.bta.primaryBg }]}>{ORDER_TEXT.ADD_MORE_BUTTON}</Text>
                     </TouchableOpacity>
                 )}
             </View>
@@ -53,9 +50,7 @@ export function OrderProductList({
 const styles = StyleSheet.create({
     container: {
         borderRadius: 12,
-        backgroundColor: BRAND_COLORS.background.primary,
-        borderColor: BRAND_COLORS.border.light,
-        borderWidth: 1,
+        borderWidth: 3,
         paddingVertical: 8,
         marginBottom: 16,
     },
@@ -69,12 +64,10 @@ const styles = StyleSheet.create({
     title: {
         fontSize: TYPOGRAPHY.fontSize.base,
         fontFamily: TYPOGRAPHY.fontFamily.bodyBold,
-        color: BRAND_COLORS.text.primary,
     },
     addButton: {
         fontSize: TYPOGRAPHY.fontSize.md,
         fontFamily: TYPOGRAPHY.fontFamily.bodyMedium,
-        color: BRAND_COLORS.secondary.camDam,
     },
     emptyContainer: {
         paddingVertical: 40,
@@ -83,6 +76,5 @@ const styles = StyleSheet.create({
     emptyText: {
         fontSize: TYPOGRAPHY.fontSize.base,
         fontFamily: TYPOGRAPHY.fontFamily.bodyRegular,
-        color: BRAND_COLORS.text.tertiary,
     },
 });

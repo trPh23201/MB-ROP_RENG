@@ -1,4 +1,4 @@
-import { Product } from '../../../data/mockProducts';
+import { Product } from '../../../domain/entities/Product';
 import { OrderType } from '../../../domain/shared';
 
 export interface Topping {

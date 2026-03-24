@@ -1,10 +1,8 @@
 import { StyleSheet } from 'react-native';
-import { BRAND_COLORS } from '../../theme/colors';
 
 export const welcomeStyles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: BRAND_COLORS.background.default,
   },
   scrollContent: {
     paddingBottom: 24,
@@ -27,7 +25,6 @@ export const welcomeStyles = StyleSheet.create({
   greetingText: {
     fontSize: 20,
     fontFamily: 'Phudu-Bold',
-    color: BRAND_COLORS.primary.xanhReu,
   },
   headerIcons: {
     flexDirection: 'row',
@@ -36,7 +33,6 @@ export const welcomeStyles = StyleSheet.create({
   iconButton: {
     width: 48,
     height: 48,
-    backgroundColor: BRAND_COLORS.background.default,
     borderRadius: 24,
     justifyContent: 'center',
     alignItems: 'center',
@@ -56,7 +52,6 @@ export const welcomeStyles = StyleSheet.create({
   sectionTitle: {
     fontSize: 20,
     fontFamily: 'Phudu-Bold',
-    color: BRAND_COLORS.primary.xanhReu,
     marginBottom: 16,
   },
 });

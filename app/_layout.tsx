@@ -5,7 +5,6 @@ import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
-import { ActivityIndicator, StyleSheet, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
@@ -13,6 +12,7 @@ import { TamaguiProvider } from 'tamagui';
 import { DatabaseProvider } from '../src/infrastructure/db/sqlite/provider';
 import { NetworkGuard } from '../src/presentation/layouts/network/NetworkGuard';
 import { PopupProvider } from '../src/presentation/layouts/popup/PopupProvider';
+import { BrandColorProvider } from '../src/presentation/theme/BrandColorContext';
 import { persistor, store } from '../src/state/store';
 import { useAppInitialization } from '../src/utils/hooks/useAppInitialization';
 import config from '../tamagui.config';
@@ -23,26 +23,17 @@ function AppInitializer({ children, fontsLoaded }: { children: React.ReactNode; 
   const { isReady, error } = useAppInitialization();
 
   useEffect(() => {
-    if (fontsLoaded && isReady) {
-      console.log('[AppInitializer] Fonts and data ready, hiding splash');
+    if (fontsLoaded) {
+      console.log('[AppInitializer] Fonts ready, hiding native splash');
       SplashScreen.hideAsync();
     }
-  }, [fontsLoaded, isReady]);
+  }, [fontsLoaded]);
 
   useEffect(() => {
     if (error) {
       console.error('[AppInitializer] Init error:', error);
-      SplashScreen.hideAsync();
     }
   }, [error]);
-
-  if (!isReady && !error) {
-    return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#4A6741" />
-      </View>
-    );
-  }
 
   return <>{children}</>;
 }
@@ -62,46 +53,40 @@ export default function RootLayout() {
   }
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
+    <GestureHandlerRootView style={{ flex: 1 }} >
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
           <NetworkGuard>
             <TamaguiProvider config={config}>
               <BottomSheetModalProvider>
                 <DatabaseProvider>
-                  <PopupProvider>
-                    <AppInitializer fontsLoaded={fontsLoaded}>
-                      <StatusBar style={IS_IOS ? 'dark' : 'auto'} />
-                      <Stack screenOptions={{ headerShown: false }}>
-                        <Stack.Screen name="index" />
-                        <Stack.Screen name="(auth)" />
-                        <Stack.Screen name="(tabs)" />
-                        <Stack.Screen
-                          name="address-management"
-                          options={{
-                            headerShown: false,
-                            presentation: 'fullScreenModal',
-                            animation: 'slide_from_bottom'
-                          }}
-                        />
-                      </Stack>
-                    </AppInitializer>
-                  </PopupProvider>
+                  <BrandColorProvider>
+                    <PopupProvider>
+                      <AppInitializer fontsLoaded={fontsLoaded}>
+                        <StatusBar style={IS_IOS ? 'dark' : 'auto'} />
+                        <Stack screenOptions={{ headerShown: false }}>
+                          <Stack.Screen name="index" />
+                          <Stack.Screen name="(auth)" />
+                          <Stack.Screen name="(tabs)" />
+                          <Stack.Screen name="select-brand" />
+                          <Stack.Screen
+                            name="address-management"
+                            options={{
+                              headerShown: false,
+                              presentation: 'fullScreenModal',
+                              animation: 'slide_from_bottom'
+                            }}
+                          />
+                        </Stack>
+                      </AppInitializer>
+                    </PopupProvider>
+                  </BrandColorProvider>
                 </DatabaseProvider>
               </BottomSheetModalProvider>
             </TamaguiProvider>
           </NetworkGuard>
         </PersistGate>
       </Provider>
-    </GestureHandlerRootView>
+    </GestureHandlerRootView >
   );
 }
-
-const styles = StyleSheet.create({
-  loadingContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5F0EB',
-  },
-});

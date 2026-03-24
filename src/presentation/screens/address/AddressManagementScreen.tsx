@@ -15,7 +15,7 @@ import { MapSearchBar } from "../../components/map/MapSearchBar";
 import { AppIcon } from "../../components/shared/AppIcon";
 import { BaseAuthenticatedLayout } from "../../layouts/BaseAuthenticatedLayout";
 import { popupService } from "../../layouts/popup/PopupService";
-import { BRAND_COLORS } from "../../theme/colors";
+import { useBrandColors } from '../../theme/BrandColorContext';
 
 const repo = new GoongGeocodingRepository();
 const DEBOUNCE_MS = 400;
@@ -29,6 +29,7 @@ interface GeocodingState {
 }
 
 export default function AddressManagementScreen() {
+  const BRAND_COLORS = useBrandColors();
   const router = useRouter();
   const dispatch = useDispatch();
   const cameraRef = useRef<CameraRef>(null);
@@ -67,11 +68,7 @@ export default function AddressManagementScreen() {
     };
   }, []);
 
-  useEffect(() => {
-    initLocation();
-  }, [savedAddress]);
-
-  const initLocation = async () => {
+  const initLocation = useCallback(async () => {
     try {
       if (savedAddress?.lat && savedAddress?.lng) {
         const coords: [number, number] = [savedAddress.lng, savedAddress.lat];
@@ -105,14 +102,13 @@ export default function AddressManagementScreen() {
       } catch (error: any) {
         console.error("[AddressManagement] Reverse geocode failed:", error);
 
-        // Show retry popup for initial load failure
         const shouldRetry = await popupService.confirm(
           "Không thể xác định tên đường do lỗi kết nối. Bạn có muốn thử lại?",
           { title: "Lỗi kết nối", confirmText: "Thử lại", cancelText: "Để sau" }
         );
 
         if (shouldRetry) {
-          initLocation(); // Recursive retry
+          initLocation();
           return;
         }
 
@@ -136,7 +132,11 @@ export default function AddressManagementScreen() {
 
       setInitialRegion([APP_DEFAULT_LOCATION.longitude, APP_DEFAULT_LOCATION.latitude]);
     }
-  };
+  }, [savedAddress]);
+
+  useEffect(() => {
+    initLocation();
+  }, [initLocation]);
 
   const handleSelectSuggestion = async (item: IAddressSuggestion) => {
     try {
@@ -307,12 +307,12 @@ export default function AddressManagementScreen() {
     <BaseAuthenticatedLayout
       headerMode="hidden"
       safeAreaEdges={['bottom']}
-      backgroundColor="#F5F5F5"
+      backgroundColor={BRAND_COLORS.primary.p1}
     >
       {showMapLoading && (
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color={BRAND_COLORS.primary.xanhReu} />
-          <Text style={styles.loadingText}>Đang tải bản đồ...</Text>
+        <View style={[styles.loadingContainer, { backgroundColor: BRAND_COLORS.primary.p1 }]}>
+          <ActivityIndicator size="large" color={BRAND_COLORS.primary.p3} />
+          <Text style={[styles.loadingText, { color: BRAND_COLORS.secondary.s3 }]}>Đang tải bản đồ...</Text>
         </View>
       )}
 
@@ -325,20 +325,19 @@ export default function AddressManagementScreen() {
         >
           <Camera
             ref={cameraRef}
-          // No defaultSettings - camera position controlled via setCamera() only
           />
           <UserLocation visible={true} />
         </GoongMapView>
       )}
 
       <View style={styles.centerMarkerContainer} pointerEvents="none">
-        <Animated.View style={[styles.markerPin, { transform: [{ translateY: markerY }] }]}>
-          <AppIcon name="location" size={32} color={BRAND_COLORS.primary.beSua} />
+        <Animated.View style={[styles.markerPin, { backgroundColor: BRAND_COLORS.primary.p3 }, { transform: [{ translateY: markerY }] }]}>
+          <AppIcon name="location" size={32} color={BRAND_COLORS.primary.p1} />
         </Animated.View>
         <View style={styles.markerShadow} />
       </View>
 
-      <TouchableOpacity style={styles.backButton} onPress={onBack} activeOpacity={0.8}>
+      <TouchableOpacity style={[styles.backButton, { backgroundColor: BRAND_COLORS.primary.p1 }]} onPress={onBack} activeOpacity={0.8}>
         <AppIcon name="arrow-back" size={20} color={BRAND_COLORS.text.primary} />
       </TouchableOpacity>
 
@@ -350,8 +349,8 @@ export default function AddressManagementScreen() {
         initialValue={searchBarValue}
       />
 
-      <TouchableOpacity style={styles.myLocationBtn} onPress={onGoToMyLocation} activeOpacity={0.8}>
-        <AppIcon name="location-sharp" size={22} color={BRAND_COLORS.primary.xanhReu} />
+      <TouchableOpacity style={[styles.myLocationBtn, { backgroundColor: BRAND_COLORS.primary.p1 }]} onPress={onGoToMyLocation} activeOpacity={0.8}>
+        <AppIcon name="location-sharp" size={22} color={BRAND_COLORS.primary.p3} />
       </TouchableOpacity>
 
       {geocodingState.error && (
@@ -361,9 +360,9 @@ export default function AddressManagementScreen() {
         </TouchableOpacity>
       )}
 
-      <View style={styles.footer}>
+      <View style={[styles.footer, { backgroundColor: BRAND_COLORS.primary.p1 }]}>
         <View style={styles.addressPreview}>
-          <Text style={styles.label}>ĐỊA CHỈ GIAO HÀNG</Text>
+          <Text style={[styles.label, { color: BRAND_COLORS.secondary.s3 }]}>ĐỊA CHỈ GIAO HÀNG</Text>
           <View style={styles.addressRow}>
             <Text style={styles.addressText} numberOfLines={2}>
               {geocodingState.isLoading
@@ -371,18 +370,18 @@ export default function AddressManagementScreen() {
                 : addressString || "Di chuyển bản đồ để chọn địa chỉ"}
             </Text>
             {geocodingState.isLoading && (
-              <ActivityIndicator size="small" color={BRAND_COLORS.primary.xanhReu} style={styles.addressLoader} />
+              <ActivityIndicator size="small" color={BRAND_COLORS.primary.p3} style={styles.addressLoader} />
             )}
           </View>
         </View>
 
         <TouchableOpacity
-          style={[styles.btnConfirm, isConfirmDisabled && styles.btnDisabled]}
+          style={[styles.btnConfirm, { backgroundColor: BRAND_COLORS.primary.p3 }, isConfirmDisabled && styles.btnDisabled]}
           onPress={onConfirm}
           disabled={isConfirmDisabled}
           activeOpacity={0.8}
         >
-          <Text style={styles.btnText}>Xác nhận địa chỉ này</Text>
+          <Text style={[styles.btnText, { color: BRAND_COLORS.primary.p1 }]}>Xác nhận địa chỉ này</Text>
         </TouchableOpacity>
       </View>
     </BaseAuthenticatedLayout>
@@ -392,19 +391,15 @@ export default function AddressManagementScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F5F5F5",
   },
   loadingContainer: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: "#F5F5F5",
-    justifyContent: "center",
     alignItems: "center",
     zIndex: 100,
   },
   loadingText: {
     marginTop: 12,
     fontSize: 14,
-    color: "#666666",
   },
   hiddenMap: {
     opacity: 0,
@@ -419,7 +414,6 @@ const styles = StyleSheet.create({
     zIndex: 20,
     width: 44,
     height: 44,
-    backgroundColor: "#FFFFFF",
     borderRadius: 22,
     alignItems: "center",
     justifyContent: "center",
@@ -442,7 +436,6 @@ const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: 22,
-    backgroundColor: BRAND_COLORS.primary.xanhReu,
     alignItems: "center",
     justifyContent: "center",
     elevation: 6,
@@ -463,7 +456,6 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    backgroundColor: "#FFFFFF",
     paddingHorizontal: 20,
     paddingTop: 20,
     paddingBottom: 34,
@@ -480,7 +472,6 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 12,
-    color: "#888888",
     fontWeight: "600",
     letterSpacing: 0.5,
     marginBottom: 6,
@@ -500,7 +491,6 @@ const styles = StyleSheet.create({
     marginLeft: 8,
   },
   btnConfirm: {
-    backgroundColor: BRAND_COLORS.primary.xanhReu,
     paddingVertical: 16,
     borderRadius: 12,
     alignItems: "center",
@@ -509,7 +499,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#CCCCCC",
   },
   btnText: {
-    color: "#FFFFFF",
     fontWeight: "700",
     fontSize: 16,
   },
@@ -520,7 +509,6 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 24,
-    backgroundColor: "#FFFFFF",
     justifyContent: "center",
     alignItems: "center",
     elevation: 4,

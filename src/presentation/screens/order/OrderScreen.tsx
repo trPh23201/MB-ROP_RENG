@@ -11,7 +11,7 @@ import { useAppDispatch, useAppSelector } from '../../../utils/hooks';
 import { MiniCartButton } from '../../components/shared/MiniCartButton';
 import { BaseFullScreenLayout } from '../../layouts/BaseFullScreenLayout';
 import { popupService } from '../../layouts/popup/PopupService';
-import { BRAND_COLORS } from '../../theme/colors';
+import { useBrandColors } from '../../theme/BrandColorContext';
 import PreOrderBottomSheet from '../preorder/PreOrderBottomSheet';
 import { OrderCategoryScroll } from './components/OrderCategoryScroll';
 import { OrderHeader } from './components/OrderHeader';
@@ -19,6 +19,7 @@ import { OrderProductSection } from './components/OrderProductSection';
 import { OrderPromoSection } from './components/OrderPromoSection';
 
 export default function OrderScreen() {
+  const BRAND_COLORS = useBrandColors();
   const insets = useSafeAreaInsets();
   const dispatch = useAppDispatch();
   const handleAddToCart = useAddToCart();
@@ -86,19 +87,19 @@ export default function OrderScreen() {
     popupService.alert(`Đã thêm ${product.name} vào giỏ hàng`, { title: 'Thành công', type: 'success' });
   }, [selectedStore, pendingAction, dispatch, products]);
 
-  const handleMiniCartPress = useCallback(() => {
+  const handleMiniCartPress = () => {
     console.log('[OrderScreen] Opening PreOrder sheet');
     setShowPreOrder(true);
-  }, []);
+  };
 
-  const handlePreOrderClose = useCallback(() => {
+  const handlePreOrderClose = () => {
     setShowPreOrder(false);
-  }, []);
+  };
 
-  const handleOrderSuccess = useCallback(() => {
+  const handleOrderSuccess = () => {
     console.log('[OrderScreen] Order placed successfully, redirecting to Home');
     router.replace('../(tabs)/');
-  }, []);
+  };
 
   const productsByCategory = useMemo(() => {
     const categoryMap = new Map<string, { categoryName: string; products: typeof products }>();
@@ -117,15 +118,16 @@ export default function OrderScreen() {
 
 
   const renderHeader = useCallback(() => (
-    <View style={{ paddingTop: insets.top, backgroundColor: BRAND_COLORS.background.default }}>
+    <View style={[{ paddingTop: insets.top }, { backgroundColor: BRAND_COLORS.screenBg.fresh }]}>
       <OrderHeader />
     </View>
-  ), [insets.top]);
+  ), [insets.top, BRAND_COLORS]);
 
   return (
     <BaseFullScreenLayout
       renderHeader={renderHeader}
       testID="order-screen"
+      backgroundColor={BRAND_COLORS.screenBg.fresh}
       safeAreaEdges={['left', 'right']}
     >
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -137,7 +139,19 @@ export default function OrderScreen() {
             title={combo.title}
             expiresAt={combo.expiresAt}
             products={combo.products}
-            onProductPress={handleAddToCart}
+            onProductPress={(product) => handleAddToCart({
+              id: product.id,
+              menuItemId: product.menuItemId,
+              productId: product.productId,
+              name: product.name,
+              price: product.price,
+              imageUrl: product.imageUrl,
+              categoryId: product.categoryId,
+              originalPrice: product.originalPrice,
+              badge: product.badge,
+              discount: undefined,
+              status: 'AVAILABLE'
+            })}
           />
         ))}
 

@@ -9,7 +9,7 @@ import { AuthActionService } from '../../../domain/services/AuthActionService';
 import { clearPendingAction } from '../../../state/slices/authSlice';
 import { useAppDispatch, useAppSelector } from '../../../utils/hooks';
 import { useAuth } from '../../../utils/hooks/useAuth';
-import { BRAND_COLORS } from '../../theme/colors';
+import { useBrandColors } from '../../theme/BrandColorContext';
 import { OtpInput } from './components/OtpInput';
 import { OtpTimer } from './components/OtpTimer';
 import { RetryButton } from './components/RetryButton';
@@ -32,6 +32,7 @@ interface OtpVerificationScreenProps {
 
 export const OtpVerificationBottomSheet = forwardRef<OtpVerificationRef, OtpVerificationScreenProps>(
   ({ phoneNumber, onVerifyOtp, onSuccess, onResendOtp }, ref) => {
+    const BRAND_COLORS = useBrandColors();
     const router = useRouter();
     const dispatch = useAppDispatch();
     const insets = useSafeAreaInsets();
@@ -203,22 +204,22 @@ export const OtpVerificationBottomSheet = forwardRef<OtpVerificationRef, OtpVeri
         enableDynamicSizing={false}
         backdropComponent={renderBackdrop}
         onDismiss={handleDismiss}
-        backgroundStyle={styles.bottomSheetBackground}
+        backgroundStyle={[styles.bottomSheetBackground, { backgroundColor: BRAND_COLORS.screenBg.warm }]}
         handleIndicatorStyle={styles.indicator}
       >
         <BottomSheetView style={styles.contentWrapper}>
           <TouchableOpacity style={styles.closeButton} onPress={handleClose}>
-            <Text style={styles.closeButtonText}>{OTP_TEXT.CLOSE_BUTTON}</Text>
+            <Text style={[styles.closeButtonText, { color: BRAND_COLORS.primary.p3 }]}>{OTP_TEXT.CLOSE_BUTTON}</Text>
           </TouchableOpacity>
 
           <View style={[styles.content, { paddingBottom: insets.bottom + 24 }]}>
-            <Text style={styles.title}>{OTP_TEXT.TITLE}</Text>
+            <Text style={[styles.title, { color: BRAND_COLORS.primary.p3 }]}>{OTP_TEXT.TITLE}</Text>
 
-            <Text style={styles.subtitle}>
+            <Text style={[styles.subtitle, { color: BRAND_COLORS.primary.p3 }]}>
               {OTP_TEXT.SUBTITLE_PREFIX} {OtpVerificationService.formatPhoneForDisplay(phoneNumber)}
             </Text>
 
-            <Text style={styles.inputLabel}>{OTP_TEXT.INPUT_LABEL}</Text>
+            <Text style={[styles.inputLabel, { color: BRAND_COLORS.primary.p3 }]}>{OTP_TEXT.INPUT_LABEL}</Text>
 
             <OtpInput
               digits={digits}
@@ -250,8 +251,8 @@ export const OtpVerificationBottomSheet = forwardRef<OtpVerificationRef, OtpVeri
             )}
 
             {showMaxRetriesError && (
-              <TouchableOpacity style={styles.okButton} onPress={handleClose}>
-                <Text style={styles.okButtonText}>{OTP_TEXT.BUTTON_OK}</Text>
+              <TouchableOpacity style={[styles.okButton, { backgroundColor: BRAND_COLORS.primary.p3 }]} onPress={handleClose}>
+                <Text style={[styles.okButtonText, { color: BRAND_COLORS.primary.p1 }]}>{OTP_TEXT.BUTTON_OK}</Text>
               </TouchableOpacity>
             )}
           </View>
@@ -265,7 +266,6 @@ OtpVerificationBottomSheet.displayName = 'OtpVerificationBottomSheet';
 
 const styles = StyleSheet.create({
   bottomSheetBackground: {
-    backgroundColor: BRAND_COLORS.background.default,
     borderTopLeftRadius: OTP_LAYOUT.MODAL_BORDER_RADIUS,
     borderTopRightRadius: OTP_LAYOUT.MODAL_BORDER_RADIUS,
   },
@@ -290,7 +290,6 @@ const styles = StyleSheet.create({
   },
   closeButtonText: {
     fontSize: OTP_LAYOUT.CLOSE_BUTTON_FONT_SIZE,
-    color: BRAND_COLORS.primary.xanhReu,
     fontFamily: 'SpaceGrotesk-Bold',
   },
   content: {
@@ -301,14 +300,12 @@ const styles = StyleSheet.create({
   title: {
     fontSize: OTP_LAYOUT.TITLE_FONT_SIZE,
     fontFamily: 'Phudu-Bold',
-    color: BRAND_COLORS.primary.xanhReu,
     textAlign: 'center',
     marginBottom: OTP_LAYOUT.TITLE_MARGIN_BOTTOM,
   },
   subtitle: {
     fontSize: OTP_LAYOUT.SUBTITLE_FONT_SIZE,
     fontFamily: 'SpaceGrotesk-Medium',
-    color: BRAND_COLORS.primary.xanhReu,
     textAlign: 'center',
     lineHeight: OTP_LAYOUT.SUBTITLE_LINE_HEIGHT,
     marginBottom: OTP_LAYOUT.SUBTITLE_MARGIN_BOTTOM,
@@ -316,7 +313,6 @@ const styles = StyleSheet.create({
   inputLabel: {
     fontSize: OTP_LAYOUT.INPUT_LABEL_FONT_SIZE,
     fontFamily: 'SpaceGrotesk-Medium',
-    color: BRAND_COLORS.primary.xanhReu,
     textAlign: 'center',
     marginBottom: OTP_LAYOUT.INPUT_LABEL_MARGIN_BOTTOM,
   },
@@ -335,7 +331,6 @@ const styles = StyleSheet.create({
   },
   okButton: {
     marginTop: OTP_LAYOUT.OK_BUTTON_MARGIN_TOP,
-    backgroundColor: BRAND_COLORS.secondary.nauEspresso,
     borderRadius: OTP_LAYOUT.OK_BUTTON_BORDER_RADIUS,
     paddingVertical: OTP_LAYOUT.OK_BUTTON_PADDING_VERTICAL,
     alignItems: 'center',
@@ -343,6 +338,5 @@ const styles = StyleSheet.create({
   okButtonText: {
     fontSize: OTP_LAYOUT.OK_BUTTON_FONT_SIZE,
     fontFamily: 'Phudu-Bold',
-    color: BRAND_COLORS.background.default,
   },
 });

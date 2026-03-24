@@ -26,7 +26,7 @@ export const MOCK_MEMBERSHIP_TIERS: MembershipTierData[] = [
       {
         id: 'bronze-3',
         icon: '🛍️',
-        description: 'Đặc quyền Đổi Ưu đãi bằng điểm BEAN tích lũy',
+        description: 'Đặc quyền Đổi Ưu đãi bằng điểm Loyalty tích lũy',
       },
     ],
   },
@@ -48,7 +48,7 @@ export const MOCK_MEMBERSHIP_TIERS: MembershipTierData[] = [
       {
         id: 'silver-3',
         icon: '🛍️',
-        description: 'Đặc quyền Đổi Ưu đãi bằng điểm BEAN tích lũy',
+        description: 'Đặc quyền Đổi Ưu đãi bằng điểm Loyalty tích lũy',
       },
     ],
   },
@@ -70,7 +70,7 @@ export const MOCK_MEMBERSHIP_TIERS: MembershipTierData[] = [
       {
         id: 'gold-3',
         icon: '🛍️',
-        description: 'Đặc quyền Đổi Ưu đãi bằng điểm BEAN tích lũy',
+        description: 'Đặc quyền Đổi Ưu đãi bằng điểm Loyalty tích lũy',
       },
     ],
   },
@@ -82,7 +82,7 @@ export const MOCK_MEMBERSHIP_TIERS: MembershipTierData[] = [
       {
         id: 'diamond-1',
         icon: '☕',
-        description: 'Được nhận 1.5 BEAN tích lũy',
+        description: 'Được nhận 1.5 Loyalty tích lũy',
       },
       {
         id: 'diamond-2',
@@ -97,7 +97,7 @@ export const MOCK_MEMBERSHIP_TIERS: MembershipTierData[] = [
       {
         id: 'diamond-4',
         icon: '🎫',
-        description: 'Nhận riêng Ưu đãi từ The Coffee House và đối tác khác',
+        description: 'Nhận riêng Ưu đãi từ Rốp Rẻng và đối tác khác',
       },
     ],
   },

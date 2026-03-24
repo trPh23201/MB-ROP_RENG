@@ -1,17 +1,17 @@
 import { AxiosError } from 'axios';
-import { HomeMenuResponseDTO } from '../../application/dto/HomeMenuDTO';
+import { HomeMenuResponseDTO, MenuAPIItemDTO } from '../../application/dto/HomeMenuDTO';
 import { VouchersResponseDTO } from '../../application/dto/VoucherDTO';
 import { ProductMapper } from '../../application/mappers/ProductMapper';
 import { VoucherMapper } from '../../application/mappers/VoucherMapper';
 import { ApiError, NetworkError } from '../../core/errors/AppErrors';
-import { HomeMenuParams, HomeMenuResult, HomeRepository, VouchersParams, VouchersResult } from '../../domain/repositories/HomeRepository';
+import { HomeMenuParams, HomeMenuResult, HomeRepository, MenuByStoreResult, VouchersParams, VouchersResult } from '../../domain/repositories/HomeRepository';
 import { HOME_API_SUCCESS_CODE, HOME_ENDPOINTS } from '../api/home/HomeApiConfig';
 import { httpClient } from '../http/HttpClient';
 
 export class HomeRepositoryImpl implements HomeRepository {
   private static instance: HomeRepositoryImpl;
 
-  private constructor() {}
+  private constructor() { }
 
   public static getInstance(): HomeRepositoryImpl {
     if (!HomeRepositoryImpl.instance) {
@@ -35,7 +35,54 @@ export class HomeRepositoryImpl implements HomeRepository {
         throw new ApiError(response.message || 'Không thể tải menu');
       }
 
-      return ProductMapper.toHomeMenuResult(response);
+      const partialResult = ProductMapper.toHomeMenuResult(response);
+      const menuId = partialResult.menuId;
+
+      if (menuId) {
+        try {
+          const menuDetailResponse = await httpClient.get<{ menu: { items: MenuAPIItemDTO[], toppings: MenuAPIItemDTO[] } }>(`/menus/${menuId}`);
+          if (menuDetailResponse && menuDetailResponse.menu) {
+            if (menuDetailResponse.menu.items) {
+              partialResult.products = menuDetailResponse.menu.items.map(dto => ProductMapper.toEntityFromMenuItem(dto));
+            }
+            if (menuDetailResponse.menu.toppings) {
+              partialResult.toppings = menuDetailResponse.menu.toppings.map(dto => ProductMapper.toEntityFromMenuItem(dto));
+            }
+          }
+        } catch (detailError) {
+          console.error('[HomeRepositoryImpl] Failed to fetch full menu details:', detailError);
+        }
+      }
+
+      return partialResult;
+    } catch (error) {
+      throw this.handleError(error);
+    }
+  }
+
+  async getMenuByStore(storeId: number): Promise<MenuByStoreResult> {
+    try {
+      const response = await httpClient.get<{
+        menu: {
+          id: number;
+          store_id: number;
+          items: MenuAPIItemDTO[];
+          toppings: MenuAPIItemDTO[]
+        }
+      }>(`/menus/${storeId}`);
+
+      const products = response.menu.items ?
+        response.menu.items.map(dto => ProductMapper.toEntityFromMenuItem(dto)) : [];
+
+      const toppings = response.menu.toppings ?
+        response.menu.toppings.map(dto => ProductMapper.toEntityFromMenuItem(dto)) : [];
+
+      return {
+        menuId: response.menu.id,
+        storeId: response.menu.store_id,
+        products,
+        toppings,
+      };
     } catch (error) {
       throw this.handleError(error);
     }

@@ -2,7 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { networkService } from '../../../infrastructure/services/NetworkService';
-import { BRAND_COLORS } from '../../theme/colors';
+import { useBrandColors } from '../../theme/BrandColorContext';
 import { TYPOGRAPHY } from '../../theme/typography';
 
 interface NetworkGuardProps {
@@ -10,6 +10,7 @@ interface NetworkGuardProps {
 }
 
 export function NetworkGuard({ children }: NetworkGuardProps) {
+    const BRAND_COLORS = useBrandColors();
     const [isConnected, setIsConnected] = useState(true);
     const [isChecking, setIsChecking] = useState(false);
 
@@ -47,19 +48,19 @@ export function NetworkGuard({ children }: NetworkGuardProps) {
                 animationType="fade"
                 statusBarTranslucent
             >
-                <View style={styles.container}>
+                <View style={[styles.container, { backgroundColor: BRAND_COLORS.background.default }]}>
                     <View style={styles.iconContainer}>
                         <Ionicons name="sad-outline" size={64} color={BRAND_COLORS.text.secondary} />
                     </View>
 
-                    <Text style={styles.title}>Oh no! Chúng ta mất kết nối thật rồi</Text>
-                    <Text style={styles.message}>
+                    <Text style={[styles.title, { color: BRAND_COLORS.text.primary }]}>Oh no! Chúng ta mất kết nối thật rồi</Text>
+                    <Text style={[styles.message, { color: BRAND_COLORS.text.secondary }]}>
                         Bạn hãy kiểm tra lại kết nối internet nhé.{'\n'}
                         Hệ thống sẽ tự động kết nối lại khi có mạng.
                     </Text>
 
                     <TouchableOpacity
-                        style={styles.retryButton}
+                        style={[styles.retryButton, { backgroundColor: BRAND_COLORS.primary.p3 }]}
                         onPress={handleRetry}
                         disabled={isChecking}
                     >
@@ -75,7 +76,6 @@ export function NetworkGuard({ children }: NetworkGuardProps) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: BRAND_COLORS.background.default,
         justifyContent: 'center',
         alignItems: 'center',
         padding: 24,
@@ -92,20 +92,17 @@ const styles = StyleSheet.create({
     title: {
         fontSize: TYPOGRAPHY.fontSize.xl,
         fontFamily: TYPOGRAPHY.fontFamily.heading,
-        color: BRAND_COLORS.text.primary,
         marginBottom: 12,
         textAlign: 'center',
     },
     message: {
         fontSize: TYPOGRAPHY.fontSize.md,
         fontFamily: TYPOGRAPHY.fontFamily.bodyRegular,
-        color: BRAND_COLORS.text.secondary,
         textAlign: 'center',
         marginBottom: 24,
         lineHeight: 22,
     },
     retryButton: {
-        backgroundColor: BRAND_COLORS.primary.xanhReu,
         paddingHorizontal: 32,
         paddingVertical: 12,
         borderRadius: 8,

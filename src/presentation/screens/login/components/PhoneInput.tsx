@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { ActivityIndicator, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import { BRAND_COLORS } from '../../../theme/colors';
+import { useBrandColors } from '../../../theme/BrandColorContext';
 import { LOGIN_PHONE_CONFIG, LOGIN_TEXT } from '../LoginConstants';
 import { LOGIN_LAYOUT } from '../LoginLayout';
 
@@ -14,6 +14,7 @@ interface PhoneInputProps {
 }
 
 export function PhoneInput({ value, onChangeText, onSubmit, isValid, autoFocusDelay = 0, isLoading = false }: PhoneInputProps) {
+  const BRAND_COLORS = useBrandColors();
   const inputRef = useRef<TextInput>(null);
 
   useEffect(() => {
@@ -30,11 +31,11 @@ export function PhoneInput({ value, onChangeText, onSubmit, isValid, autoFocusDe
       <View style={styles.inputContainer}>
         <View style={styles.countryCode}>
           <Text style={styles.flag}>{LOGIN_PHONE_CONFIG.FLAG_EMOJI}</Text>
-          <Text style={styles.code}>{LOGIN_PHONE_CONFIG.COUNTRY_CODE}</Text>
+          <Text style={[styles.code, { color: BRAND_COLORS.ui.heading }]}>{LOGIN_PHONE_CONFIG.COUNTRY_CODE}</Text>
         </View>
         <TextInput
           ref={inputRef}
-          style={styles.input}
+          style={[styles.input, { color: BRAND_COLORS.ui.heading }]}
           placeholder={LOGIN_TEXT.PHONE_PLACEHOLDER}
           placeholderTextColor="#CCCCCC"
           value={value}
@@ -48,7 +49,7 @@ export function PhoneInput({ value, onChangeText, onSubmit, isValid, autoFocusDe
       </View>
 
       <TouchableOpacity
-        style={[styles.button, isValid && !isLoading && styles.buttonActive]}
+        style={[styles.button, isValid && !isLoading && { backgroundColor: BRAND_COLORS.bta.primaryBg }]}
         onPress={onSubmit}
         disabled={!isValid || isLoading}
         activeOpacity={0.8}
@@ -56,7 +57,7 @@ export function PhoneInput({ value, onChangeText, onSubmit, isValid, autoFocusDe
         {isLoading ? (
           <ActivityIndicator color={BRAND_COLORS.background.default} />
         ) : (
-          <Text style={[styles.buttonText, isValid && styles.buttonTextActive]}>
+          <Text style={[styles.buttonText, { color: BRAND_COLORS.ui.subtitle }, isValid && { color: BRAND_COLORS.bta.primaryText }]}>
             {LOGIN_TEXT.LOGIN_BUTTON}
           </Text>
         )}
@@ -72,7 +73,7 @@ const styles = StyleSheet.create({
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: BRAND_COLORS.background.default,
+    backgroundColor: '#FFFFFF',
     borderWidth: LOGIN_LAYOUT.INPUT_BORDER_WIDTH,
     borderColor: '#807878ff',
     borderRadius: LOGIN_LAYOUT.INPUT_BORDER_RADIUS,
@@ -91,31 +92,22 @@ const styles = StyleSheet.create({
   code: {
     fontSize: 14,
     fontFamily: 'SpaceGrotesk-Medium',
-    color: BRAND_COLORS.primary.xanhReu,
   },
   input: {
     flex: 1,
     fontSize: 14,
     fontFamily: 'SpaceGrotesk-Medium',
-    color: BRAND_COLORS.primary.xanhReu,
   },
   button: {
-    backgroundColor: '#E5E5E5',
+    backgroundColor: '#FFFFFF',
     borderRadius: LOGIN_LAYOUT.BUTTON_BORDER_RADIUS,
     paddingVertical: LOGIN_LAYOUT.BUTTON_PADDING_VERTICAL,
     alignItems: 'center',
     minHeight: 48,
     justifyContent: 'center',
   },
-  buttonActive: {
-    backgroundColor: BRAND_COLORS.secondary.nauEspresso,
-  },
   buttonText: {
     fontSize: 14,
     fontFamily: 'Phudu-Bold',
-    color: '#999999',
-  },
-  buttonTextActive: {
-    color: BRAND_COLORS.background.default,
   },
 });

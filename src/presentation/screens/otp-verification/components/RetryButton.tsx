@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
-import { BRAND_COLORS } from '../../../theme/colors';
+import { useBrandColors } from '../../../theme/BrandColorContext';
 import { OTP_LAYOUT } from '../OtpVerificationLayout';
 
 interface RetryButtonProps {
@@ -9,9 +9,10 @@ interface RetryButtonProps {
 }
 
 export function RetryButton({ onPress, disabled = false }: RetryButtonProps) {
+  const BRAND_COLORS = useBrandColors();
   return (
     <TouchableOpacity
-      style={[styles.button, disabled && styles.buttonDisabled]}
+      style={[styles.button, { backgroundColor: BRAND_COLORS.primary.p1 }, disabled && styles.buttonDisabled]}
       onPress={onPress}
       disabled={disabled}
       activeOpacity={0.7}
@@ -27,7 +28,6 @@ const styles = StyleSheet.create({
     height: OTP_LAYOUT.RETRY_BUTTON_SIZE,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: BRAND_COLORS.background.default,
     borderRadius: OTP_LAYOUT.RETRY_BUTTON_SIZE / 2,
     marginLeft: OTP_LAYOUT.RETRY_BUTTON_MARGIN_LEFT,
   },

@@ -1,4 +1,4 @@
-import { OrderType, PaymentMethod } from '../../../domain/shared';
+import { PaymentMethod } from '../../../domain/shared';
 
 export const PREORDER_TEXT = {
   TITLE: 'Xác nhận đơn hàng',
@@ -28,59 +28,8 @@ export const PREORDER_TEXT = {
   COMING_SOON_MESSAGE: 'Tính năng đang được phát triển',
 };
 
-export const ORDER_TYPE_LABELS: Record<OrderType, string> = {
-  [OrderType.DELIVERY]: 'Giao hàng',
-  [OrderType.TAKEAWAY]: 'Mang đi',
-  [OrderType.DINE_IN]: 'Dùng tại chỗ',
-};
-
 export const PAYMENT_METHOD_LABELS: Record<PaymentMethod, string> = {
   [PaymentMethod.CASH]: 'Tiền mặt',
   [PaymentMethod.VNPAY]: 'VNPay',
   [PaymentMethod.MOMO]: 'Momo',
-};
-
-export const ORDER_TYPE_SECTION_TITLES: Record<OrderType, string> = {
-  [OrderType.DELIVERY]: 'Giao hàng',
-  [OrderType.TAKEAWAY]: 'Tự đến lấy hàng',
-  [OrderType.DINE_IN]: 'Dùng tại chỗ',
-};
-
-export const SIZE_OPTIONS = [
-  { id: 'large', label: 'Lớn', priceAdjust: 10000 },
-  { id: 'medium', label: 'Vừa', priceAdjust: 0 },
-  { id: 'small', label: 'Nhỏ', priceAdjust: -10000 },
-] as const;
-
-export const ICE_OPTIONS = [
-  { id: 'normal', label: 'Bình Thường' },
-  { id: 'separate', label: 'Đá Riêng' },
-  { id: 'less', label: 'Ít Đá' },
-] as const;
-
-export const SWEETNESS_OPTIONS = [
-  { id: 'normal', label: 'Bình thường' },
-  { id: 'less', label: 'Ít ngọt' },
-  { id: 'more', label: 'Thêm ngọt' },
-] as const;
-
-export const EDIT_PRODUCT_TEXT = {
-  SIZE_LABEL: 'Size',
-  SIZE_HINT: 'Chọn 1 loại size',
-  ICE_LABEL: 'Lượng đá',
-  SWEETNESS_LABEL: 'Độ ngọt',
-  TOPPING_LABEL: 'THÊM LỰA CHỌN',
-  TOPPING_HINT: 'Tùy chọn thêm sữa, syrup hay topping yêu thích để Nhà pha dùng gụ bạn nhất (Một số lựa chọn có phụ phí).',
-  NOTE_LABEL: 'Thêm ghi chú',
-  CHANGE_BUTTON: 'Thay đổi',
-  DELETE_CONFIRM_TITLE: 'Xác nhận',
-  DELETE_CONFIRM_MESSAGE: 'Sản phẩm sẽ bị xóa khỏi giỏ hàng. Bạn có chắc chắn?',
-  DELETE_CONFIRM_CANCEL: 'Hủy',
-  DELETE_CONFIRM_OK: 'Xác nhận',
-};
-
-export const TOPPING_TEXT = {
-  TITLE: 'Topping mua kèm món',
-  SUBTITLE: 'Chọn tối đa 3 loại Topping',
-  APPLY_BUTTON: 'Áp dụng',
 };

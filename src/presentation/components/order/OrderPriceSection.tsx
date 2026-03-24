@@ -1,34 +1,35 @@
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { BRAND_COLORS } from '../../theme/colors';
+import { useBrandColors } from '../../theme/BrandColorContext';
 import { TYPOGRAPHY } from '../../theme/typography';
 import { ORDER_TEXT } from './OrderConstants';
 import { OrderPriceSectionProps } from './OrderInterfaces';
 import { OrderService } from './OrderService';
 
 export function OrderPriceSection({ subtotal, shippingFee, discountAmount = 0, onPromotionPress, showPromotionButton = true }: OrderPriceSectionProps) {
+    const BRAND_COLORS = useBrandColors();
     const totalPrice = OrderService.calculateTotalPrice(subtotal, shippingFee, discountAmount);
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>{ORDER_TEXT.TOTAL_SECTION_TITLE}</Text>
+            <Text style={[styles.title, { color: BRAND_COLORS.ui.heading }]}>{ORDER_TEXT.TOTAL_SECTION_TITLE}</Text>
 
             <View style={styles.content}>
                 <View style={styles.row}>
-                    <Text style={styles.label}>{ORDER_TEXT.SUBTOTAL_LABEL}</Text>
-                    <Text style={styles.value}>{OrderService.formatPrice(subtotal)}</Text>
+                    <Text style={[styles.label, { color: BRAND_COLORS.ui.subtitle }]}>{ORDER_TEXT.SUBTOTAL_LABEL}</Text>
+                    <Text style={[styles.value, { color: BRAND_COLORS.ui.heading }]}>{OrderService.formatPrice(subtotal)}</Text>
                 </View>
 
                 <View style={styles.row}>
-                    <Text style={styles.label}>{ORDER_TEXT.SHIPPING_FEE_LABEL}</Text>
-                    <Text style={styles.value}>{OrderService.formatPrice(shippingFee)}</Text>
+                    <Text style={[styles.label, { color: BRAND_COLORS.ui.subtitle }]}>{ORDER_TEXT.SHIPPING_FEE_LABEL}</Text>
+                    <Text style={[styles.value, { color: BRAND_COLORS.ui.heading }]}>{OrderService.formatPrice(shippingFee)}</Text>
                 </View>
 
                 {discountAmount > 0 && (
                     <View style={styles.row}>
-                        <Text style={styles.label}>{ORDER_TEXT.DISCOUNT_LABEL}</Text>
-                        <Text style={styles.discountValue}>-{OrderService.formatPrice(discountAmount)}</Text>
+                        <Text style={[styles.label, { color: BRAND_COLORS.ui.subtitle }]}>{ORDER_TEXT.DISCOUNT_LABEL}</Text>
+                        <Text style={[styles.discountValue, { color: BRAND_COLORS.bta.primaryBg }]}>-{OrderService.formatPrice(discountAmount)}</Text>
                     </View>
                 )}
 
@@ -38,16 +39,16 @@ export function OrderPriceSection({ subtotal, shippingFee, discountAmount = 0, o
                         onPress={onPromotionPress}
                         activeOpacity={0.7}
                     >
-                        <Text style={styles.promotionLabel}>{ORDER_TEXT.PROMOTION_LABEL}</Text>
-                        <Ionicons name="chevron-forward" size={20} color={BRAND_COLORS.text.tertiary} />
+                        <Text style={[styles.promotionLabel, { color: BRAND_COLORS.bta.primaryBg }]}>{ORDER_TEXT.PROMOTION_LABEL}</Text>
+                        <Ionicons name="chevron-forward" size={20} color={BRAND_COLORS.ui.placeholder} />
                     </TouchableOpacity>
                 )}
 
-                <View style={styles.divider} />
+                <View style={[styles.divider, { backgroundColor: BRAND_COLORS.ui.placeholder }]} />
 
                 <View style={styles.totalRow}>
-                    <Text style={styles.totalLabel}>{ORDER_TEXT.FINAL_TOTAL_LABEL}</Text>
-                    <Text style={styles.totalValue}>{OrderService.formatPrice(totalPrice)}</Text>
+                    <Text style={[styles.totalLabel, { color: BRAND_COLORS.ui.heading }]}>{ORDER_TEXT.FINAL_TOTAL_LABEL}</Text>
+                    <Text style={[styles.totalValue, { color: BRAND_COLORS.bta.primaryBg }]}>{OrderService.formatPrice(totalPrice)}</Text>
                 </View>
             </View>
         </View>
@@ -61,7 +62,6 @@ const styles = StyleSheet.create({
     title: {
         fontSize: TYPOGRAPHY.fontSize.md,
         fontFamily: TYPOGRAPHY.fontFamily.bodyBold,
-        color: BRAND_COLORS.text.primary,
     },
     content: {
         gap: 12,
@@ -74,17 +74,14 @@ const styles = StyleSheet.create({
     label: {
         fontSize: TYPOGRAPHY.fontSize.base,
         fontFamily: TYPOGRAPHY.fontFamily.bodyRegular,
-        color: BRAND_COLORS.text.secondary,
     },
     value: {
         fontSize: TYPOGRAPHY.fontSize.md,
         fontFamily: TYPOGRAPHY.fontFamily.monoBold,
-        color: BRAND_COLORS.text.primary,
     },
     discountValue: {
         fontSize: TYPOGRAPHY.fontSize.md,
         fontFamily: TYPOGRAPHY.fontFamily.monoBold,
-        color: BRAND_COLORS.primary.xanhReu,
     },
     promotionRow: {
         flexDirection: 'row',
@@ -95,11 +92,9 @@ const styles = StyleSheet.create({
     promotionLabel: {
         fontSize: TYPOGRAPHY.fontSize.base,
         fontFamily: TYPOGRAPHY.fontFamily.bodyRegular,
-        color: BRAND_COLORS.primary.xanhReu,
     },
     divider: {
         height: 1,
-        backgroundColor: BRAND_COLORS.border.light,
         marginVertical: 4,
     },
     totalRow: {
@@ -111,11 +106,9 @@ const styles = StyleSheet.create({
     totalLabel: {
         fontSize: TYPOGRAPHY.fontSize.md,
         fontFamily: TYPOGRAPHY.fontFamily.bodyBold,
-        color: BRAND_COLORS.text.primary,
     },
     totalValue: {
         fontSize: 22,
         fontFamily: TYPOGRAPHY.fontFamily.monoBold,
-        color: BRAND_COLORS.primary.xanhReu,
     },
 });

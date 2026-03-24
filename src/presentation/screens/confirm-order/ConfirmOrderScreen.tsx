@@ -6,17 +6,19 @@ import { OrderType, PaymentMethod, PreOrderState } from '../../../domain/shared'
 import { clearConfirmedOrder, SerializableConfirmOrderItem, submitOrder } from '../../../state/slices/confirmOrderSlice';
 import { selectSelectedAddress } from '../../../state/slices/deliverySlice';
 import { clearCart } from '../../../state/slices/orderCartSlice';
+import { resetPreOrder, selectSelectedVouchers } from '../../../state/slices/preOrderSlice';
 import { useAppDispatch, useAppSelector } from '../../../utils/hooks';
 import { OrderAddressCard, OrderDisplayItem, OrderFooter, OrderPriceSection, OrderProductEditBottomSheet, OrderProductEditRef, OrderProductList, OrderTypeSelector } from '../../components/order';
 import { AppIcon } from '../../components/shared/AppIcon';
 import { BaseAuthenticatedLayout } from '../../layouts/BaseAuthenticatedLayout';
 import { popupService } from '../../layouts/popup/PopupService';
-import { BRAND_COLORS } from '../../theme/colors';
+import { useBrandColors } from '../../theme/BrandColorContext';
 import { TYPOGRAPHY } from '../../theme/typography';
 import { PreOrderService } from '../preorder/PreOrderService';
 import { CONFIRM_ORDER_TEXT, PAYMENT_METHOD_LABELS } from './ConfirmOrderConstants';
 
 export default function ConfirmOrderScreen() {
+    const BRAND_COLORS = useBrandColors();
     const insets = useSafeAreaInsets();
     const dispatch = useAppDispatch();
     const editProductModalRef = useRef<OrderProductEditRef>(null);
@@ -25,6 +27,7 @@ export default function ConfirmOrderScreen() {
     const { confirmedOrder, error } = useAppSelector((state) => state.confirmOrder);
     const deliveryAddress = useAppSelector(selectSelectedAddress);
     const cartItems = useAppSelector((state) => state.orderCart.items);
+    const selectedVouchers = useAppSelector(selectSelectedVouchers);
 
     const user = useAppSelector(state => state.auth.user);
     const selectedStore = useAppSelector(state => state.home.store);
@@ -41,7 +44,7 @@ export default function ConfirmOrderScreen() {
 
         return confirmedOrder.items.map((item: SerializableConfirmOrderItem) => ({
             id: item.id,
-            name: item.name || `Sản phẩm #${item.menuItemId}`,
+            name: item.name,
             quantity: item.quantity,
             unitPrice: item.unitPrice,
             totalPrice: item.totalPrice,
@@ -90,13 +93,13 @@ export default function ConfirmOrderScreen() {
         };
     }, [confirmedOrder, displayItems]);
 
-    const handleBack = useCallback(() => {
+    const handleBack = () => {
         router.back();
-    }, []);
+    };
 
-    const handlePromotionPress = useCallback(() => {
+    const handlePromotionPress = () => {
         popupService.alert(CONFIRM_ORDER_TEXT.VOUCHER_NOTICE, { title: 'Thông báo' });
-    }, []);
+    };
 
     const handleConfirmOrder = useCallback(async () => {
         if (!confirmedOrder || !user || !selectedStore) {
@@ -116,7 +119,8 @@ export default function ConfirmOrderScreen() {
                 selectedStore,
                 deliveryAddress,
                 cartItems,
-                currentPreOrderState
+                currentPreOrderState,
+                selectedVouchers
             );
 
             await dispatch(submitOrder(payload)).unwrap();
@@ -128,6 +132,7 @@ export default function ConfirmOrderScreen() {
 
             dispatch(clearCart());
             dispatch(clearConfirmedOrder());
+            dispatch(resetPreOrder());
             router.replace('/order-history');
 
         } catch (err) {
@@ -137,20 +142,16 @@ export default function ConfirmOrderScreen() {
                 type: 'error'
             });
         }
-    }, [confirmedOrder, dispatch, user, selectedStore, deliveryAddress, cartItems, orderType]);
-
-
-
-
+    }, [confirmedOrder, dispatch, user, selectedStore, deliveryAddress, cartItems, orderType, selectedVouchers]);
 
     if (!confirmedOrder || error) {
         return (
             <BaseAuthenticatedLayout safeAreaEdges={['left', 'right']}>
                 <View style={styles.errorContainer}>
-                    <Text style={styles.errorTitle}>{CONFIRM_ORDER_TEXT.NO_ORDER_TITLE}</Text>
-                    <Text style={styles.errorMessage}>{error || CONFIRM_ORDER_TEXT.NO_ORDER_MESSAGE}</Text>
-                    <TouchableOpacity style={styles.retryButton} onPress={handleBack}>
-                        <Text style={styles.retryButtonText}>{CONFIRM_ORDER_TEXT.BACK_BUTTON}</Text>
+                    <Text style={[styles.errorTitle, { color: BRAND_COLORS.ui.heading }]}>{CONFIRM_ORDER_TEXT.NO_ORDER_TITLE}</Text>
+                    <Text style={[styles.errorMessage, { color: BRAND_COLORS.ui.subtitle }]}>{error || CONFIRM_ORDER_TEXT.NO_ORDER_MESSAGE}</Text>
+                    <TouchableOpacity style={[styles.retryButton, { backgroundColor: BRAND_COLORS.bta.primaryBg }]} onPress={handleBack}>
+                        <Text style={[styles.retryButtonText, { color: BRAND_COLORS.bta.primaryText }]}>{CONFIRM_ORDER_TEXT.BACK_BUTTON}</Text>
                     </TouchableOpacity>
                 </View>
             </BaseAuthenticatedLayout>
@@ -161,7 +162,7 @@ export default function ConfirmOrderScreen() {
         <BaseAuthenticatedLayout safeAreaEdges={['left', 'right']}>
             <View style={{ flex: 1 }}>
                 <ScrollView
-                    style={styles.scrollView}
+                    style={[styles.scrollView, { backgroundColor: BRAND_COLORS.primary.p1 }]}
                     contentContainerStyle={[styles.contentContainer, { paddingBottom: 200 }]}
                     showsVerticalScrollIndicator={false}
                 >
@@ -192,10 +193,10 @@ export default function ConfirmOrderScreen() {
                     />
 
                     <View style={styles.paymentSection}>
-                        <Text style={styles.paymentTitle}>{CONFIRM_ORDER_TEXT.PAYMENT_SECTION_TITLE}</Text>
-                        <View style={styles.paymentCard}>
-                            <AppIcon name="card-outline" size={24} color={BRAND_COLORS.primary.xanhReu} />
-                            <Text style={styles.paymentMethod}>
+                        <Text style={[styles.paymentTitle, { color: BRAND_COLORS.ui.heading }]}>{CONFIRM_ORDER_TEXT.PAYMENT_SECTION_TITLE}</Text>
+                        <View style={[styles.paymentCard, { backgroundColor: BRAND_COLORS.screenBg.fresh, borderColor: BRAND_COLORS.ui.placeholder }]}>
+                            <AppIcon name="card-outline" size={24} color={BRAND_COLORS.bta.primaryBg} />
+                            <Text style={[styles.paymentMethod, { color: BRAND_COLORS.ui.heading }]}>
                                 {PAYMENT_METHOD_LABELS[confirmedOrder.paymentMethod] || confirmedOrder.paymentMethod}
                             </Text>
                         </View>
@@ -215,9 +216,9 @@ export default function ConfirmOrderScreen() {
 
                 <Modal visible={isSubmitting} transparent statusBarTranslucent animationType="fade">
                     <View style={styles.overlayContainer}>
-                        <View style={styles.loadingBox}>
-                            <ActivityIndicator size="large" color={BRAND_COLORS.primary.xanhReu} />
-                            <Text style={styles.loadingText}>Đang gửi đơn hàng...</Text>
+                        <View style={[styles.loadingBox, { backgroundColor: BRAND_COLORS.screenBg.warm }]}>
+                            <ActivityIndicator size="large" color={BRAND_COLORS.bta.primaryBg} />
+                            <Text style={[styles.loadingText, { color: BRAND_COLORS.ui.subtitle }]}>Đang gửi đơn hàng...</Text>
                         </View>
                     </View>
                 </Modal>
@@ -236,8 +237,6 @@ const styles = StyleSheet.create({
         height: 56,
         paddingHorizontal: 16,
         borderBottomWidth: 1,
-        borderBottomColor: BRAND_COLORS.border.light,
-        backgroundColor: BRAND_COLORS.background.primary,
     },
     backButton: {
         width: 40,
@@ -248,14 +247,12 @@ const styles = StyleSheet.create({
     headerTitle: {
         fontSize: TYPOGRAPHY.fontSize.md,
         fontFamily: TYPOGRAPHY.fontFamily.bodyBold,
-        color: BRAND_COLORS.text.primary,
     },
     headerRight: {
         width: 40,
     },
     scrollView: {
         flex: 1,
-        backgroundColor: BRAND_COLORS.background.default,
     },
     contentContainer: {
         padding: 16,
@@ -270,7 +267,6 @@ const styles = StyleSheet.create({
         marginTop: 12,
         fontSize: TYPOGRAPHY.fontSize.base,
         fontFamily: TYPOGRAPHY.fontFamily.bodyRegular,
-        color: BRAND_COLORS.text.secondary,
     },
     errorContainer: {
         flex: 1,
@@ -281,26 +277,22 @@ const styles = StyleSheet.create({
     errorTitle: {
         fontSize: TYPOGRAPHY.fontSize.lg,
         fontFamily: TYPOGRAPHY.fontFamily.bodyBold,
-        color: BRAND_COLORS.text.primary,
         marginBottom: 8,
     },
     errorMessage: {
         fontSize: TYPOGRAPHY.fontSize.base,
         fontFamily: TYPOGRAPHY.fontFamily.bodyRegular,
-        color: BRAND_COLORS.text.secondary,
         textAlign: 'center',
         marginBottom: 24,
     },
     retryButton: {
         paddingHorizontal: 24,
         paddingVertical: 12,
-        backgroundColor: BRAND_COLORS.primary.xanhReu,
         borderRadius: 12,
     },
     retryButtonText: {
         fontSize: TYPOGRAPHY.fontSize.base,
         fontFamily: TYPOGRAPHY.fontFamily.bodyMedium,
-        color: BRAND_COLORS.text.inverse,
     },
     paymentSection: {
         gap: 12,
@@ -308,22 +300,18 @@ const styles = StyleSheet.create({
     paymentTitle: {
         fontSize: TYPOGRAPHY.fontSize.md,
         fontFamily: TYPOGRAPHY.fontFamily.bodyBold,
-        color: BRAND_COLORS.text.primary,
     },
     paymentCard: {
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: BRAND_COLORS.background.primary,
         borderRadius: 12,
         padding: 16,
-        borderWidth: 1,
-        borderColor: BRAND_COLORS.border.light,
+        borderWidth: 3,
         gap: 12,
     },
     paymentMethod: {
         fontSize: TYPOGRAPHY.fontSize.base,
         fontFamily: TYPOGRAPHY.fontFamily.bodyMedium,
-        color: BRAND_COLORS.text.primary,
     },
     footerContainer: {
         position: 'absolute',
@@ -338,7 +326,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     loadingBox: {
-        backgroundColor: BRAND_COLORS.background.primary,
         padding: 24,
         borderRadius: 16,
         alignItems: 'center',

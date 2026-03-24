@@ -1,4 +1,4 @@
-import { Product } from '../../../data/mockProducts';
+import { Product } from '../../../domain/entities/Product';
 
 export interface CartItem {
   id: string;

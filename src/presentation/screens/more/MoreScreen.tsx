@@ -7,19 +7,22 @@ import { logout } from '../../../state/slices/authSlice';
 import { useAppDispatch, useAppSelector } from '../../../utils/hooks';
 import { BaseFullScreenLayout } from '../../layouts/BaseFullScreenLayout';
 import { popupService } from '../../layouts/popup/PopupService';
-import { BRAND_COLORS } from '../../theme/colors';
+import { useBrandColors } from '../../theme/BrandColorContext';
 import { ACCOUNT_MENU, MORE_STRINGS, SUPPORT_MENU } from './MoreConstants';
 import { MenuSectionData } from './MoreInterfaces';
 import { MenuSection } from './components/MenuSection';
 import { MoreHeader } from './components/MoreHeader';
+import { QRCodePopup } from './components/QRCodePopup';
 import { UtilityGrid } from './components/UtilityGrid';
 import { VersionFooter } from './components/VersionFooter';
 
 export default function MoreScreen() {
+  const BRAND_COLORS = useBrandColors();
   const dispatch = useAppDispatch();
   const router = useRouter();
   const db = useSQLiteContext();
-  const { isAuthenticated, user } = useAppSelector((state) => state.auth);
+  const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
+  const user = useAppSelector((state) => state.auth.user);
 
   const accountMenuSection: MenuSectionData = useMemo(() => {
     if (isAuthenticated) {
@@ -50,8 +53,6 @@ export default function MoreScreen() {
 
     dispatch(logout());
 
-    // 3. Navigation (Optional: redirect to welcome or stay here)
-    // router.replace('/');
   }, [dispatch, user?.uuid, db]);
 
   const handleMenuPress = useCallback((id: string) => {
@@ -83,13 +84,23 @@ export default function MoreScreen() {
 
       case 'profile':
         if (isAuthenticated) {
-          console.log('Navigate to Profile');
+          router.push('../profile');
+        } else {
+          router.push('../(auth)/login');
         }
         break;
 
       case 'history':
         if (isAuthenticated) {
           router.push('../order-history');
+        } else {
+          router.push('../(auth)/login');
+        }
+        break;
+
+      case 'scan-qr':
+        if (isAuthenticated && user?.uuid) {
+          popupService.custom(QRCodePopup as any, { uuid: user.uuid });
         } else {
           router.push('../(auth)/login');
         }
@@ -104,7 +115,7 @@ export default function MoreScreen() {
     <BaseFullScreenLayout
       renderHeader={() => <MoreHeader />}
       safeAreaEdges={['left', 'right']}
-      backgroundColor={BRAND_COLORS.background.paper}
+      backgroundColor={BRAND_COLORS.screenBg.fresh}
     >
       <ScrollView showsVerticalScrollIndicator={false}>
         <UtilityGrid onItemPress={handleMenuPress} />

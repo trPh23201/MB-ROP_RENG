@@ -2,7 +2,7 @@ import { router, usePathname } from 'expo-router';
 import React, { useEffect } from 'react';
 import { ActivityIndicator, View } from 'react-native';
 import { useAppSelector } from '../../utils/hooks';
-import { BRAND_COLORS } from '../theme/colors';
+import { useBrandColors } from '../theme/BrandColorContext';
 import { BaseFullScreenLayout, BaseFullScreenLayoutProps } from './BaseFullScreenLayout';
 
 export interface BaseAuthenticatedLayoutProps extends BaseFullScreenLayoutProps {
@@ -56,7 +56,7 @@ export function BaseAuthenticatedLayout({
         return (
             <BaseFullScreenLayout {...rest}>
                 <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                    <ActivityIndicator size="large" color={BRAND_COLORS.primary.xanhReu} />
+                    <ActivityIndicator size="large" color={BRAND_COLORS.primary.p3} />
                 </View>
             </BaseFullScreenLayout>
         );

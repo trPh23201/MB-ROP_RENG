@@ -1,7 +1,7 @@
 // src/presentation/screens/deals/components/MembershipCard.tsx
 import React, { useRef } from 'react';
 import { Animated, Pressable, StyleSheet, Text, View } from 'react-native';
-import { BRAND_COLORS } from '../../../theme/colors';
+import { useBrandColors } from '../../../theme/BrandColorContext';
 import { MembershipTierData } from '../DealsInterfaces';
 import { DEALS_LAYOUT } from '../DealsLayout';
 
@@ -12,6 +12,7 @@ interface MembershipCardProps {
 }
 
 export function MembershipCard({ tier, isSelected, onPress }: MembershipCardProps) {
+  const BRAND_COLORS = useBrandColors();
   const scaleAnim = useRef(new Animated.Value(1)).current;
 
   const handlePressIn = () => {
@@ -41,7 +42,7 @@ export function MembershipCard({ tier, isSelected, onPress }: MembershipCardProp
         style={[
           styles.container,
           { transform: [{ scale: scaleAnim }] },
-          isSelected && styles.containerSelected,
+          isSelected && [styles.containerSelected, { backgroundColor: BRAND_COLORS.screenBg.warm }],
         ]}
       >
         <View
@@ -55,7 +56,7 @@ export function MembershipCard({ tier, isSelected, onPress }: MembershipCardProp
           </View> */}
         </View>
         
-        <Text style={styles.tierName}>{tier.name}</Text>
+        <Text style={[styles.tierName, { color: BRAND_COLORS.ui.heading }]}>{tier.name}</Text>
       </Animated.View>
     </Pressable>
   );
@@ -72,7 +73,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: DEALS_LAYOUT.TIER_CONTAINER_PADDING_HORIZONTAL,
   },
   containerSelected: {
-    backgroundColor: BRAND_COLORS.background.default,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.15,
@@ -96,12 +96,10 @@ const styles = StyleSheet.create({
   logoText: {
     fontSize: DEALS_LAYOUT.TIER_LOGO_SIZE,
     fontFamily: 'Phudu-Bold',
-    color: BRAND_COLORS.background.default,
   },
   tierName: {
     fontSize: DEALS_LAYOUT.TIER_NAME_SIZE,
     fontFamily: 'SpaceGrotesk-Medium',
-    color: BRAND_COLORS.primary.xanhReu,
     marginTop: DEALS_LAYOUT.TIER_NAME_MARGIN_TOP,
     paddingBottom: DEALS_LAYOUT.TIER_NAME_MARGIN_BOTTOM,
     textAlign: 'center',

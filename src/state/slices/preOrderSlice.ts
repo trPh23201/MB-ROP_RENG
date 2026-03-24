@@ -13,6 +13,7 @@ interface PreOrderState {
   error: string | null;
   lastOrder: SerializablePreOrder | null;
   orderType: OrderType;
+  selectedVouchers: { code: string }[];
 }
 
 const initialState: PreOrderState = {
@@ -20,6 +21,7 @@ const initialState: PreOrderState = {
   error: null,
   lastOrder: null,
   orderType: OrderType.TAKEAWAY,
+  selectedVouchers: [],
 };
 
 export const createPreOrder = createAsyncThunk<SerializablePreOrder, CreatePreOrderParams, { rejectValue: string }>('preOrder/create',
@@ -46,6 +48,15 @@ const preOrderSlice = createSlice({
     setOrderType: (state, action: PayloadAction<OrderType>) => {
       state.orderType = action.payload;
     },
+    setSelectedVouchers: (state, action: PayloadAction<{ code: string }[]>) => {
+      state.selectedVouchers = action.payload;
+    },
+    resetPreOrder: (state) => {
+      state.lastOrder = null;
+      state.selectedVouchers = [];
+      state.error = null;
+      state.orderType = OrderType.TAKEAWAY;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -64,10 +75,11 @@ const preOrderSlice = createSlice({
   },
 });
 
-export const { clearPreOrderError, setOrderType } = preOrderSlice.actions;
+export const { clearPreOrderError, setOrderType, setSelectedVouchers, resetPreOrder } = preOrderSlice.actions;
 export default preOrderSlice.reducer;
 
 export const selectIsLoading = (state: { preOrder: PreOrderState }) => state.preOrder.isLoading;
 export const selectError = (state: { preOrder: PreOrderState }) => state.preOrder.error;
 export const selectLastOrder = (state: { preOrder: PreOrderState }) => state.preOrder.lastOrder;
 export const selectPreOrderType = (state: { preOrder: PreOrderState }) => state.preOrder.orderType;
+export const selectSelectedVouchers = (state: { preOrder: PreOrderState }) => state.preOrder.selectedVouchers;

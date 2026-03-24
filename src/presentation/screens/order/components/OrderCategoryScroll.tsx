@@ -1,11 +1,14 @@
 import React from 'react';
-import { ScrollView, TouchableOpacity, Text, View, StyleSheet } from 'react-native';
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { MOCK_CATEGORIES } from '../../../../data/mockProducts';
 import { AppIcon } from '../../../components/shared/AppIcon';
-import { BRAND_COLORS } from '../../../theme/colors';
+import { useBrandColors } from '../../../theme/BrandColorContext';
 import { ORDER_LAYOUT } from '../OrderLayout';
 
 export function OrderCategoryScroll() {
+  const BRAND_COLORS = useBrandColors();
+  console.log('[OrderCategoryScroll] Render! Color p1 is:', BRAND_COLORS.primary.p1);
+
   return (
     <ScrollView
       horizontal
@@ -14,10 +17,10 @@ export function OrderCategoryScroll() {
     >
       {MOCK_CATEGORIES.map((category) => (
         <TouchableOpacity key={category.id} style={styles.item}>
-          <View style={styles.iconContainer}>
-            <AppIcon name={category.icon} size="lg" />
+          <View style={[styles.iconContainer, { backgroundColor: BRAND_COLORS.primary.p1 }]}>
+            <AppIcon name={category.icon} size="lg" color={BRAND_COLORS.primary.p3} />
           </View>
-          <Text style={styles.label} numberOfLines={2}>
+          <Text style={[styles.label, { color: BRAND_COLORS.primary.p3 }]} numberOfLines={2}>
             {category.name}
           </Text>
         </TouchableOpacity>
@@ -39,7 +42,6 @@ const styles = StyleSheet.create({
   iconContainer: {
     width: ORDER_LAYOUT.CATEGORY_ICON_SIZE,
     height: ORDER_LAYOUT.CATEGORY_ICON_SIZE,
-    backgroundColor: BRAND_COLORS.primary.beSua,
     borderRadius: ORDER_LAYOUT.CATEGORY_ICON_SIZE / 2,
     justifyContent: 'center',
     alignItems: 'center',
@@ -48,7 +50,6 @@ const styles = StyleSheet.create({
   label: {
     fontSize: ORDER_LAYOUT.CATEGORY_LABEL_SIZE,
     fontFamily: 'SpaceGrotesk-Medium',
-    color: BRAND_COLORS.primary.xanhReu,
     textAlign: 'center',
   },
 });

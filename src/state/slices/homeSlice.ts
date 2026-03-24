@@ -22,6 +22,7 @@ interface HomeState {
   vouchers: Voucher[];
   vouchersLoading: boolean;
   vouchersError: string | null;
+  toppings: Product[];
 }
 
 interface FetchParams {
@@ -39,6 +40,7 @@ export const fetchHomeMenu = createAsyncThunk("home/fetchMenu", async (params: F
       store: result.store,
       menuId: result.menuId,
       products: result.products,
+      toppings: result.toppings,
       page: params.page ?? 0,
       hasMore: result.products.length === (params.limit ?? 10),
     };
@@ -75,6 +77,24 @@ export const fetchVouchers = createAsyncThunk(
   },
 );
 
+export const fetchMenuByStore = createAsyncThunk("home/fetchMenuByStore", async (storeId: number, { rejectWithValue }) => {
+    try {
+      console.log(`[fetchMenuByStore] Fetching menu for store_id: ${storeId}`);
+      const result = await homeRepository.getMenuByStore(storeId);
+      console.log(`[fetchMenuByStore] Received ${result.products.length} products, ${result.toppings.length} toppings from store_id: ${storeId}`);
+      return {
+        storeId: result.storeId,
+        menuId: result.menuId,
+        products: result.products,
+        toppings: result.toppings,
+      };
+    } catch (error) {
+      console.error(`[fetchMenuByStore] Error fetching menu for store_id: ${storeId}`, error);
+      return rejectWithValue(error instanceof Error ? error.message : "Không thể tải menu cửa hàng");
+    }
+  },
+);
+
 const initialState: HomeState = {
   storeId: null,
   store: null,
@@ -88,6 +108,7 @@ const initialState: HomeState = {
   vouchers: [],
   vouchersLoading: false,
   vouchersError: null,
+  toppings: [],
 };
 
 const homeSlice = createSlice({
@@ -117,6 +138,7 @@ const homeSlice = createSlice({
         state.store = action.payload.store;
         state.menuId = action.payload.menuId;
         state.products = action.payload.products;
+        state.toppings = action.payload.toppings;
         state.currentPage = action.payload.page;
         state.hasMore = action.payload.hasMore;
       })
@@ -155,6 +177,25 @@ const homeSlice = createSlice({
         state.vouchersLoading = false;
         state.vouchersError = action.payload as string;
       });
+
+    builder
+      .addCase(fetchMenuByStore.pending, (state) => {
+        state.productsLoading = true;
+        state.productsError = null;
+      })
+      .addCase(fetchMenuByStore.fulfilled, (state, action) => {
+        state.productsLoading = false;
+        state.storeId = action.payload.storeId;
+        state.menuId = action.payload.menuId;
+        state.products = action.payload.products;
+        state.toppings = action.payload.toppings;
+        state.currentPage = 0;
+        state.hasMore = false;
+      })
+      .addCase(fetchMenuByStore.rejected, (state, action) => {
+        state.productsLoading = false;
+        state.productsError = action.payload as string;
+      });
   },
 });
 
@@ -171,3 +212,4 @@ export const selectHasMoreProducts = (state: { home: HomeState }) => state.home.
 export const selectVouchers = (state: { home: HomeState }) => state.home.vouchers;
 export const selectVouchersLoading = (state: { home: HomeState }) => state.home.vouchersLoading;
 export const selectStoreId = (state: { home: HomeState }) => state.home.storeId;
+export const selectToppings = (state: { home: HomeState }) => state.home.toppings;

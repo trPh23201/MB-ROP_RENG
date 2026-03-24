@@ -25,7 +25,7 @@ export const GoongMapView: React.FC<GoongMapViewProps> = ({ centerCoordinate = D
   useEffect(() => {
     const initCache = async () => {
       try {
-        await MapLibreGL.OfflineManager.setMaximumAmbientCacheSize(500 * 1024 * 1024); // 500MB
+        await MapLibreGL.OfflineManager.setMaximumAmbientCacheSize(500 * 1024 * 1024);
         // await MapLibreGL.OfflineManager.invalidateAmbientCache(); // Use only if cache is corrupted
         console.log(`[GoongMap] Ambient cache size set to 500MB`);
       } catch (error) {

@@ -14,6 +14,14 @@ export interface HomeMenuResult {
   store: Store;
   menuId: number;
   products: Product[];
+  toppings: Product[];
+}
+
+export interface MenuByStoreResult {
+  menuId: number;
+  storeId: number;
+  products: Product[];
+  toppings: Product[];
 }
 
 export interface VouchersParams {
@@ -30,5 +38,6 @@ export interface VouchersResult {
 
 export interface HomeRepository {
   getHomeMenu(params: HomeMenuParams): Promise<HomeMenuResult>;
+  getMenuByStore(storeId: number): Promise<MenuByStoreResult>;
   getVouchers(params: VouchersParams): Promise<VouchersResult>;
 }

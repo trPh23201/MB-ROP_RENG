@@ -16,13 +16,9 @@ export interface CreatePreOrderRequestDTO {
     size: string;
     ice: string;
     sweetness: string;
-    toppings: {
-      id: string;
-      name: string;
-      price: number;
-    }[];
+    toppings: { toppingIds: number }[];
   }[];
-  vouchers: number[];
+  vouchers: { voucher_code: string }[];
   promotions: { promotionId: string }[];
   dateTimeCreated: string;
   dateTimeUpdated: string;
@@ -30,10 +26,19 @@ export interface CreatePreOrderRequestDTO {
 
 export interface CreatePreOrderResponseDTO {
   order: {
-    subtotal: number;
-    discount_amount: number;
-    delivery_fee: number;
-    total: number;
+    summary: {
+      subtotal: number;
+      discount_amount: number;
+      delivery_fee: number;
+      total: number;
+    };
+    available_vouchers: {
+      code: string;
+      name: string;
+      description: string | null;
+      discount_amount: number;
+      type: string;
+    }[];
   };
 }
 
@@ -42,9 +47,11 @@ export type ConfirmOrderRequestDTO = CreatePreOrderRequestDTO;
 export interface ConfirmOrderResponseDTO {
   order: {
     order_id: number;
-    subtotal: number;
-    discount_amount: number;
-    delivery_fee: number;
-    total: number;
+    summary: {
+      subtotal: number;
+      discount_amount: number;
+      delivery_fee: number;
+      total: number;
+    };
   };
 }
