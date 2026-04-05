@@ -20,6 +20,32 @@ export class HomeRepositoryImpl implements HomeRepository {
     return HomeRepositoryImpl.instance;
   }
 
+  private extractToppings = (menuItems: MenuAPIItemDTO[]) => {
+    const toppingMap = new Map<string, any>();
+    menuItems?.forEach(dto => {
+      dto.product?.option_groups?.forEach(group => {
+        if (group.is_topping) {
+          group.items.forEach(group_item => {
+            if (!toppingMap.has(String(group_item.id))) {
+              toppingMap.set(String(group_item.id), {
+                //Currently use for mapping
+                id: String(group_item.id),
+                name: group_item.name,
+                price: Number(group_item.additional_price),
+                //Additional fields for potential future use
+                linkedProductId: group_item.linked_product_id,
+                isActive: group_item.is_active,
+                optionGroupId: group_item.id,
+                optionGroupName: group.name,
+              });
+            }
+          });
+        }
+      });
+    });
+    return Array.from(toppingMap.values());
+  };
+ 
   async getHomeMenu(params: HomeMenuParams): Promise<HomeMenuResult> {
     try {
       const response = await httpClient.get<HomeMenuResponseDTO>(HOME_ENDPOINTS.MENU, {
@@ -44,9 +70,7 @@ export class HomeRepositoryImpl implements HomeRepository {
           if (menuDetailResponse && menuDetailResponse.menu) {
             if (menuDetailResponse.menu.items) {
               partialResult.products = menuDetailResponse.menu.items.map(dto => ProductMapper.toEntityFromMenuItem(dto));
-            }
-            if (menuDetailResponse.menu.toppings) {
-              partialResult.toppings = menuDetailResponse.menu.toppings.map(dto => ProductMapper.toEntityFromMenuItem(dto));
+              partialResult.toppings = this.extractToppings(menuDetailResponse.menu.items);
             }
           }
         } catch (detailError) {
@@ -67,15 +91,15 @@ export class HomeRepositoryImpl implements HomeRepository {
           id: number;
           store_id: number;
           items: MenuAPIItemDTO[];
-          toppings: MenuAPIItemDTO[]
+          toppings?: MenuAPIItemDTO[];
         }
-      }>(`/menus/${storeId}`);
+      }>(`/menus/v2/${storeId}`);
 
-      const products = response.menu.items ?
-        response.menu.items.map(dto => ProductMapper.toEntityFromMenuItem(dto)) : [];
+      const products = response.menu.items
+        ? response.menu.items.map(dto => ProductMapper.toEntityFromMenuItem(dto))
+        : [];
 
-      const toppings = response.menu.toppings ?
-        response.menu.toppings.map(dto => ProductMapper.toEntityFromMenuItem(dto)) : [];
+      const toppings = this.extractToppings(response.menu.items);
 
       return {
         menuId: response.menu.id,

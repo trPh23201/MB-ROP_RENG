@@ -18,8 +18,8 @@ interface ApiStore {
 export class StoresUIService {
 
   static mapApiStoreToUIStore(apiStore: ApiStore, userLocation: { lat: number; lng: number } | null): UIStore {
-    const storeLat = apiStore.location.coordinates[1];
-    const storeLng = apiStore.location.coordinates[0];
+    const storeLat = apiStore.location?.coordinates[1];
+    const storeLng = apiStore.location?.coordinates[0];
     
     const distanceKm = userLocation ? this.calculateDistance(userLocation.lat, userLocation.lng, storeLat, storeLng) : 999;
 
