@@ -88,7 +88,7 @@ export const AddToppingBottomSheet = forwardRef<AddToppingRef, AddToppingBottomS
 
             <BottomSheetScrollView contentContainerStyle={[styles.contentWrapper, { paddingBottom: insets.bottom }]}>
                 {availableToppings.map((topping) => {
-                    const mappedTopping: Topping = { id: topping.menuItemId?.toString() || topping.id, name: topping.name, price: topping.price };
+                    const mappedTopping: Topping = { id: topping.id, name: topping.name, price: topping.price };
                     const isSelected = selectedToppings.some((t) => t.id === mappedTopping.id);
                     return (
                         <TouchableOpacity
@@ -101,9 +101,9 @@ export const AddToppingBottomSheet = forwardRef<AddToppingRef, AddToppingBottomS
                                 {isSelected && <Ionicons name="checkmark" size={16} color={BRAND_COLORS.bta.primaryText} />}
                             </View>
                             <Text style={[styles.toppingName, { color: BRAND_COLORS.ui.heading }, !isSelected && selectedToppings.length >= 3 && styles.toppingDisabled, !isSelected && selectedToppings.length >= 3 && { color: BRAND_COLORS.ui.placeholder }]}>
-                                {topping.name}
+                                {mappedTopping.name}
                             </Text>
-                            <Text style={[styles.toppingPrice, { color: BRAND_COLORS.ui.heading }]}>{OrderService.formatPrice(topping.price)}</Text>
+                            <Text style={[styles.toppingPrice, { color: BRAND_COLORS.ui.heading }]}>{OrderService.formatPrice(mappedTopping.price)}</Text>
                         </TouchableOpacity>
                     );
                 })}
