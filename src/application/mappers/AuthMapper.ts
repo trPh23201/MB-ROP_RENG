@@ -20,6 +20,8 @@ export class AuthMapper {
       currentLevelId: dto.current_level_id,
       nextLevelId: dto.next_level_id,
       otp: dto.otp,
+      qrcodeUrl: dto.qrcode_url ?? null,
+      barcodeUrl: dto.barcode_url ?? null,
       store: dto.store,
       createdAt: new Date(dto.created_at),
       updatedAt: dto.updated_at ? new Date(dto.updated_at) : null,
@@ -42,6 +44,8 @@ export class AuthMapper {
       currentLevelId: user.currentLevelId,
       nextLevelId: user.nextLevelId,
       otp: user.otp,
+      qrcodeUrl: user.qrcodeUrl ?? null,
+      barcodeUrl: user.barcodeUrl ?? null,
       store: user.store,
       createdAt: user.createdAt.toISOString(),
       updatedAt: user.updatedAt?.toISOString() ?? null,
@@ -65,6 +69,8 @@ export interface SerializableUser {
   currentLevelId: number | null;
   nextLevelId: number | null;
   otp?: string;
+  qrcodeUrl?: string | null;
+  barcodeUrl?: string | null;
   store?: any | null;
   createdAt: string;
   updatedAt: string | null;

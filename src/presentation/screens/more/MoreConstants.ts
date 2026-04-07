@@ -22,7 +22,7 @@ export const SUPPORT_MENU: MenuSectionData = {
   title: 'Tiện ích',
   items: [
     { id: 'profile', label: 'Tài khoản', icon: 'person-outline' },
-    { id: 'scan-qr', label: 'Scan QR', icon: 'qr-code-outline' },
+    // { id: 'scan-qr', label: 'Scan QR', icon: 'qr-code-outline' },
     { id: 'settings', label: 'Cài đặt', icon: 'settings-outline' },
     { id: 'help', label: 'Gửi yêu cầu hỗ trợ', icon: 'help-circle-outline' },
     { id: 'terms', label: 'Điều khoản & Chính sách', icon: 'document-text-outline' },
