@@ -2,7 +2,7 @@ import { APP_DEFAULT_LOCATION } from "@/src/core/config/locationConstants";
 import { IAddressSuggestion, ILocationCoordinate } from "@/src/domain/shared/types";
 import { locationService } from "@/src/infrastructure/services";
 import { useAddressSearch } from "@/src/utils/hooks/useAddressSearch";
-import { Camera, CameraRef, UserLocation } from "@maplibre/maplibre-react-native";
+// import { Camera, CameraRef, UserLocation } from "@maplibre/maplibre-react-native";
 import { useRouter } from "expo-router";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { ActivityIndicator, Animated, Easing, StyleSheet, Text, TouchableOpacity, View } from "react-native";
@@ -32,7 +32,7 @@ export default function AddressManagementScreen() {
   const BRAND_COLORS = useBrandColors();
   const router = useRouter();
   const dispatch = useDispatch();
-  const cameraRef = useRef<CameraRef>(null);
+  // const cameraRef = useRef<CameraRef>(null);
 
   const savedAddress = useAppSelector(selectSelectedAddress);
 
@@ -151,11 +151,11 @@ export default function AddressManagementScreen() {
       setSelectedLocation(coords);
       setGeocodingState({ isLoading: false, error: null });
 
-      cameraRef.current?.setCamera({
-        centerCoordinate: [coords.longitude, coords.latitude],
-        zoomLevel: 16,
-        animationDuration: 1000,
-      });
+      // cameraRef.current?.setCamera({
+      //   centerCoordinate: [coords.longitude, coords.latitude],
+      //   zoomLevel: 16,
+      //   animationDuration: 1000,
+      // });
     } catch (error: any) {
       console.error("[AddressManagement] Select suggestion error:", error);
       setGeocodingState({ isLoading: false, error: null });
@@ -247,11 +247,11 @@ export default function AddressManagementScreen() {
     try {
       const location = await locationService.getCurrentPosition();
 
-      cameraRef.current?.setCamera({
-        centerCoordinate: [location.longitude, location.latitude],
-        zoomLevel: 15,
-        animationDuration: 1000,
-      });
+      // cameraRef.current?.setCamera({
+      //   centerCoordinate: [location.longitude, location.latitude],
+      //   zoomLevel: 15,
+      //   animationDuration: 1000,
+      // });
     } catch (error) {
       console.log("[AddressManagement] Error getting location:", error);
       setGeocodingState((prev) => ({ ...prev, error: "Không thể lấy vị trí hiện tại" }));
@@ -288,11 +288,11 @@ export default function AddressManagementScreen() {
     setMapState("ready");
 
     if (initialRegion) {
-      cameraRef.current?.setCamera({
-        centerCoordinate: initialRegion,
-        zoomLevel: 15,
-        animationDuration: 300,
-      });
+      // cameraRef.current?.setCamera({
+      //   centerCoordinate: initialRegion,
+      //   zoomLevel: 15,
+      //   animationDuration: 300,
+      // });
     }
   };
 
@@ -323,10 +323,10 @@ export default function AddressManagementScreen() {
           onRegionWillChange={onRegionWillChange}
           onMapReady={handleMapReady}
         >
-          <Camera
+          {/* <Camera
             ref={cameraRef}
           />
-          <UserLocation visible={true} />
+          <UserLocation visible={true} /> */}
         </GoongMapView>
       )}
 
