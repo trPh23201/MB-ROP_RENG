@@ -18,6 +18,8 @@ export class UserMapper {
             currentLevelId: dto.current_level_id,
             nextLevelId: dto.next_level_id,
             otp: dto.otp,
+            qrcodeUrl: dto.qrcode_url ?? null,
+            barcodeUrl: dto.barcode_url ?? null,
             store: dto.store,
             createdAt: new Date(dto.created_at),
             updatedAt: dto.updated_at ? new Date(dto.updated_at) : null,

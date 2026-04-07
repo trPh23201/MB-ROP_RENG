@@ -252,8 +252,9 @@ const styles = StyleSheet.create({
         height: 180,
     },
     barcodeImage: {
-        width: '100%',
-        height: 100,
+        width: 320,
+        height: 60,
+        resizeMode: 'contain',
     },
     emptyCodeText: {
         fontSize: 14,
