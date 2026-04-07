@@ -248,12 +248,12 @@ const styles = StyleSheet.create({
         marginBottom: 12,
     },
     qrImage: {
-        width: 180,
-        height: 180,
+        width: 240,
+        height: 240,
     },
     barcodeImage: {
-        width: 320,
-        height: 60,
+        width: 240,
+        aspectRatio: 3.0 / 1,
         resizeMode: 'contain',
     },
     emptyCodeText: {
