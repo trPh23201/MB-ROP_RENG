@@ -23,6 +23,8 @@ export interface UserResponseDTO {
   current_level_id: number | null;
   next_level_id: number | null;
   otp: string;
+  qrcode_url?: string | null;
+  barcode_url?: string | null;
   created_at: string;
   updated_at: string | null;
   deleted_at: string | null;

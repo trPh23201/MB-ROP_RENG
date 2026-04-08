@@ -15,6 +15,8 @@ export interface User {
   readonly currentLevelId: number | null;
   readonly nextLevelId: number | null;
   readonly otp?: string;
+  readonly qrcodeUrl?: string | null;
+  readonly barcodeUrl?: string | null;
   readonly store?: any | null;
   readonly createdAt: Date;
   readonly updatedAt: Date | null;

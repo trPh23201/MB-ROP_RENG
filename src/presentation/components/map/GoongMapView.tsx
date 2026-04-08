@@ -1,11 +1,11 @@
-import * as MapLibreGL from "@maplibre/maplibre-react-native";
-import { Camera, MapView } from "@maplibre/maplibre-react-native";
+// import * as MapLibreGL from "@maplibre/maplibre-react-native";
+// import { Camera, MapView } from "@maplibre/maplibre-react-native";
 import React, { useEffect } from "react";
 import { StyleSheet, View, ViewProps } from "react-native";
 import { GOONG_CONFIG } from "../../../infrastructure/api/goong/GoongConfig";
 
-MapLibreGL.setAccessToken(null);
-MapLibreGL.setConnected(true);
+// MapLibreGL.setAccessToken(null);
+// MapLibreGL.setConnected(true);
 
 interface GoongMapViewProps extends ViewProps {
   centerCoordinate?: [number, number];
@@ -25,7 +25,7 @@ export const GoongMapView: React.FC<GoongMapViewProps> = ({ centerCoordinate = D
   useEffect(() => {
     const initCache = async () => {
       try {
-        await MapLibreGL.OfflineManager.setMaximumAmbientCacheSize(500 * 1024 * 1024);
+        // await MapLibreGL.OfflineManager.setMaximumAmbientCacheSize(500 * 1024 * 1024);
         // await MapLibreGL.OfflineManager.invalidateAmbientCache(); // Use only if cache is corrupted
         console.log(`[GoongMap] Ambient cache size set to 500MB`);
       } catch (error) {
@@ -37,7 +37,7 @@ export const GoongMapView: React.FC<GoongMapViewProps> = ({ centerCoordinate = D
 
   return (
     <View style={[styles.container, style]} {...props}>
-      <MapView
+      {/* <MapView
         style={styles.map}
         mapStyle={styleUrl}
         logoEnabled={false}
@@ -56,7 +56,7 @@ export const GoongMapView: React.FC<GoongMapViewProps> = ({ centerCoordinate = D
           />
         )}
         {children}
-      </MapView>
+      </MapView> */}
     </View>
   );
 };

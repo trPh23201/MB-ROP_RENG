@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import React, { useEffect } from 'react';
-import { RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { fetchProfile } from '../../../state/slices/authSlice';
 import { useAppDispatch, useAppSelector } from '../../../utils/hooks';
 import { BaseFullScreenLayout } from '../../layouts/BaseFullScreenLayout';
@@ -98,6 +98,28 @@ export default function ProfileScreen() {
                             <Text style={[styles.pointLabel, { color: BRAND_COLORS.ui.subtitle }]}>{PROFILE_STRINGS.AVAILABLE_POINT}</Text>
                             <Text style={[styles.pointValue, { color: BRAND_COLORS.ui.heading }]}>{user.availablePoint}</Text>
                         </View>
+                    </View>
+                </View>
+
+                <View style={[styles.cardSection, { backgroundColor: BRAND_COLORS.screenBg.warm, shadowColor: BRAND_COLORS.shadow.light }]}>
+                    <Text style={[styles.sectionTitle, { color: BRAND_COLORS.ui.heading }]}>Mã của bạn</Text>
+
+                    <View style={styles.codeContainer}>
+                        <Text style={[styles.codeLabel, { color: BRAND_COLORS.ui.subtitle }]}>QR Code</Text>
+                        {user.qrcodeUrl ? (
+                            <Image source={{ uri: user.qrcodeUrl }} style={styles.qrImage} resizeMode="contain" />
+                        ) : (
+                            <Text style={[styles.emptyCodeText, { color: BRAND_COLORS.text.disabled }]}>Chưa có QR code</Text>
+                        )}
+                    </View>
+
+                    <View style={[styles.codeContainer, styles.codeContainerSpacing]}>
+                        <Text style={[styles.codeLabel, { color: BRAND_COLORS.ui.subtitle }]}>Barcode</Text>
+                        {user.barcodeUrl ? (
+                            <Image source={{ uri: user.barcodeUrl }} style={styles.barcodeImage} resizeMode="contain" />
+                        ) : (
+                            <Text style={[styles.emptyCodeText, { color: BRAND_COLORS.text.disabled }]}>Chưa có barcode</Text>
+                        )}
                     </View>
                 </View>
             </ScrollView>
@@ -208,5 +230,34 @@ const styles = StyleSheet.create({
     divider: {
         width: 1,
         height: 40,
+    },
+    sectionTitle: {
+        fontSize: 16,
+        fontWeight: '700',
+        marginBottom: 12,
+    },
+    codeContainer: {
+        alignItems: 'center',
+    },
+    codeContainerSpacing: {
+        marginTop: 20,
+    },
+    codeLabel: {
+        fontSize: 14,
+        fontWeight: '600',
+        marginBottom: 12,
+    },
+    qrImage: {
+        width: 240,
+        height: 240,
+    },
+    barcodeImage: {
+        width: 240,
+        aspectRatio: 3.0 / 1,
+        resizeMode: 'contain',
+    },
+    emptyCodeText: {
+        fontSize: 14,
+        textAlign: 'center',
     },
 });

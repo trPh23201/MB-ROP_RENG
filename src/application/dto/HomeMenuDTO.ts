@@ -1,3 +1,20 @@
+export interface MenuAPIProductOptionGroupDTO {
+  id: number;
+  name: string;
+  is_multi_select: boolean;
+  is_required: boolean;
+  is_topping: boolean;
+  items: MenuAPIProductOptionDTO[];
+}
+
+export interface MenuAPIProductOptionDTO {
+  id: number;
+  option_group_id: number;
+  name: string;
+  additional_price: number;
+  linked_product_id: number;
+  is_active: boolean;
+}
 export interface MenuAPIProductDTO {
   id: number;
   sku: string;
@@ -10,6 +27,7 @@ export interface MenuAPIProductDTO {
   product_type: string;
   points_required: number;
   created_at: string;
+  option_groups: MenuAPIProductOptionGroupDTO[];
 }
 
 export interface MenuAPIItemDTO {
