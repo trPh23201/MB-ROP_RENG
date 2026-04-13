@@ -71,7 +71,7 @@ export interface SerializableUser {
   otp?: string;
   qrcodeUrl?: string | null;
   barcodeUrl?: string | null;
-  store?: any | null;
+  store?: unknown | null;
   createdAt: string;
   updatedAt: string | null;
   isNewUser: boolean;

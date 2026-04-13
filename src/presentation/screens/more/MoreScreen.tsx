@@ -38,15 +38,12 @@ export default function MoreScreen() {
   }, [isAuthenticated]);
 
   const handleLogout = useCallback(async () => {
-    console.log('[MoreScreen] Processing logout...');
-
     if (user?.uuid) {
       try {
         const cartRepo = new CartRepository(db);
         await cartRepo.clearAllCartsForUser(user?.uuid);
-        console.log('[MoreScreen] SQLite cart cleared');
       } catch (error) {
-        console.error('[MoreScreen] Failed to clear SQLite cart', error);
+        // Error captured by Sentry
       }
     }
 
@@ -55,7 +52,6 @@ export default function MoreScreen() {
   }, [dispatch, user?.uuid, db]);
 
   const handleMenuPress = useCallback((id: string) => {
-    console.log(`[MoreScreen] Menu pressed: ${id}, Auth: ${isAuthenticated}`);
     switch (id) {
       case 'logout':
         popupService.confirm(

@@ -36,7 +36,7 @@ export const useAddressSearch = () => {
         const results = await repository.searchAddress(text, sessionToken.current);
         setSuggestions(results);
 
-      } catch (error: any) {
+      } catch (error: unknown) {
         setSuggestions([]);
         if (error instanceof AppError && error.code === 'QUOTA_EXCEEDED') {
           popupService.alert(error.message, { title: 'Thông báo' });

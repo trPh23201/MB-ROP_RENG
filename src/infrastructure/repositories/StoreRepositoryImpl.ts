@@ -1,5 +1,5 @@
 import { AxiosError } from 'axios';
-import { GetStoresByProductResponseDTO, GetStoresResponseDTO } from '../../application/dto/StoreDTO';
+import { GetStoresByProductResponseDTO, GetStoresResponseDTO, StoreDetailDTO } from '../../application/dto/StoreDTO';
 import { StoreMapper } from '../../application/mappers/StoreMapper';
 import { ApiError, NetworkError } from '../../core/errors/AppErrors';
 import { Store } from '../../domain/entities/Store';
@@ -39,7 +39,7 @@ export class StoreRepositoryImpl implements StoreRepository {
 
   async getStoreById(id: number): Promise<Store> {
     try {
-      const response = await httpClient.get<{ store: any }>(
+      const response = await httpClient.get<{ store: StoreDetailDTO }>(
         STORE_ENDPOINTS.GET_BY_ID(id)
       );
 

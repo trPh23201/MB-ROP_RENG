@@ -19,6 +19,5 @@ export class LocationBackgroundService extends BaseBackgroundService {
                 lng: location.longitude,
             })
         );
-        console.log('[LocationBackgroundService] Location cached:', location);
     }
 }

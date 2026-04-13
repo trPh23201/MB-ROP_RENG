@@ -14,8 +14,6 @@ export const useAddToCart = () => {
   return useAuthGuard(
     (product: Product) => {
       if (!selectedStore) {
-        console.log(`[useAddToCart] No store selected. Redirecting for product: ${product.id}`);
-
         const pendingAction = AuthActionService.create('PURCHASE', {
           productId: product.id,
         });
@@ -28,7 +26,6 @@ export const useAddToCart = () => {
         return;
       }
 
-      console.log(`[useAddToCart] Adding ${product.name} to cart`);
       dispatch(addToCart(product));
     },
     'PURCHASE',

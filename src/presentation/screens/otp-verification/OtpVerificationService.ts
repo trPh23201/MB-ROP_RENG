@@ -77,7 +77,6 @@ export class OtpVerificationService {
   static async resendOtp(phoneNumber: string): Promise<void> {
     return new Promise((resolve) => {
       setTimeout(() => {
-        console.log(`Resent OTP to ${phoneNumber}`);
         resolve();
       }, 500);
     });

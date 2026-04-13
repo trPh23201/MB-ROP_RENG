@@ -30,7 +30,7 @@ export class LoginUIService {
     return state.validationState === LoginValidationState.VALID;
   }
 
-  static handleSocialLogin(provider: LoginProvider): void {
-    console.log(`Social login initiated: ${provider}`);
+  static handleSocialLogin(_provider: LoginProvider): void {
+    // Social login: not yet implemented
   }
 }

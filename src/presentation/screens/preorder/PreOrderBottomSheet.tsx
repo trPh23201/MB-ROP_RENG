@@ -1,5 +1,5 @@
 import { selectSelectedAddress } from '@/src/state/slices/deliverySlice';
-import { BottomSheetModal, BottomSheetScrollView } from '@gorhom/bottom-sheet';
+import { BottomSheetFooterProps, BottomSheetModal, BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import { router, useFocusEffect } from 'expo-router';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { StyleSheet } from 'react-native';
@@ -191,7 +191,7 @@ export default function PreOrderBottomSheet({ visible, onClose, onOrderSuccess }
   }, []);
 
   const FooterComponent = useMemo(() => {
-    return (props: any) => (
+    return (props: BottomSheetFooterProps) => (
       <OrderFooter
         {...props}
         orderType={preOrderState.orderType}

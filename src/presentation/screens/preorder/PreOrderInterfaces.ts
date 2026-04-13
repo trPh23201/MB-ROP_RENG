@@ -42,7 +42,7 @@ export interface PaymentTypeSelectorProps {
   onPress: () => void;
 }
 
-// TODO: API Integration - Define Order creation DTO
+// Define Order creation DTO (pending API integration)
 export interface CreateOrderDTO {
   storeId: string;
   orderType: OrderType;

@@ -74,7 +74,7 @@ export class HomeRepositoryImpl implements HomeRepository {
             }
           }
         } catch (detailError) {
-          console.error('[HomeRepositoryImpl] Failed to fetch full menu details:', detailError);
+          // Menu detail fetch failed — continue with partial result
         }
       }
 

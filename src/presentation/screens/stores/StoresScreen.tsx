@@ -74,8 +74,6 @@ export default function StoresScreen() {
   );
 
   const handleStorePress = useCallback(async (store: Store) => {
-    console.log(`[StoresScreen] Store pressed: ${store.name}`);
-
     if (selectedStore && selectedStore.id !== store.id && totalItems > 0) {
       const confirmed = await popupService.confirm(
         STORES_TEXT.ALERT_MESSAGE(totalItems),
@@ -88,11 +86,9 @@ export default function StoresScreen() {
       );
 
       if (!confirmed) {
-        console.log('[StoresScreen] User cancelled store switch');
         return;
       }
 
-      console.log('[StoresScreen] User confirmed, clearing cart and switching store');
       dispatch(setSelectedStore(store));
       dispatch(fetchMenuByStore(Number(store.id)));
 
@@ -103,7 +99,6 @@ export default function StoresScreen() {
     }
 
     if (params.mode === 'select') {
-      console.log('[StoresScreen] Setting store and navigating to Order');
       dispatch(setSelectedStore(store));
       dispatch(fetchMenuByStore(Number(store.id)));
       router.replace('/(tabs)/order');

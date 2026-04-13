@@ -11,7 +11,7 @@ interface StoresSearchBarProps { value: string; onChangeText: (text: string) => 
 export function StoresSearchBar({ value, onChangeText }: StoresSearchBarProps) {
   const BRAND_COLORS = useBrandColors();
   const handleMapPress = () => {
-    console.log('[StoresSearchBar] Map button pressed (placeholder)');
+    // Map view: not yet implemented
   };
 
   return (

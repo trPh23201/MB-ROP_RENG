@@ -4,6 +4,7 @@ import { CustomPopupProps, PopupAction, PopupConfig } from './types';
 class PopupService {
     private static instance: PopupService;
     private dispatch: Dispatch<PopupAction> | null = null;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     private resolvers: Map<string, (value: any) => void> = new Map();
 
     static getInstance(): PopupService {
@@ -96,6 +97,7 @@ class PopupService {
         });
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     resolve(id: string, value: any): void {
         const resolver = this.resolvers.get(id);
         if (resolver) {

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { StyleSheet, TextInput, TextInputKeyPressEvent } from 'react-native';
-import Animated from 'react-native-reanimated';
+import Animated, { AnimatedStyle } from 'react-native-reanimated';
 import { useBrandColors } from '../../../theme/BrandColorContext';
 import { OTP_CONFIG } from '../OtpVerificationConstants';
 import { OTP_LAYOUT } from '../OtpVerificationLayout';
@@ -10,7 +10,7 @@ interface OtpInputProps {
   digits: string[];
   onDigitsChange: (digits: string[]) => void;
   onComplete: (code: string) => void;
-  shakeAnimatedStyle: any;
+  shakeAnimatedStyle: AnimatedStyle;
   disabled?: boolean;
 }
 

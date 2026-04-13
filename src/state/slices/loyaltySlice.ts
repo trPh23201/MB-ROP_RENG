@@ -32,8 +32,8 @@ export const fetchLoyaltyTiers = createAsyncThunk('loyalty/fetchTiers', async (_
       })),
     }));
     return mappedTiers;
-  } catch (error: any) {
-    return rejectWithValue(error.message || 'Failed to fetch loyalty tiers');
+  } catch (error: unknown) {
+    return rejectWithValue(error instanceof Error ? error.message : 'Failed to fetch loyalty tiers');
   }
 });
 

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Dimensions, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Dimensions, NativeSyntheticEvent, NativeScrollEvent, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Animated, { Easing, interpolateColor, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { WELCOME_TEXT } from '../../screens/welcome/WelcomeConstants';
 import { useBrandColors } from '../../theme/BrandColorContext';
@@ -42,7 +42,7 @@ export function EntryPromoBanner({ onBannerPress, autoScroll = false }: EntryPro
     };
   }, [autoScroll, isUserInteracting]);
 
-  const handlePageChange = (event: any) => {
+  const handlePageChange = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const scrollPosition = event.nativeEvent.contentOffset.x;
     const index = Math.round(scrollPosition / BANNER_WIDTH);
     if (index !== activeIndexRef.current) {

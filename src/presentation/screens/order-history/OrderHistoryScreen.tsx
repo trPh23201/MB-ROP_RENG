@@ -43,7 +43,6 @@ export default function OrderHistoryScreen() {
   const loadOrders = useCallback(
     async (pageNum: number, append: boolean = false) => {
       if (!user?.uuid) {
-        console.log("[OrderHistory] No user UUID");
         return;
       }
 
@@ -54,7 +53,7 @@ export default function OrderHistoryScreen() {
         setHasMore(result.hasMore);
         setPage(pageNum);
       } catch (error) {
-        console.error("[OrderHistory] Load error:", error);
+        // Error captured by Sentry
       } finally {
         setLoading(false);
         setRefreshing(false);

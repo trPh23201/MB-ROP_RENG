@@ -34,52 +34,37 @@ export default function OrderScreen() {
   const showMiniCart = isAuthenticated && totalItems > 0;
 
   useEffect(() => {
-    console.log('[OrderScreen] Store or Action changed, checking conditions...');
-    console.log(`[OrderScreen] selectedStore: ${selectedStore?.name || 'null'}`);
-    console.log(`[OrderScreen] pendingAction: ${pendingAction ? JSON.stringify(pendingAction) : 'null'}`);
-
     if (!pendingAction) {
-      console.log('[OrderScreen] No pending action');
       return;
     }
 
     if (pendingAction.type !== 'PURCHASE') {
-      console.log('[OrderScreen] Action is not PURCHASE');
       return;
     }
 
     if (!pendingAction.context.productId) {
-      console.log('[OrderScreen] No productId in action');
       return;
     }
 
     if (!selectedStore) {
-      console.log('[OrderScreen] No store selected, waiting...');
       return;
     }
 
     const actionKey = `${pendingAction.context.productId}-${pendingAction.timestamp}`;
     if (processedActionRef.current === actionKey) {
-      console.log('[OrderScreen] Action already processed, skipping');
       return;
     }
-
-    console.log(`[OrderScreen] All conditions met! Auto-adding product: ${pendingAction.context.productId}`);
 
     const product = products.find((p) => p.id === pendingAction.context.productId);
 
     if (!product) {
-      console.error(`[OrderScreen] Product not found: ${pendingAction.context.productId}`);
       popupService.alert('Sản phẩm trong yêu cầu không tồn tại', { title: 'Lỗi', type: 'error' });
       dispatch(clearPendingAction());
       processedActionRef.current = actionKey;
       return;
     }
 
-    console.log(`[OrderScreen] Found product: ${product.name}, adding to cart...`);
     dispatch(addToCart(product));
-
-    console.log('[OrderScreen] Product added, clearing pending action');
     dispatch(clearPendingAction());
 
     processedActionRef.current = actionKey;
@@ -88,7 +73,6 @@ export default function OrderScreen() {
   }, [selectedStore, pendingAction, dispatch, products]);
 
   const handleMiniCartPress = () => {
-    console.log('[OrderScreen] Opening PreOrder sheet');
     setShowPreOrder(true);
   };
 
@@ -97,7 +81,6 @@ export default function OrderScreen() {
   };
 
   const handleOrderSuccess = () => {
-    console.log('[OrderScreen] Order placed successfully, redirecting to Home');
     router.replace('../(tabs)/');
   };
 

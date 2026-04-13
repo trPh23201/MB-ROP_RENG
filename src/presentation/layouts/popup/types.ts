@@ -63,12 +63,15 @@ export interface InputPopupConfig extends BasePopupConfig {
 export interface CustomPopupProps<T> {
     onResolve: (value: T) => void;
     onDismiss: () => void;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     [key: string]: any;
 }
 
 export interface CustomPopupConfig extends BasePopupConfig {
     type: 'custom';
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     component: React.ComponentType<any>;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     props?: Record<string, any>;
 }
 

@@ -1,5 +1,5 @@
 import { useBrandColors } from '@/src/presentation/theme/BrandColorContext';
-import BottomSheet, { BottomSheetBackdrop, BottomSheetView } from '@gorhom/bottom-sheet';
+import BottomSheet, { BottomSheetBackdrop, BottomSheetBackdropProps, BottomSheetView } from '@gorhom/bottom-sheet';
 import { Image } from 'expo-image';
 import React, { useCallback, useMemo, useRef } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
@@ -26,7 +26,7 @@ export function CollectionModal({ collection, onClose }: CollectionModalProps) {
   }, [onClose]);
 
   const renderBackdrop = useCallback(
-    (props: any) => (
+    (props: BottomSheetBackdropProps) => (
       <BottomSheetBackdrop
         {...props}
         disappearsOnIndex={-1}

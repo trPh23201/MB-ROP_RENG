@@ -36,7 +36,6 @@ class AppLifecycleManager {
 
         if (prevEvent !== nextEvent) {
             this.currentEvent = nextEvent;
-            console.log(`[AppLifecycle] ${prevEvent} → ${nextEvent}`);
             this.listeners.forEach(listener => listener(nextEvent, prevEvent));
         }
     };

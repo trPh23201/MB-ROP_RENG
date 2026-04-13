@@ -36,11 +36,10 @@ export class GoongGeocodingRepository implements IGeocodingRepository {
       }
 
       if (data.status !== "OK" && data.status !== "ZERO_RESULTS") {
-        console.error("Goong API Error:", data.error_message);
         return [];
       }
 
-      return (data.predictions || []).map((item: any) => ({
+      return (data.predictions || []).map((item: { place_id: string; description: string; structured_formatting: { main_text: string; secondary_text: string } }) => ({
         place_id: item.place_id,
         description: item.description,
         structured_formatting: {
@@ -58,13 +57,10 @@ export class GoongGeocodingRepository implements IGeocodingRepository {
     try {
       const url = `${GOONG_CONFIG.BASE_URL}/Geocode?latlng=${coordinate.latitude},${coordinate.longitude}&api_key=${GOONG_CONFIG.API_KEY}`;
 
-      console.log("[GoongGeocoding] Reverse geocoding:", { lat: coordinate.latitude, lng: coordinate.longitude });
-
       const response = await fetch(url);
 
       if (!response.ok) {
         const statusText = response.statusText || "Unknown error";
-        console.error("[GoongGeocoding] HTTP Error:", response.status, statusText);
         throw new ApiError(`Không thể kết nối tới dịch vụ bản đồ (HTTP ${response.status}: ${statusText})`);
       }
 
@@ -75,46 +71,41 @@ export class GoongGeocodingRepository implements IGeocodingRepository {
       }
 
       if (data.status === "REQUEST_DENIED") {
-        console.error("[GoongGeocoding] Access denied:", data.error_message);
         throw new ApiError("Không có quyền truy cập dịch vụ bản đồ. Vui lòng kiểm tra API key.");
       }
 
       if (data.status === "ZERO_RESULTS") {
-        console.warn("[GoongGeocoding] No results for coordinates:", coordinate);
         throw new ApiError("Không tìm thấy địa chỉ tại vị trí này");
       }
 
       if (data.status !== "OK") {
         const errorMsg = data.error_message || data.status || "Unknown error";
-        console.error("[GoongGeocoding] API Error:", errorMsg);
         throw new ApiError(`Lỗi xác định vị trí: ${errorMsg}`);
       }
 
       const address = data.results[0]?.formatted_address;
 
       if (!address) {
-        console.warn("[GoongGeocoding] Empty address in response");
         throw new ApiError("Không có dữ liệu địa chỉ trả về");
       }
 
-      console.log("[GoongGeocoding] Success:", address);
       return address;
-    } catch (error: any) {
+    } catch (error: unknown) {
       if (error instanceof AppError) {
         throw error;
       }
 
-      if (error?.name === "TypeError" || error?.message?.includes("Network") || error?.message?.includes("network")) {
-        console.error("[GoongGeocoding] Network failure:", error.message);
+      const errMsg = error instanceof Error ? error.message : '';
+      const errName = error instanceof Error ? error.name : '';
+
+      if (errName === "TypeError" || errMsg.includes("Network") || errMsg.includes("network")) {
         throw new NetworkError();
       }
 
-      if (error?.message?.includes("timeout")) {
-        console.error("[GoongGeocoding] Timeout:", error.message);
+      if (errMsg.includes("timeout")) {
         throw new NetworkError();
       }
 
-      console.error("[GoongGeocoding] Unexpected error:", error);
       throw new ApiError("Không thể xác định địa chỉ. Vui lòng thử lại sau.");
     }
   }

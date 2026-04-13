@@ -94,9 +94,5 @@ export function showToast(message: string, duration = 2000) {
     currentToast();
   }
 
-  // Create new toast (requires React root wrapper)
-  console.log('[Toast]', message); // Fallback for now
-  
-  // TODO: Implement proper toast manager with React portal
-  // For MVP: Using Alert as fallback for product unavailable
+  // For MVP: Using popupService.toast() as fallback
 }

@@ -15,7 +15,7 @@ export function LoginCard() {
   };
 
   const handleLoyaltyPress = () => {
-    console.log('Clicked: Rốp Rẻng Loyalty');
+    // Loyalty navigation: not yet implemented
   };
 
   return (

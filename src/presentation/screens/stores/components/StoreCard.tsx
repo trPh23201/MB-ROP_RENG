@@ -13,8 +13,6 @@ export function StoreCard({ store, onPress }: StoreCardProps) {
   const handlePress = useAuthGuard(
     () => {
       onPress();
-      console.log(`[StoreCard] Viewing: ${store.name}`);
-      // TODO: Navigate to store detail
     },
     'VIEW_STORE',
     () => ({

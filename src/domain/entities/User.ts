@@ -17,7 +17,7 @@ export interface User {
   readonly otp?: string;
   readonly qrcodeUrl?: string | null;
   readonly barcodeUrl?: string | null;
-  readonly store?: any | null;
+  readonly store?: unknown | null;
   readonly createdAt: Date;
   readonly updatedAt: Date | null;
 }

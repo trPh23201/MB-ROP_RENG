@@ -17,7 +17,7 @@ export function useBrandColor() {
       popupService.loading(false);
       return brand;
     } catch (err) {
-      console.log('[useBrandColor] fetchAndCacheBrand error:', err);
+      // Error captured by Sentry
       popupService.loading(false);
       return null;
     }
@@ -36,7 +36,7 @@ export function useBrandColor() {
       popupService.loading(false);
       return true;
     } catch (err) {
-      console.log('[useBrandColor] applyBrandColors error:', err);
+      // Error captured by Sentry
       popupService.loading(false);
       return false;
     }

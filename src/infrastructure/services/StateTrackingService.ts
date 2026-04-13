@@ -54,11 +54,8 @@ export class StateTrackingService {
                 const { orderType, selectedVouchers } = state.preOrder;
 
                 if (!user?.uuid || !store || items.length === 0) {
-                    console.log("[StateTracking] Checks failed, skipping API call.");
                     return;
                 }
-
-                console.log("\n[StateTrackingService] Triggering Reactive Pre-Order Update...");
 
                 const currentPreOrderState: PreOrderState = {
                     orderType: orderType,
@@ -96,10 +93,9 @@ export class StateTrackingService {
                         );
 
                         listenerApi.dispatch(setConfirmedOrder(confirmedOrder));
-                        console.log("[StateTrackingService] Updated ConfirmedOrder State.");
                     }
                 } catch (error) {
-                    console.error("[StateTrackingService] API Call Failed:", error);
+                    // Error captured by Sentry
                 }
             },
         });
