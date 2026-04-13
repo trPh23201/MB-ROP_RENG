@@ -69,11 +69,17 @@
       [
         "@maplibre/maplibre-react-native"
       ],
-      "expo-secure-store"
+      "expo-secure-store",
+      [
+        "@sentry/react-native/expo",
+        {
+          "organization": "ropreng",
+          "project": "ropreng-mobile"
+        }
+      ]
     ],
     "experiments": {
-      "typedRoutes": true,
-      "reactCompiler": true
+      "typedRoutes": true
     }
   }
 }
