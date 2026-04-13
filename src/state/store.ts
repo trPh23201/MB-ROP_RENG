@@ -8,6 +8,7 @@ import brandReducer from './slices/brandSlice';
 import confirmOrderReducer from './slices/confirmOrderSlice';
 import deliveryReducer from './slices/deliverySlice';
 import homeReducer from './slices/homeSlice';
+import loyaltyReducer from './slices/loyaltySlice';
 import orderCart from './slices/orderCartSlice';
 import ordersReducer from './slices/ordersSlice';
 import preOrderReducer from './slices/preOrderSlice';
@@ -43,6 +44,7 @@ export const store = configureStore({
     confirmOrder: confirmOrderReducer,
     orders: ordersReducer,
     stores: storesReducer,
+    loyalty: loyaltyReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
