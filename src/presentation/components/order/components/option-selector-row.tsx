@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useBrandColors } from '../../../theme/BrandColorContext';
 import { TYPOGRAPHY } from '../../../theme/typography';
+import { HapticFeedback } from '../../../utils/HapticFeedback';
 
 interface OptionItem {
   id: string;
@@ -49,7 +50,7 @@ export const OptionSelectorRow = React.memo(function OptionSelectorRow({
                 { borderColor: BRAND_COLORS.ui.placeholder, backgroundColor: BRAND_COLORS.screenBg.warm },
                 isSelected && { borderColor: BRAND_COLORS.secondary.s3, backgroundColor: `${BRAND_COLORS.secondary.s3}18` },
               ]}
-              onPress={() => onSelect(option.id)}
+              onPress={() => { HapticFeedback.selection(); onSelect(option.id); }}
             >
               <Text
                 style={[

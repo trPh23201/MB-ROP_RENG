@@ -16,6 +16,7 @@ import { OrderService } from './OrderService';
 import { OptionSelectorRow } from './components/option-selector-row';
 import { QuantityControlRow } from './components/quantity-control-row';
 import { ToppingSelectorButton } from './components/topping-selector-button';
+import { SPRING_CONFIG } from '../../constants/animation-configs';
 
 export interface OrderProductEditRef {
     present: (item: CartItem) => void;
@@ -110,6 +111,7 @@ export const OrderProductEditBottomSheet = forwardRef<OrderProductEditRef, { onC
                 enablePanDownToClose={false}
                 enableDynamicSizing={false}
                 enableDismissOnClose={true}
+                animationConfigs={SPRING_CONFIG}
                 backdropComponent={renderBackdrop}
                 backgroundStyle={[styles.bottomSheetBg, { backgroundColor: BRAND_COLORS.primary.p1 }]}
                 handleIndicatorStyle={[styles.indicator, { backgroundColor: BRAND_COLORS.secondary.s3 }]}

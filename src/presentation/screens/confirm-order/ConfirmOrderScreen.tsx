@@ -1,5 +1,5 @@
 import { router } from 'expo-router';
-import React, { useCallback, useMemo, useRef } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { OrderType, PaymentMethod, PreOrderState } from '../../../domain/shared';
 import { clearConfirmedOrder, SerializableConfirmOrderItem, submitOrder } from '../../../state/slices/confirmOrderSlice';
@@ -16,12 +16,14 @@ import { PreOrderService } from '../preorder/PreOrderService';
 import { CONFIRM_ORDER_TEXT } from './ConfirmOrderConstants';
 import { ConfirmOrderPaymentCard } from './components/confirm-order-payment-card';
 import { ConfirmOrderSubmittingOverlay } from './components/confirm-order-submitting-overlay';
+import { LottieOrderSuccess } from '../../components/shared/lottie-order-success';
 
 export default function ConfirmOrderScreen() {
     const BRAND_COLORS = useBrandColors();
     const dispatch = useAppDispatch();
     const editProductModalRef = useRef<OrderProductEditRef>(null);
-    const [isSubmitting, setIsSubmitting] = React.useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [showSuccess, setShowSuccess] = useState(false);
 
     const { confirmedOrder, error } = useAppSelector((state) => state.confirmOrder);
     const deliveryAddress = useAppSelector(selectSelectedAddress);
@@ -82,6 +84,7 @@ export default function ConfirmOrderScreen() {
             return;
         }
         try {
+            setIsSubmitting(true);
             const currentPreOrderState: PreOrderState = {
                 orderType,
                 paymentMethod: (confirmedOrder.paymentMethod as PaymentMethod) || PaymentMethod.CASH,
@@ -96,15 +99,21 @@ export default function ConfirmOrderScreen() {
                 selectedVouchers
             );
             await dispatch(submitOrder(payload)).unwrap();
-            await popupService.alert(CONFIRM_ORDER_TEXT.CONFIRM_SUCCESS_MESSAGE, { title: CONFIRM_ORDER_TEXT.CONFIRM_SUCCESS_TITLE, buttonText: 'OK' });
-            dispatch(clearCart());
-            dispatch(clearConfirmedOrder());
-            dispatch(resetPreOrder());
-            router.replace('/order-history');
+            setIsSubmitting(false);
+            setShowSuccess(true);
         } catch (err) {
+            setIsSubmitting(false);
             popupService.alert((err as string) || 'Không thể xác nhận đơn hàng', { title: CONFIRM_ORDER_TEXT.CONFIRM_ERROR_TITLE, type: 'error' });
         }
     }, [confirmedOrder, dispatch, user, selectedStore, deliveryAddress, cartItems, orderType, selectedVouchers]);
+
+    const handleSuccessComplete = useCallback(() => {
+        setShowSuccess(false);
+        dispatch(clearCart());
+        dispatch(clearConfirmedOrder());
+        dispatch(resetPreOrder());
+        router.replace('/order-history');
+    }, [dispatch]);
 
     if (!confirmedOrder || error) {
         return (
@@ -156,6 +165,7 @@ export default function ConfirmOrderScreen() {
             </View>
 
             <OrderProductEditBottomSheet ref={editProductModalRef} />
+            <LottieOrderSuccess visible={showSuccess} onAnimationFinish={handleSuccessComplete} />
         </BaseAuthenticatedLayout>
     );
 }

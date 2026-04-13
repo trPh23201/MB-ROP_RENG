@@ -8,6 +8,7 @@ import { useBrandColors } from '../../theme/BrandColorContext';
 import { TYPOGRAPHY } from '../../theme/typography';
 import { ORDER_TYPE_LABELS } from '../order/OrderConstants';
 import { OrderService } from '../order/OrderService';
+import { HapticFeedback } from '../../utils/HapticFeedback';
 
 interface MiniCartButtonProps {
   onPress: () => void;
@@ -32,7 +33,7 @@ export function MiniCartButton({ onPress }: MiniCartButtonProps) {
     <View style={[styles.container, { bottom: bottomSpacing }]}>
       <TouchableOpacity
         style={[styles.button, { backgroundColor: BRAND_COLORS.secondary.s4, shadowColor: BRAND_COLORS.secondary.s3 }]}
-        onPress={onPress}
+        onPress={() => { HapticFeedback.light(); onPress(); }}
         activeOpacity={0.85}
       >
         <View style={styles.topRow}>

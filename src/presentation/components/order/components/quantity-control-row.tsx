@@ -3,6 +3,7 @@ import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useBrandColors } from '../../../theme/BrandColorContext';
 import { TYPOGRAPHY } from '../../../theme/typography';
+import { HapticFeedback } from '../../../utils/HapticFeedback';
 
 interface QuantityControlRowProps {
   quantity: number;
@@ -21,7 +22,7 @@ export const QuantityControlRow = React.memo(function QuantityControlRow({
     <View style={styles.quantityControls}>
       <TouchableOpacity
         style={[styles.quantityButton, { backgroundColor: `${BRAND_COLORS.secondary.s3}20` }]}
-        onPress={onDecrease}
+        onPress={() => { HapticFeedback.light(); onDecrease(); }}
       >
         <Ionicons name="remove" size={20} color={BRAND_COLORS.secondary.s3} />
       </TouchableOpacity>
@@ -30,7 +31,7 @@ export const QuantityControlRow = React.memo(function QuantityControlRow({
 
       <TouchableOpacity
         style={[styles.quantityButton, { backgroundColor: `${BRAND_COLORS.secondary.s3}20` }]}
-        onPress={onIncrease}
+        onPress={() => { HapticFeedback.light(); onIncrease(); }}
       >
         <Ionicons name="add" size={20} color={BRAND_COLORS.secondary.s3} />
       </TouchableOpacity>

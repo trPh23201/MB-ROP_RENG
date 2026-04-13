@@ -9,6 +9,7 @@ import { TYPOGRAPHY } from '../../theme/typography';
 import { TOPPING_TEXT } from './OrderConstants';
 import { Topping } from './OrderInterfaces';
 import { OrderService } from './OrderService';
+import { SPRING_CONFIG } from '../../constants/animation-configs';
 
 export interface AddToppingRef {
     present: (currentToppings: Topping[]) => void;
@@ -67,6 +68,7 @@ export const AddToppingBottomSheet = forwardRef<AddToppingRef, AddToppingBottomS
             enablePanDownToClose={false}
             enableDynamicSizing={false}
             enableDismissOnClose={true}
+            animationConfigs={SPRING_CONFIG}
             backdropComponent={renderBackdrop}
             backgroundStyle={[styles.bottomSheetBackground, { backgroundColor: BRAND_COLORS.primary.p1 }]}
             handleIndicatorStyle={[styles.indicator, { backgroundColor: BRAND_COLORS.secondary.s3 }]}

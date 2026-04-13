@@ -48,6 +48,8 @@ export interface BaseBottomSheetLayoutProps {
 const HEADER_HEIGHT = 60;
 const HEADER_ICON_SIZE = 24;
 
+import { SPRING_CONFIG } from '../constants/animation-configs';
+
 export const BaseBottomSheetLayout = forwardRef<BottomSheetModal, BaseBottomSheetLayoutProps>(
     (
         {
@@ -128,6 +130,7 @@ export const BaseBottomSheetLayout = forwardRef<BottomSheetModal, BaseBottomShee
                 ref={ref}
                 index={initialSnapIndex}
                 snapPoints={finalSnapPoints}
+                animationConfigs={SPRING_CONFIG}
                 onChange={onChange}
                 onDismiss={onDismiss}
                 enablePanDownToClose={enablePanDownToClose}

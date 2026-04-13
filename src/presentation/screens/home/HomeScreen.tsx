@@ -1,6 +1,8 @@
 import { LinearGradient } from 'expo-linear-gradient';
-import React, { useCallback } from 'react';
-import { ActivityIndicator, FlatList, ListRenderItem, RefreshControl, StyleSheet, Text, View } from 'react-native';
+import React, { useCallback, useRef } from 'react';
+import { FlatList, ListRenderItem, RefreshControl, StyleSheet, Text, View } from 'react-native';
+import { CartFlyAnimation } from '../../components/shared/cart-fly-animation';
+import { useCartFlyAnimation } from '../../hooks/use-cart-fly-animation';
 import {
   EntryCategoryScroll,
   EntryBrandSelector,
@@ -9,7 +11,9 @@ import {
   EntryQuickActions,
   EntrySearchBar,
 } from '../../components/entry';
+import { AnimatedProductCard } from '../../components/entry/animated-product-card';
 import { MiniCartButton } from '../../components/shared/MiniCartButton';
+import { SkeletonShimmerList } from '../../components/shared/skeleton-shimmer-list';
 import { BaseFullScreenLayout } from '../../layouts/BaseFullScreenLayout';
 import { useBrandColors } from '../../theme/BrandColorContext';
 import PreOrderBottomSheet from '../preorder/PreOrderBottomSheet';
@@ -22,6 +26,8 @@ import { useHomeScreen } from './hooks/use-home-screen';
 
 export default function HomeScreen() {
   const BRAND_COLORS = useBrandColors();
+  const { flyState, cartPosition, progress, onCartLayout, triggerFly } = useCartFlyAnimation();
+  const miniCartRef = useRef<View>(null);
   const {
     products,
     isLoading,
@@ -38,7 +44,6 @@ export default function HomeScreen() {
     showPreOrder,
     refreshing,
     isInitialLoading,
-    cachedLocation,
     handleRefresh,
     handleProductPress,
     handleQuickActionPress,
@@ -50,7 +55,7 @@ export default function HomeScreen() {
   } = useHomeScreen();
 
   const renderProduct: ListRenderItem<typeof products[0]> = useCallback(
-    ({ item }) => <EntryProductCard product={item} onPress={handleProductPress} />,
+    ({ item }) => <AnimatedProductCard product={item} onPress={handleProductPress} />,
     [handleProductPress]
   );
 
@@ -110,12 +115,7 @@ export default function HomeScreen() {
         renderHeader={renderHeader}
       >
         {isInitialLoading ? (
-          <View style={styles.loadingContainer}>
-            <ActivityIndicator size="large" color={BRAND_COLORS.primary.p3} />
-            <Text style={[styles.loadingText, { color: BRAND_COLORS.primary.p3 }]}>
-              {!cachedLocation ? 'Đang xác định vị trí...' : 'Đang tải menu...'}
-            </Text>
-          </View>
+          <SkeletonShimmerList />
         ) : (
           <FlatList
             data={products}
@@ -141,13 +141,27 @@ export default function HomeScreen() {
           />
         )}
 
-        {showMiniCart && <MiniCartButton onPress={() => setShowPreOrder(true)} />}
+        {showMiniCart && (
+          <View
+            ref={miniCartRef}
+            onLayout={() => {
+              miniCartRef.current?.measure((_fx, _fy, w, h, px, py) => {
+                onCartLayout(px, py, w, h);
+              });
+            }}
+          >
+            <MiniCartButton onPress={() => setShowPreOrder(true)} />
+          </View>
+        )}
 
         <PreOrderBottomSheet
           visible={showPreOrder}
           onClose={() => setShowPreOrder(false)}
           onOrderSuccess={() => router.replace('../(tabs)/')}
         />
+
+        {/* Cart fly overlay — triggers via triggerFly(startPos, imageUrl) from product cards */}
+        <CartFlyAnimation flyState={flyState} cartPosition={cartPosition} progress={progress} />
       </BaseFullScreenLayout>
     </LinearGradient>
   );
@@ -163,6 +177,4 @@ const styles = StyleSheet.create({
     fontFamily: 'Phudu-Bold',
     marginBottom: HOME_LAYOUT.SECTION_TITLE_MARGIN_BOTTOM,
   },
-  loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center', gap: 16 },
-  loadingText: { fontSize: 16, fontFamily: 'SpaceGrotesk-Medium' },
 });

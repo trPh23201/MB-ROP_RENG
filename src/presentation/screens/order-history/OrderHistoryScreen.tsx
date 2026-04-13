@@ -10,6 +10,7 @@ import { ITEMS_PER_PAGE, ORDER_HISTORY_STRINGS, STATUS_CHIPS } from "./OrderHist
 import { OrderStatus } from "./OrderHistoryEnums";
 import { StatusChipData } from "./OrderHistoryInterfaces";
 import { OrderHistoryService } from "./OrderHistoryService";
+import { SkeletonShimmerList } from "../../components/shared/skeleton-shimmer-list";
 import { OrderHistoryItem } from "./components/OrderHistoryItem";
 import { OrderStatusChip } from "./components/OrderStatusChip";
 
@@ -143,12 +144,7 @@ export default function OrderHistoryScreen() {
 
   const renderEmpty = useCallback(() => {
     if (loading) {
-      return (
-        <View style={styles.emptyContainer}>
-          <ActivityIndicator size="large" color={BRAND_COLORS.bta.primaryBg} />
-          <Text style={[styles.loadingText, { color: BRAND_COLORS.ui.subtitle }]}>{ORDER_HISTORY_STRINGS.LOADING}</Text>
-        </View>
-      );
+      return <SkeletonShimmerList count={4} />;
     }
     return (
       <View style={styles.emptyContainer}>
@@ -194,15 +190,6 @@ export default function OrderHistoryScreen() {
 }
 
 const styles = StyleSheet.create({
-  loadingContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  loadingText: {
-    marginTop: 12,
-    fontSize: 14,
-  },
   chipsContainer: {
     paddingVertical: 12,
     borderBottomWidth: 1,
