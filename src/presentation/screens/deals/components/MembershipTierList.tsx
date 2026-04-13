@@ -2,12 +2,11 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { useBrandColors } from '../../../theme/BrandColorContext';
 import { DEALS_TEXT } from '../DealsConstants';
-import { MembershipTier } from '../DealsEnums';
 import { MembershipTierData, SelectedTier } from '../DealsInterfaces';
 import { DEALS_LAYOUT } from '../DealsLayout';
 import { MembershipCard } from './MembershipCard';
 
-interface MembershipTierListProps { tiers: MembershipTierData[]; selectedTier: SelectedTier; onTierSelect: (tier: MembershipTier) => void; }
+interface MembershipTierListProps { tiers: MembershipTierData[]; selectedTier: SelectedTier; onTierSelect: (tier: number) => void; }
 
 export function MembershipTierList({ tiers, selectedTier, onTierSelect, }: MembershipTierListProps) {
   const BRAND_COLORS = useBrandColors();
