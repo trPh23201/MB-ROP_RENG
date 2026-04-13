@@ -19,6 +19,20 @@ export class TokenStorage {
     return { accessToken, refreshToken, userId };
   }
 
+  static async getRefreshToken(): Promise<string | null> {
+    return SecureStorage.getRefreshToken();
+  }
+
+  static async setRefreshToken(token: string): Promise<void> {
+    await SecureStorage.saveRefreshToken(token);
+  }
+
+  /** Clears both access token and refresh token from storage */
+  static async clearAll(): Promise<void> {
+    await SecureStorage.clearAll();
+  }
+
+  /** @deprecated Use clearAll() for full token cleanup */
   static async clearTokens(): Promise<void> {
     await SecureStorage.clearAll();
   }

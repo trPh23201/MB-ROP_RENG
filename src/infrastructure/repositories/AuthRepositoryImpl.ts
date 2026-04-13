@@ -1,4 +1,4 @@
-import { AuthRepository, RegisterResult, LoginResult } from '../../domain/repositories/AuthRepository';
+import { AuthRepository, RegisterResult, LoginResult, AuthTokens } from '../../domain/repositories/AuthRepository';
 import { httpClient } from '../http/HttpClient';
 import { AUTH_ENDPOINTS } from '../api/auth/AuthApiConfig';
 import { RegisterRequestDTO, RegisterResponseDTO, LoginRequestDTO, LoginResponseDTO } from '../../application/dto/AuthDTO';
@@ -48,6 +48,29 @@ export class AuthRepositoryImpl implements AuthRepository {
       };
     } catch (error) {
       throw this.handleError(error, 'register');
+    }
+  }
+
+  async refreshToken(refreshToken: string): Promise<AuthTokens> {
+    try {
+      const response = await httpClient.post<AuthTokens>(
+        AUTH_ENDPOINTS.REFRESH,
+        { refreshToken }
+      );
+      return response;
+    } catch (error) {
+      throw this.handleError(error, 'login');
+    }
+  }
+
+  async logout(token: string): Promise<void> {
+    try {
+      await httpClient.post<void>(
+        AUTH_ENDPOINTS.LOGOUT,
+        { token }
+      );
+    } catch {
+      // Best-effort: server-side logout failure should not block client cleanup
     }
   }
 

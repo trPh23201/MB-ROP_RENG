@@ -1,6 +1,7 @@
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
 import { HTTP_CONFIG } from './HttpConfig';
 import { authRequestInterceptor, requestErrorHandler, responseErrorHandler, responseInterceptor } from './interceptors/AuthInterceptor';
+import { addBreadcrumb } from '../services/monitoring';
 
 class HttpClient {
   private static instance: HttpClient;
@@ -24,6 +25,7 @@ class HttpClient {
   }
 
   private setupInterceptors(): void {
+    // Auth interceptor: injects Bearer token + handles 401 refresh flow
     this.axiosInstance.interceptors.request.use(
       authRequestInterceptor,
       requestErrorHandler
@@ -34,53 +36,41 @@ class HttpClient {
       responseErrorHandler
     );
 
+    // Logging interceptor: Sentry breadcrumbs for request/response tracing
     this.axiosInstance.interceptors.request.use(this.logRequest, this.logError);
     this.axiosInstance.interceptors.response.use(this.logResponse, this.logError);
   }
 
-  private logRequest = (config: InternalAxiosRequestConfig) => {
-    console.log(' ');
-    console.log(`[API REQUEST] ${config.method?.toUpperCase()} ${config.url}`);
-    
-    if (config.params) {
-      console.log('   🔹 Params:', JSON.stringify(config.params, null, 2));
-    }
-    
-    if (config.data) {
-       const dataLog = JSON.stringify(config.data, null, 2);
-       console.log('Body:', dataLog.length > 2000 ? '[Data too long]' : dataLog);
-    }
-    
+  private logRequest = (config: InternalAxiosRequestConfig): InternalAxiosRequestConfig => {
+    addBreadcrumb(
+      `API REQUEST ${config.method?.toUpperCase()} ${config.url}`,
+      'http'
+    );
     return config;
   };
 
-  private logResponse = (response: AxiosResponse) => {
-    console.log(`[API RESPONSE] ${response.status} ${response.config.url}`);
-    console.log(' Headers:', JSON.stringify(response.headers));
-    
-    if (response.data) {
-        const responseData = JSON.stringify(response.data, null, 2);
-        const shouldTruncate = responseData.length > 5000;
-        console.log('Data:', shouldTruncate ? responseData.substring(0, 5000) + '... [TRUNCATED]' : responseData);
-    }
-    console.log(' ');
-    
+  private logResponse = (response: AxiosResponse): AxiosResponse => {
+    addBreadcrumb(
+      `API RESPONSE ${response.status} ${response.config.url}`,
+      'http'
+    );
     return response;
   };
 
-  private logError = (error: AxiosError) => {
-    console.log(' ');
+  private logError = (error: AxiosError): Promise<never> => {
     if (error.response) {
-      console.log(`[API ERROR] ${error.response.status} ${error.config?.url}`);
-      console.log('Message:', JSON.stringify(error.response.data, null, 2));
+      addBreadcrumb(
+        `API ERROR ${error.response.status} ${error.config?.url}`,
+        'http'
+      );
     } else if (error.request) {
-      console.log(`[API ERROR] No Response received from ${error.config?.url}`);
-      console.log('Request:', error.request);
+      addBreadcrumb(
+        `API ERROR — no response from ${error.config?.url}`,
+        'http'
+      );
     } else {
-      console.log('[API ERROR] Request Setup Error:', error.message);
+      addBreadcrumb(`API ERROR — request setup: ${error.message}`, 'http');
     }
-    console.log(' ');
-    
     return Promise.reject(error);
   };
 
@@ -117,4 +107,3 @@ class HttpClient {
 export const httpClient = HttpClient.getInstance();
 
 export { HttpClient };
-
