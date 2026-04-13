@@ -110,6 +110,7 @@ export const BrandDetailBottomSheet = forwardRef<BottomSheetModal, BrandDetailBo
         );
     }
 );
+BrandDetailBottomSheet.displayName = 'BrandDetailBottomSheet';
 
 const styles = StyleSheet.create({
     sheetBackground: {

@@ -166,6 +166,7 @@ export const BaseBottomSheetLayout = forwardRef<BottomSheetModal, BaseBottomShee
         );
     }
 );
+BaseBottomSheetLayout.displayName = 'BaseBottomSheetLayout';
 
 const styles = StyleSheet.create({
     header: {

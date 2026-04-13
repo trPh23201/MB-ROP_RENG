@@ -15,6 +15,7 @@ import { OrderPriceSection } from '../../components/order/OrderPriceSection';
 import { OrderProductEditBottomSheet, OrderProductEditRef } from '../../components/order/OrderProductEditBottomSheet';
 import { OrderProductList } from '../../components/order/OrderProductList';
 import { OrderTypeSelector } from '../../components/order/OrderTypeSelector';
+// eslint-disable-next-line import/namespace
 import { BaseBottomSheetLayout } from '../../layouts/BaseBottomSheetLayout';
 import { popupService } from '../../layouts/popup/PopupService';
 import { useBrandColors } from '../../theme/BrandColorContext';
@@ -191,7 +192,7 @@ export default function PreOrderBottomSheet({ visible, onClose, onOrderSuccess }
   }, []);
 
   const FooterComponent = useMemo(() => {
-    return (props: BottomSheetFooterProps) => (
+    const PreOrderFooter = (props: BottomSheetFooterProps) => (
       <OrderFooter
         {...props}
         orderType={preOrderState.orderType}
@@ -201,6 +202,8 @@ export default function PreOrderBottomSheet({ visible, onClose, onOrderSuccess }
         onButtonPress={handlePlaceOrder}
       />
     );
+    PreOrderFooter.displayName = 'PreOrderFooter';
+    return PreOrderFooter;
   }, [preOrderState.orderType, totalItems, serverFinalTotal, handlePlaceOrder, BRAND_COLORS]);
 
   return (
