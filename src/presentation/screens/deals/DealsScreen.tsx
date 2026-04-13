@@ -7,7 +7,7 @@ import { useBrandColors } from '../../theme/BrandColorContext';
 import { BenefitsList } from './components/BenefitsList';
 import { LoginPromptCard } from './components/LoginPromptCard';
 import { MembershipTierList } from './components/MembershipTierList';
-import { SelectedTier } from './DealsInterfaces';
+import { MembershipTierData, SelectedTier } from './DealsInterfaces';
 
 export default function DealsScreen() {
   const BRAND_COLORS = useBrandColors();
@@ -20,9 +20,8 @@ export default function DealsScreen() {
   
   const [selectedTier, setSelectedTier] = useState<SelectedTier>(null);
   const tiers = useAppSelector((state) => state.loyalty.tiers);
-  console.log("tiers: ", tiers);
 
-  const selectedTierData = selectedTier ? tiers.find((t: any) => t.id === selectedTier) : null;
+  const selectedTierData = selectedTier ? tiers.find((t: MembershipTierData) => t.id === selectedTier) : null;
 
   return (
     <View style={[styles.container, { backgroundColor: BRAND_COLORS.screenBg.fresh }, { paddingTop: insets.top }]}>
