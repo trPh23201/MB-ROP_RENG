@@ -13,6 +13,10 @@ import { AddToppingBottomSheet, AddToppingRef } from './AddToppingBottomSheet';
 import { EDIT_PRODUCT_TEXT, ICE_OPTIONS, SIZE_OPTIONS, SWEETNESS_OPTIONS } from './OrderConstants';
 import { CartItem, Topping } from './OrderInterfaces';
 import { OrderService } from './OrderService';
+import { OptionSelectorRow } from './components/option-selector-row';
+import { QuantityControlRow } from './components/quantity-control-row';
+import { ToppingSelectorButton } from './components/topping-selector-button';
+import { SPRING_CONFIG } from '../../constants/animation-configs';
 
 export interface OrderProductEditRef {
     present: (item: CartItem) => void;
@@ -48,9 +52,7 @@ export const OrderProductEditBottomSheet = forwardRef<OrderProductEditRef, { onC
             setSelectedToppings([...item.customizations.toppings]);
             sheetRef.current?.present();
         },
-        dismiss: () => {
-            sheetRef.current?.dismiss();
-        },
+        dismiss: () => sheetRef.current?.dismiss(),
     }));
 
     const calculatePrice = useCallback(() => {
@@ -65,20 +67,13 @@ export const OrderProductEditBottomSheet = forwardRef<OrderProductEditRef, { onC
         if (newQty === 0) {
             const confirmed = await popupService.confirm(
                 EDIT_PRODUCT_TEXT.DELETE_CONFIRM_MESSAGE,
-                {
-                    title: EDIT_PRODUCT_TEXT.DELETE_CONFIRM_TITLE,
-                    confirmText: EDIT_PRODUCT_TEXT.DELETE_CONFIRM_OK,
-                    cancelText: EDIT_PRODUCT_TEXT.DELETE_CONFIRM_CANCEL,
-                    confirmStyle: 'destructive',
-                }
+                { title: EDIT_PRODUCT_TEXT.DELETE_CONFIRM_TITLE, confirmText: EDIT_PRODUCT_TEXT.DELETE_CONFIRM_OK, cancelText: EDIT_PRODUCT_TEXT.DELETE_CONFIRM_CANCEL, confirmStyle: 'destructive' }
             );
             if (confirmed && editingItem) {
                 const isLastItem = cartItems.length === 1;
                 dispatch(removeCartItem(editingItem.id));
                 sheetRef.current?.dismiss();
-                if (isLastItem && onCartEmpty) {
-                    onCartEmpty();
-                }
+                if (isLastItem && onCartEmpty) onCartEmpty();
             }
         } else if (newQty > 0) {
             setQuantity(newQty);
@@ -87,34 +82,25 @@ export const OrderProductEditBottomSheet = forwardRef<OrderProductEditRef, { onC
 
     const handleApplyChanges = () => {
         if (!editingItem) return;
-
-        const updated: CartItem = {
+        dispatch(updateCartItem({
             ...editingItem,
             quantity,
-            customizations: {
-                size: selectedSize,
-                ice: selectedIce,
-                sweetness: selectedSweetness,
-                toppings: selectedToppings,
-            },
+            customizations: { size: selectedSize, ice: selectedIce, sweetness: selectedSweetness, toppings: selectedToppings },
             finalPrice: calculatePrice(),
-        };
-
-        dispatch(updateCartItem(updated));
+        }));
         sheetRef.current?.dismiss();
     };
 
-    const handleOpenToppingModal = () => {
-        toppingModalRef.current?.present(selectedToppings);
-    };
-
-    const handleToppingsSelected = (toppings: Topping[]) => {
-        setSelectedToppings(toppings);
-    };
-
     const renderBackdrop = useCallback(
-        (props: any) => <BottomSheetBackdrop {...props} disappearsOnIndex={-1} appearsOnIndex={0} opacity={0.5} pressBehavior="close" />,
+        (props: React.ComponentProps<typeof BottomSheetBackdrop>) => <BottomSheetBackdrop {...props} disappearsOnIndex={-1} appearsOnIndex={0} opacity={0.5} pressBehavior="close" />,
         []
+    );
+
+    const sizeOptionsWithLabel = useMemo(() =>
+        editingItem
+            ? SIZE_OPTIONS.map(o => ({ id: o.id, label: `${o.label}: ${OrderService.formatPrice(editingItem.product.price + o.priceAdjust)}` }))
+            : [],
+        [editingItem]
     );
 
     return (
@@ -125,8 +111,9 @@ export const OrderProductEditBottomSheet = forwardRef<OrderProductEditRef, { onC
                 enablePanDownToClose={false}
                 enableDynamicSizing={false}
                 enableDismissOnClose={true}
+                animationConfigs={SPRING_CONFIG}
                 backdropComponent={renderBackdrop}
-                backgroundStyle={[styles.bottomSheetBackground, { backgroundColor: BRAND_COLORS.primary.p1 }]}
+                backgroundStyle={[styles.bottomSheetBg, { backgroundColor: BRAND_COLORS.primary.p1 }]}
                 handleIndicatorStyle={[styles.indicator, { backgroundColor: BRAND_COLORS.secondary.s3 }]}
                 index={0}
                 stackBehavior="push"
@@ -134,96 +121,30 @@ export const OrderProductEditBottomSheet = forwardRef<OrderProductEditRef, { onC
             >
                 {editingItem ? (
                     <>
-                        <BottomSheetScrollView contentContainerStyle={[styles.contentWrapper, { paddingBottom: insets.bottom }]}>
+                        <BottomSheetScrollView contentContainerStyle={[styles.content, { paddingBottom: insets.bottom }]}>
                             <View style={styles.header}>
                                 <Text style={[styles.title, { color: BRAND_COLORS.ui.heading }]}>{editingItem.product.name}</Text>
-                                <TouchableOpacity onPress={() => sheetRef.current?.dismiss()} style={styles.closeButton}>
+                                <TouchableOpacity onPress={() => sheetRef.current?.dismiss()} style={styles.closeBtn}>
                                     <Ionicons name="close" size={24} color={BRAND_COLORS.ui.subtitle} />
                                 </TouchableOpacity>
                             </View>
 
-                            <View style={styles.section}>
-                                <Text style={[styles.sectionTitle, { color: BRAND_COLORS.ui.heading }]}>
-                                    {EDIT_PRODUCT_TEXT.SIZE_LABEL} <Text style={[styles.required, { color: BRAND_COLORS.semantic.error }]}>*</Text>
-                                </Text>
-                                <Text style={[styles.sectionHint, { color: BRAND_COLORS.ui.subtitle }]}>{EDIT_PRODUCT_TEXT.SIZE_HINT}</Text>
-                                <View style={styles.optionRow}>
-                                    {SIZE_OPTIONS.map((option) => (
-                                        <TouchableOpacity
-                                            key={option.id}
-                                            style={[styles.optionButton, { borderColor: BRAND_COLORS.ui.placeholder, backgroundColor: BRAND_COLORS.screenBg.warm }, selectedSize === option.id && styles.optionButtonSelected, selectedSize === option.id && { borderColor: BRAND_COLORS.secondary.s3, backgroundColor: `${BRAND_COLORS.secondary.s3}18` }]}
-                                            onPress={() => setSelectedSize(option.id as any)}
-                                        >
-                                            <Text style={[styles.optionText, { color: BRAND_COLORS.ui.heading }, selectedSize === option.id && styles.optionTextSelected, selectedSize === option.id && { color: BRAND_COLORS.secondary.s3 }]}>
-                                                {option.label}: {OrderService.formatPrice(editingItem.product.price + option.priceAdjust)}
-                                            </Text>
-                                        </TouchableOpacity>
-                                    ))}
-                                </View>
-                            </View>
+                            <OptionSelectorRow title={EDIT_PRODUCT_TEXT.SIZE_LABEL} hint={EDIT_PRODUCT_TEXT.SIZE_HINT} options={sizeOptionsWithLabel} selectedId={selectedSize} onSelect={(id) => setSelectedSize(id as any)} required />
+                            <OptionSelectorRow title={EDIT_PRODUCT_TEXT.ICE_LABEL} options={ICE_OPTIONS} selectedId={selectedIce} onSelect={(id) => setSelectedIce(id as any)} />
+                            <OptionSelectorRow title={EDIT_PRODUCT_TEXT.SWEETNESS_LABEL} options={SWEETNESS_OPTIONS} selectedId={selectedSweetness} onSelect={(id) => setSelectedSweetness(id as any)} />
 
-                            <View style={styles.section}>
-                                <Text style={[styles.sectionTitle, { color: BRAND_COLORS.ui.heading }]}>{EDIT_PRODUCT_TEXT.ICE_LABEL}</Text>
-                                <View style={styles.optionRow}>
-                                    {ICE_OPTIONS.map((option) => (
-                                        <TouchableOpacity
-                                            key={option.id}
-                                            style={[styles.optionButton, { borderColor: BRAND_COLORS.ui.placeholder, backgroundColor: BRAND_COLORS.screenBg.warm }, selectedIce === option.id && styles.optionButtonSelected, selectedIce === option.id && { borderColor: BRAND_COLORS.secondary.s3, backgroundColor: `${BRAND_COLORS.secondary.s3}18` }]}
-                                            onPress={() => setSelectedIce(option.id as any)}
-                                        >
-                                            <Text style={[styles.optionText, { color: BRAND_COLORS.ui.heading }, selectedIce === option.id && styles.optionTextSelected, selectedIce === option.id && { color: BRAND_COLORS.secondary.s3 }]}>{option.label}</Text>
-                                        </TouchableOpacity>
-                                    ))}
-                                </View>
-                            </View>
+                            <ToppingSelectorButton selectedToppings={selectedToppings} onPress={() => toppingModalRef.current?.present(selectedToppings)} />
 
-                            <View style={styles.section}>
-                                <Text style={[styles.sectionTitle, { color: BRAND_COLORS.ui.heading }]}>{EDIT_PRODUCT_TEXT.SWEETNESS_LABEL}</Text>
-                                <View style={styles.optionRow}>
-                                    {SWEETNESS_OPTIONS.map((option) => (
-                                        <TouchableOpacity
-                                            key={option.id}
-                                            style={[styles.optionButton, { borderColor: BRAND_COLORS.ui.placeholder, backgroundColor: BRAND_COLORS.screenBg.warm }, selectedSweetness === option.id && styles.optionButtonSelected, selectedSweetness === option.id && { borderColor: BRAND_COLORS.secondary.s3, backgroundColor: `${BRAND_COLORS.secondary.s3}18` }]}
-                                            onPress={() => setSelectedSweetness(option.id as any)}
-                                        >
-                                            <Text style={[styles.optionText, { color: BRAND_COLORS.ui.heading }, selectedSweetness === option.id && styles.optionTextSelected, selectedSweetness === option.id && { color: BRAND_COLORS.secondary.s3 }]}>{option.label}</Text>
-                                        </TouchableOpacity>
-                                    ))}
-                                </View>
-                            </View>
-
-                            <TouchableOpacity style={[styles.toppingSection, { borderColor: BRAND_COLORS.secondary.s3 }]} onPress={handleOpenToppingModal}>
-                                <View style={[styles.toppingIcon, { backgroundColor: `${BRAND_COLORS.secondary.s3}18` }]}>
-                                    <Ionicons name="cafe" size={24} color={BRAND_COLORS.secondary.s3} />
-                                </View>
-                                <View style={styles.toppingContent}>
-                                    <Text style={[styles.toppingTitle, { color: BRAND_COLORS.ui.heading }]}>{EDIT_PRODUCT_TEXT.TOPPING_LABEL}</Text>
-                                    <Text style={[styles.toppingHint, { color: BRAND_COLORS.ui.subtitle }]}>
-                                        {selectedToppings.length > 0 ? selectedToppings.map(t => t.name).join(', ') : EDIT_PRODUCT_TEXT.TOPPING_HINT}
-                                    </Text>
-                                </View>
-                                <Ionicons name="chevron-forward" size={20} color={BRAND_COLORS.secondary.s3} />
-                            </TouchableOpacity>
-
-                            <TouchableOpacity style={styles.noteSection}>
+                            <TouchableOpacity style={styles.noteRow}>
                                 <Ionicons name="document-text-outline" size={20} color={BRAND_COLORS.ui.subtitle} />
                                 <Text style={[styles.noteText, { color: BRAND_COLORS.ui.subtitle }]}>{EDIT_PRODUCT_TEXT.NOTE_LABEL}</Text>
                             </TouchableOpacity>
                         </BottomSheetScrollView>
 
                         <View style={[styles.footer, { paddingBottom: insets.bottom + 16, backgroundColor: BRAND_COLORS.screenBg.warm, borderTopColor: BRAND_COLORS.ui.placeholder }]}>
-                            <View style={styles.quantityControls}>
-                                <TouchableOpacity style={[styles.quantityButton, { backgroundColor: `${BRAND_COLORS.secondary.s3}20` }]} onPress={() => handleQuantityChange(-1)}>
-                                    <Ionicons name="remove" size={20} color={BRAND_COLORS.secondary.s3} />
-                                </TouchableOpacity>
-                                <Text style={[styles.quantityValue, { color: BRAND_COLORS.ui.heading }]}>{quantity}</Text>
-                                <TouchableOpacity style={[styles.quantityButton, { backgroundColor: `${BRAND_COLORS.secondary.s3}20` }]} onPress={() => handleQuantityChange(1)}>
-                                    <Ionicons name="add" size={20} color={BRAND_COLORS.secondary.s3} />
-                                </TouchableOpacity>
-                            </View>
-
-                            <TouchableOpacity style={[styles.applyButton, { backgroundColor: BRAND_COLORS.secondary.s3 }]} onPress={handleApplyChanges}>
-                                <Text style={[styles.applyButtonText, { color: BRAND_COLORS.bta.primaryText }]}>
+                            <QuantityControlRow quantity={quantity} onDecrease={() => handleQuantityChange(-1)} onIncrease={() => handleQuantityChange(1)} />
+                            <TouchableOpacity style={[styles.applyBtn, { backgroundColor: BRAND_COLORS.secondary.s3 }]} onPress={handleApplyChanges}>
+                                <Text style={[styles.applyBtnText, { color: BRAND_COLORS.bta.primaryText }]}>
                                     {EDIT_PRODUCT_TEXT.CHANGE_BUTTON} · {OrderService.formatPrice(calculatePrice())}
                                 </Text>
                             </TouchableOpacity>
@@ -232,7 +153,7 @@ export const OrderProductEditBottomSheet = forwardRef<OrderProductEditRef, { onC
                 ) : null}
             </BottomSheetModal>
 
-            <AddToppingBottomSheet ref={toppingModalRef} onApply={handleToppingsSelected} availableToppings={availableToppings} />
+            <AddToppingBottomSheet ref={toppingModalRef} onApply={setSelectedToppings} availableToppings={availableToppings} />
         </>
     );
 });
@@ -240,137 +161,15 @@ export const OrderProductEditBottomSheet = forwardRef<OrderProductEditRef, { onC
 OrderProductEditBottomSheet.displayName = 'OrderProductEditBottomSheet';
 
 const styles = StyleSheet.create({
-    bottomSheetBackground: {
-        borderTopLeftRadius: 20,
-        borderTopRightRadius: 20,
-    },
-    indicator: {
-        width: 40,
-    },
-    contentWrapper: {
-        paddingHorizontal: 16,
-        paddingTop: 16,
-    },
-    header: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginBottom: 24,
-    },
-    title: {
-        fontSize: TYPOGRAPHY.fontSize.xl,
-        fontFamily: TYPOGRAPHY.fontFamily.heading,
-    },
-    closeButton: {
-        padding: 4,
-    },
-    section: {
-        marginBottom: 24,
-    },
-    sectionTitle: {
-        fontSize: TYPOGRAPHY.fontSize.base,
-        fontFamily: TYPOGRAPHY.fontFamily.bodyBold,
-        marginBottom: 4,
-    },
-    required: {
-    },
-    sectionHint: {
-        fontSize: TYPOGRAPHY.fontSize.sm,
-        fontFamily: TYPOGRAPHY.fontFamily.bodyRegular,
-        marginBottom: 12,
-    },
-    optionRow: {
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        gap: 8,
-    },
-    optionButton: {
-        paddingHorizontal: 16,
-        paddingVertical: 10,
-        borderRadius: 20,
-        borderWidth: 1.5,
-    },
-    optionButtonSelected: {
-    },
-    optionText: {
-        fontSize: TYPOGRAPHY.fontSize.sm,
-        fontFamily: TYPOGRAPHY.fontFamily.bodyMedium,
-    },
-    optionTextSelected: {
-        fontFamily: TYPOGRAPHY.fontFamily.bodyBold,
-    },
-    toppingSection: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        padding: 16,
-        borderWidth: 1.5,
-        borderRadius: 12,
-        marginBottom: 16,
-        gap: 12,
-    },
-    toppingIcon: {
-        width: 40,
-        height: 40,
-        borderRadius: 8,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    toppingContent: {
-        flex: 1,
-    },
-    toppingTitle: {
-        fontSize: TYPOGRAPHY.fontSize.sm,
-        fontFamily: TYPOGRAPHY.fontFamily.bodyBold,
-        marginBottom: 4,
-    },
-    toppingHint: {
-        fontSize: TYPOGRAPHY.fontSize.xs,
-        fontFamily: TYPOGRAPHY.fontFamily.bodyRegular,
-    },
-    noteSection: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 8,
-        paddingVertical: 12,
-    },
-    noteText: {
-        fontSize: TYPOGRAPHY.fontSize.base,
-        fontFamily: TYPOGRAPHY.fontFamily.bodyRegular,
-    },
-    footer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        paddingHorizontal: 16,
-        paddingTop: 16,
-        borderTopWidth: 1,
-        gap: 12,
-    },
-    quantityControls: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 16,
-    },
-    quantityButton: {
-        width: 36,
-        height: 36,
-        borderRadius: 18,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    quantityValue: {
-        fontSize: TYPOGRAPHY.fontSize.lg,
-        fontFamily: TYPOGRAPHY.fontFamily.bodyBold,
-        minWidth: 24,
-        textAlign: 'center',
-    },
-    applyButton: {
-        flex: 1,
-        paddingVertical: 14,
-        borderRadius: 12,
-        alignItems: 'center',
-    },
-    applyButtonText: {
-        fontSize: TYPOGRAPHY.fontSize.base,
-        fontFamily: TYPOGRAPHY.fontFamily.heading,
-    },
+    bottomSheetBg: { borderTopLeftRadius: 20, borderTopRightRadius: 20 },
+    indicator: { width: 40 },
+    content: { paddingHorizontal: 16, paddingTop: 16 },
+    header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 },
+    title: { fontSize: TYPOGRAPHY.fontSize.xl, fontFamily: TYPOGRAPHY.fontFamily.heading },
+    closeBtn: { padding: 4 },
+    noteRow: { flexDirection: 'row', alignItems: 'center', gap: 8, paddingVertical: 12 },
+    noteText: { fontSize: TYPOGRAPHY.fontSize.base, fontFamily: TYPOGRAPHY.fontFamily.bodyRegular },
+    footer: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, paddingTop: 16, borderTopWidth: 1, gap: 12 },
+    applyBtn: { flex: 1, paddingVertical: 14, borderRadius: 12, alignItems: 'center' },
+    applyBtnText: { fontSize: TYPOGRAPHY.fontSize.base, fontFamily: TYPOGRAPHY.fontFamily.heading },
 });

@@ -1,7 +1,9 @@
 import { IBackgroundService, IServiceMetadata, ServicePriority } from './appLifecycle.types';
 
 export function BackgroundService(config: { name: string; priority: ServicePriority; runOnForeground?: boolean }) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return function <T extends new (...args: any[]) => object>(constructor: T) {
+        type ServiceMethod = () => Promise<void>;
         return class extends constructor implements IBackgroundService {
             readonly metadata: IServiceMetadata = {
                 name: config.name,
@@ -10,26 +12,30 @@ export function BackgroundService(config: { name: string; priority: ServicePrior
             };
 
             async startup(): Promise<void> {
-                if ('startup' in this && typeof (this as any).startup === 'function') {
-                    return (this as any).startup();
+                const self = this as Record<string, unknown>;
+                if ('startup' in this && typeof self.startup === 'function') {
+                    return (self.startup as ServiceMethod)();
                 }
             }
 
             async onForeground(): Promise<void> {
-                if ('onForeground' in this && typeof (this as any).onForeground === 'function') {
-                    return (this as any).onForeground();
+                const self = this as Record<string, unknown>;
+                if ('onForeground' in this && typeof self.onForeground === 'function') {
+                    return (self.onForeground as ServiceMethod)();
                 }
             }
 
             async onBackground(): Promise<void> {
-                if ('onBackground' in this && typeof (this as any).onBackground === 'function') {
-                    return (this as any).onBackground();
+                const self = this as Record<string, unknown>;
+                if ('onBackground' in this && typeof self.onBackground === 'function') {
+                    return (self.onBackground as ServiceMethod)();
                 }
             }
 
             async cleanup(): Promise<void> {
-                if ('cleanup' in this && typeof (this as any).cleanup === 'function') {
-                    return (this as any).cleanup();
+                const self = this as Record<string, unknown>;
+                if ('cleanup' in this && typeof self.cleanup === 'function') {
+                    return (self.cleanup as ServiceMethod)();
                 }
             }
         };

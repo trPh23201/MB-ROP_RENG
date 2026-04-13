@@ -8,11 +8,14 @@
     "android": "expo run:android",
     "ios": "expo run:ios",
     "web": "expo start --web",
-    "lint": "expo lint"
+    "lint": "expo lint",
+    "test": "jest",
+    "test:coverage": "jest --coverage"
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.3",
     "@gorhom/bottom-sheet": "^5.2.7",
+    "@lottiefiles/dotlottie-react": "^0.18.10",
     "@maplibre/maplibre-react-native": "^10.4.2",
     "@react-native-async-storage/async-storage": "2.2.0",
     "@react-native-community/netinfo": "11.4.1",
@@ -20,6 +23,7 @@
     "@react-navigation/elements": "^2.6.3",
     "@react-navigation/native": "^7.1.8",
     "@reduxjs/toolkit": "^2.10.1",
+    "@sentry/react-native": "~7.2.0",
     "@tamagui/config": "^1.136.1",
     "axios": "^1.13.2",
     "expo": "~54.0.22",
@@ -41,6 +45,7 @@
     "expo-symbols": "~1.0.7",
     "expo-system-ui": "~6.0.8",
     "expo-web-browser": "~15.0.9",
+    "lottie-react-native": "~7.3.1",
     "moti": "^0.30.0",
     "react": "19.1.0",
     "react-dom": "19.1.0",
@@ -58,12 +63,18 @@
     "tamagui": "^1.136.1"
   },
   "devDependencies": {
+    "@testing-library/jest-native": "^5.4.3",
+    "@testing-library/react-native": "^13.3.3",
+    "@types/jest": "^30.0.0",
     "@types/react": "~19.1.0",
     "@typescript-eslint/eslint-plugin": "^8.46.4",
     "@typescript-eslint/parser": "^8.46.4",
     "eslint": "^9.25.0",
     "eslint-config-expo": "~10.0.0",
     "expo-module-scripts": "^5.0.8",
+    "jest": "^30.3.0",
+    "jest-expo": "^55.0.15",
+    "ts-jest": "^29.4.9",
     "typescript": "~5.9.2"
   },
   "private": true

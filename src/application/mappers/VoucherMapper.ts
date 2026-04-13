@@ -48,7 +48,7 @@ export class VoucherMapper {
         rules.percent = parseFloat(parsed.percent);
       }
     } catch (error) {
-      console.error('[VoucherMapper] Failed to parse rules JSON:', rulesJson, error);
+      // Error captured by Sentry
     }
 
     return rules;

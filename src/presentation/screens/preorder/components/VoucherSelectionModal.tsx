@@ -101,6 +101,7 @@ export const VoucherSelectionModal = forwardRef<BottomSheetModal, VoucherSelecti
         );
     }
 );
+VoucherSelectionModal.displayName = 'VoucherSelectionModal';
 
 const styles = StyleSheet.create({
     applyText: {

@@ -6,7 +6,11 @@ import { addToCart } from '../../state/slices/orderCartSlice';
 import { useAppDispatch, useAppSelector } from '../hooks';
 import { useAuthGuard } from './useAuthGuard';
 
-export const useAddToCart = () => {
+// Optional callback fired after a successful addToCart dispatch.
+// Callers can use this to trigger visual feedback (e.g. cart fly animation).
+export type OnAddToCartCallback = (product: Product) => void;
+
+export const useAddToCart = (onAdded?: OnAddToCartCallback) => {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const selectedStore = useAppSelector((state) => state.orderCart.selectedStore);
@@ -14,8 +18,6 @@ export const useAddToCart = () => {
   return useAuthGuard(
     (product: Product) => {
       if (!selectedStore) {
-        console.log(`[useAddToCart] No store selected. Redirecting for product: ${product.id}`);
-
         const pendingAction = AuthActionService.create('PURCHASE', {
           productId: product.id,
         });
@@ -28,8 +30,8 @@ export const useAddToCart = () => {
         return;
       }
 
-      console.log(`[useAddToCart] Adding ${product.name} to cart`);
       dispatch(addToCart(product));
+      onAdded?.(product);
     },
     'PURCHASE',
     (product: Product) => ({ productId: product.id })

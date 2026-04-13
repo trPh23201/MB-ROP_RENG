@@ -19,8 +19,8 @@ export class LoyaltyRepositoryImpl implements LoyaltyRepository {
   async getLoyaltyTiers(): Promise<LoyaltyResponseDTO> {
     try {
       return await httpClient.get<LoyaltyResponseDTO>(LOYALTY_API.GET_LOYALTY_TIERS.URL);
-    } catch (error: any) {
-      const message = error?.message || 'Failed to fetch loyalty tiers';
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : 'Failed to fetch loyalty tiers';
       throw new Error(message);
     }
   }

@@ -7,7 +7,6 @@ import { ORDER_LAYOUT } from '../OrderLayout';
 
 export function OrderCategoryScroll() {
   const BRAND_COLORS = useBrandColors();
-  console.log('[OrderCategoryScroll] Render! Color p1 is:', BRAND_COLORS.primary.p1);
 
   return (
     <ScrollView

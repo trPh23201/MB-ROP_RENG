@@ -51,17 +51,15 @@ export default function WelcomeScreen() {
   }, [clearError, refresh]);
 
   const handleProductPress = useAuthGuard(
-    (product: ProductCardData) => {
-      console.log('[WelcomeScreen] Navigating to product:', product.id);
-      // TODO: Navigate to product detail
+    (_product: ProductCardData) => {
+      // Product detail navigation: not yet implemented
     },
     'PURCHASE',
     (product: ProductCardData) => ({ productId: product.id })
   );
 
   const handleQuickActionPress = useAuthGuard(
-    (actionId: string, label: string) => {
-      console.log(`Clicked: ${label} (${actionId})`);
+    (_actionId: string, _label: string) => {
       router.push('/(tabs)/order');
     },
     'PURCHASE',
@@ -69,9 +67,8 @@ export default function WelcomeScreen() {
   );
 
   const handleBannerPress = useAuthGuard(
-    (promoId: string) => {
-      console.log(`Clicked: Promo ${promoId}`);
-      // TODO: Navigate to promo detail
+    (_promoId: string) => {
+      // Promo detail navigation: not yet implemented
     },
     'CLAIM_PROMO',
     (promoId: string) => ({ promoCode: promoId })

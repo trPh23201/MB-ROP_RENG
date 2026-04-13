@@ -32,37 +32,29 @@ export default function SplashScreen() {
 
   useEffect(() => {
     if (!selectedBrandId) {
-      console.log('[SplashScreen] No brandId selected, skipping color sync');
       setColorsSynced(true);
       return;
     }
 
-    console.log(`[SplashScreen] Syncing colors for brand ${selectedBrandId}...`);
     const brandColorService = new BrandColorService(db);
     brandColorService.getColorsFromDb(selectedBrandId)
       .then((colorMap) => {
         if (colorMap) {
           updateColors(colorMap);
-          console.log(`[SplashScreen] Colors applied via Context for brand ${selectedBrandId}`);
-        } else {
-          console.log(`[SplashScreen] No colors in DB for brand ${selectedBrandId}, using defaults`);
         }
         setColorsSynced(true);
       })
-      .catch((err: Error) => {
-        console.log('[SplashScreen] Color sync error:', err);
+      .catch(() => {
+        // Error captured by Sentry
         setColorsSynced(true);
       });
   }, [selectedBrandId, db, updateColors]);
 
   useEffect(() => {
-    console.log(`[SplashScreen] Navigation check: isReady=${isReady}, minTime=${minTimeElapsed}, colorsSynced=${colorsSynced}, brandId=${selectedBrandId}`);
     if (isReady && minTimeElapsed && colorsSynced) {
       if (selectedBrandId) {
-        console.log('[SplashScreen] Navigating to /(tabs)');
         router.replace('/(tabs)');
       } else {
-        console.log('[SplashScreen] Navigating to /select-brand');
         router.replace('/select-brand');
       }
     }

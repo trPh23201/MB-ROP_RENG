@@ -4,6 +4,16 @@ import { DeliveryAddress, OrderType, PaymentMethod, PreOrderState } from '../../
 import { SerializableConfirmOrder } from '../../../state/slices/confirmOrderSlice';
 import { CartItem } from '../order/OrderInterfaces';
 
+/** Minimal store shape accepted by PreOrderService (adapts both API and UI store models) */
+export interface StoreAdaptable {
+  id: string | number;
+  name: string;
+  address: string | null;
+  location?: { coordinates: [number, number] } | null;
+  longitude?: number;
+  latitude?: number;
+}
+
 export class PreOrderService {
   static calculateTotalPrice(subtotal: number, shippingFee: number): number {
     return subtotal + shippingFee;
@@ -61,7 +71,7 @@ export class PreOrderService {
 
   static createPreOrderPayload(
     user: { uuid: string; displayName: string | null },
-    store: any,
+    store: StoreAdaptable,
     deliveryAddress: DeliveryAddress | null,
     cartItems: CartItem[],
     preOrderState: PreOrderState,
@@ -103,7 +113,7 @@ export class PreOrderService {
   static synthesizeConfirmedOrder(
     pricingResult: { subtotal: number; finalAmount: number; deliveryFee: number; discountAmount: number },
     user: { id: number; displayName: string | null; phone: string },
-    store: any,
+    store: StoreAdaptable,
     deliveryAddress: DeliveryAddress | null,
     cartItems: CartItem[],
     preOrderState: PreOrderState

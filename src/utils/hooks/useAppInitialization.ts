@@ -17,8 +17,6 @@ export function useAppInitialization() {
 
         const init = async () => {
             try {
-                console.log('[useAppInitialization] Starting app initialization...');
-
                 registerAllBackgroundServices();
 
                 const result = await serviceRegistry.runStartup();
@@ -29,20 +27,19 @@ export function useAppInitialization() {
                     const errMsg = result.errors.join(', ');
                     dispatch(setInitError(errMsg));
                     setError(errMsg);
-                    console.error('[useAppInitialization] Initialization failed:', errMsg);
+                    // Error captured by Sentry
                     return;
                 }
 
                 dispatch(setInitialized(true));
                 setIsReady(true);
-                console.log('[useAppInitialization] App initialization complete');
             } catch (err) {
                 if (!isMounted) return;
 
                 const msg = err instanceof Error ? err.message : 'Init failed';
                 dispatch(setInitError(msg));
                 setError(msg);
-                console.error('[useAppInitialization] Initialization error:', msg);
+                // Error captured by Sentry
             }
         };
 

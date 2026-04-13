@@ -7,6 +7,8 @@ export * from './GetStoresByProductUseCase';
 export * from './GetStoresUseCase';
 export * from './GetVouchersUseCase';
 export * from './LoginUseCase';
+export * from './LogoutUseCase';
 export * from './orders/GetOrderDetail';
 export * from './orders/GetOrderHistory';
+export * from './RefreshTokenUseCase';
 export * from './RegisterUseCase';

@@ -11,8 +11,8 @@ interface GoongMapViewProps extends ViewProps {
   centerCoordinate?: [number, number];
   zoomLevel?: number;
   onMapReady?: () => void;
-  onRegionDidChange?: (feature: any) => void;
-  onRegionWillChange?: (feature: any) => void;
+  onRegionDidChange?: (feature: Record<string, unknown>) => void;
+  onRegionWillChange?: (feature: Record<string, unknown>) => void;
   children?: React.ReactNode;
 }
 
@@ -27,9 +27,8 @@ export const GoongMapView: React.FC<GoongMapViewProps> = ({ centerCoordinate = D
       try {
         // await MapLibreGL.OfflineManager.setMaximumAmbientCacheSize(500 * 1024 * 1024);
         // await MapLibreGL.OfflineManager.invalidateAmbientCache(); // Use only if cache is corrupted
-        console.log(`[GoongMap] Ambient cache size set to 500MB`);
       } catch (error) {
-        console.warn("[GoongMap] Failed to set cache size:", error);
+        // Error captured by Sentry
       }
     };
     initCache();

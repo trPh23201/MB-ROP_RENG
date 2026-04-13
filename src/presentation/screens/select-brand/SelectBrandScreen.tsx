@@ -1,4 +1,5 @@
 import { fetchBrands, selectBrand as selectBrandAction, selectBrandError, selectBrandLoading, selectBrands, selectSelectedBrandId } from '@/src/state/slices/brandSlice';
+import { AppDispatch } from '@/src/state/store';
 import { useAppSelector } from '@/src/utils/hooks';
 import { useBrandColor } from '@/src/utils/hooks/useBrandColor';
 import { Image } from 'expo-image';
@@ -23,7 +24,7 @@ type SerializableBrand = {
 export default function SelectBrandScreen() {
     const BRAND_COLORS = useBrandColors();
     const router = useRouter();
-    const dispatch = useDispatch<any>();
+    const dispatch = useDispatch<AppDispatch>();
     const { fetchAndCacheBrand, applyBrandColors } = useBrandColor();
     const brands = useAppSelector(selectBrands);
     const isLoading = useAppSelector(selectBrandLoading);
@@ -58,7 +59,7 @@ export default function SelectBrandScreen() {
                 await fetchAndCacheBrand(brandId);
                 await applyBrandColors(brandId);
             } catch (err) {
-                console.log('[SelectBrandScreen] Brand flow failed:', err);
+                // Error captured by Sentry
             }
         },
         [dispatch, fetchAndCacheBrand, applyBrandColors],

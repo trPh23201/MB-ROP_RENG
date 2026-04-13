@@ -9,5 +9,5 @@ export interface UpdateProfileData {
 
 export interface IProfileRepository {
     getProfile(userId: string): Promise<User>;
-    // TODO: updateProfile(userId: string, data: UpdateProfileData): Promise<User>;
+    // updateProfile(userId: string, data: UpdateProfileData): Promise<User>;
 }

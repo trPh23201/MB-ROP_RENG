@@ -10,12 +10,23 @@ export interface LoginResult {
   token: string;
 }
 
+/** Both tokens returned on a successful refresh */
+export interface AuthTokens {
+  accessToken: string;
+  refreshToken: string;
+}
+
 export interface AuthRepository {
   register(phone: string): Promise<RegisterResult>;
   login(phone: string, otp: string): Promise<LoginResult>;
-
-  // TODO: Add when API supports
-  // refreshToken(refreshToken: string): Promise<{ accessToken: string }>;
-  // logout(): Promise<void>;
-  // updateProfile(data: UpdateProfileDTO): Promise<User>;
+  /**
+   * Exchange an existing refresh token for a new token pair.
+   * Endpoint: POST /auth/refresh-token
+   */
+  refreshToken(refreshToken: string): Promise<AuthTokens>;
+  /**
+   * Invalidate the session server-side.
+   * Endpoint: POST /auth/logout
+   */
+  logout(token: string): Promise<void>;
 }

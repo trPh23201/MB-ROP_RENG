@@ -19,23 +19,16 @@ export class LocationService {
       const hasPermission = await this.permissionService.checkOrRequestLocation();
 
       if (!hasPermission) {
-        console.log("[LocationService] Permission denied → Using fallback");
         return APP_DEFAULT_LOCATION;
       }
 
       const lastKnown = await Location.getLastKnownPositionAsync();
       if (lastKnown) {
-        console.log("[LocationService] Using last known position:", {
-          latitude: lastKnown.coords.latitude,
-          longitude: lastKnown.coords.longitude,
-        });
         return {
           latitude: lastKnown.coords.latitude,
           longitude: lastKnown.coords.longitude,
         };
       }
-
-      console.log("[LocationService] Fetching GPS location with timeout...");
 
       const locationPromise = Location.getCurrentPositionAsync({
         accuracy,
@@ -50,31 +43,21 @@ export class LocationService {
       const location = await Promise.race([locationPromise, timeoutPromise]);
 
       if (location) {
-        const coords = {
+        return {
           latitude: location.coords.latitude,
           longitude: location.coords.longitude,
         };
-        console.log("[LocationService] GPS location:", coords);
-        return coords;
       }
 
       return APP_DEFAULT_LOCATION;
 
-    } catch (error: any) {
-      const errorMsg = error?.message || error;
-
-      if (errorMsg === "LOCATION_TIMEOUT") {
-        console.log("[LocationService] GPS timeout → Using fallback immediately");
-      } else {
-        console.warn("[LocationService] GPS Error:", errorMsg);
-      }
-
+    } catch (error: unknown) {
+      // Error captured by Sentry
       return APP_DEFAULT_LOCATION;
     }
   }
 
   async requestPermissions(): Promise<boolean> {
-    console.warn("[LocationService] DEPRECATED: Use permissionService.checkOrRequestLocation()");
     return this.permissionService.checkOrRequestLocation();
   }
 }

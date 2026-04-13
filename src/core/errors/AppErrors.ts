@@ -79,3 +79,14 @@ export class LocationServiceError extends AppError {
     super('Không thể lấy vị trí hiện tại. Vui lòng kiểm tra GPS.', 'LOCATION_SERVICE_ERROR');
   }
 }
+
+// ============ Validation Errors ============
+
+export class ValidationError extends AppError {
+  constructor(
+    public readonly field: string,
+    message: string
+  ) {
+    super(message, 'VALIDATION_ERROR');
+  }
+}

@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AuthMapper, SerializableUser } from '../../application/mappers/AuthMapper';
 import { GetProfileUseCase } from '../../application/usecases/GetProfileUseCase';
 import { LoginUseCase } from '../../application/usecases/LoginUseCase';
+import { LogoutUseCase } from '../../application/usecases/LogoutUseCase';
 import { RegisterUseCase } from '../../application/usecases/RegisterUseCase';
 import { AppError } from '../../core/errors/AppErrors';
 import { PendingAuthAction } from '../../domain/services/AuthActionService';
@@ -10,6 +11,7 @@ import { TokenStorage } from '../../infrastructure/storage/tokenStorage';
 
 const registerUseCase = new RegisterUseCase(authRepository);
 const loginUseCase = new LoginUseCase(authRepository);
+const logoutUseCase = new LogoutUseCase(authRepository);
 const getProfileUseCase = new GetProfileUseCase();
 
 export const fetchProfile = createAsyncThunk<SerializableUser, string, { rejectValue: string }>(
@@ -76,13 +78,18 @@ export const loginWithOtp = createAsyncThunk<{ user: SerializableUser; phone: st
   }
 });
 
-export const logoutUser = createAsyncThunk<void, void, { rejectValue: string }>('auth/logout', async (_, { rejectWithValue }) => {
-  try {
-    await TokenStorage.clearTokens();
-  } catch {
-    return rejectWithValue('Đã có lỗi xảy ra khi đăng xuất');
+export const logoutUser = createAsyncThunk<void, void, { rejectValue: string }>(
+  'auth/logout',
+  async (_, { rejectWithValue }) => {
+    try {
+      // LogoutUseCase handles server-side invalidation + local token cleanup
+      await logoutUseCase.execute();
+    } catch {
+      // Ensure tokens are cleared even if use case throws
+      await TokenStorage.clearAll();
+      return rejectWithValue('Đã có lỗi xảy ra khi đăng xuất');
+    }
   }
-}
 );
 
 export const checkAuthStatus = createAsyncThunk<{ isAuthenticated: boolean; userId: string | null }, void, { rejectValue: string }>('auth/checkStatus', async (_, { rejectWithValue }) => {

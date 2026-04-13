@@ -79,9 +79,7 @@ export const fetchVouchers = createAsyncThunk(
 
 export const fetchMenuByStore = createAsyncThunk("home/fetchMenuByStore", async (storeId: number, { rejectWithValue }) => {
     try {
-      console.log(`[fetchMenuByStore] Fetching menu for store_id: ${storeId}`);
       const result = await homeRepository.getMenuByStore(storeId);
-      console.log(`[fetchMenuByStore] Received ${result.products.length} products, ${result.toppings.length} toppings from store_id: ${storeId}`);
       return {
         storeId: result.storeId,
         menuId: result.menuId,
@@ -89,7 +87,7 @@ export const fetchMenuByStore = createAsyncThunk("home/fetchMenuByStore", async 
         toppings: result.toppings,
       };
     } catch (error) {
-      console.error(`[fetchMenuByStore] Error fetching menu for store_id: ${storeId}`, error);
+      // Error captured by Sentry
       return rejectWithValue(error instanceof Error ? error.message : "Không thể tải menu cửa hàng");
     }
   },

@@ -15,18 +15,14 @@ export class StoresDataBackgroundService extends BaseBackgroundService {
     }
 
     async onForeground(): Promise<void> {
-        console.log('[StoresDataBackgroundService] App returned to foreground, refreshing stores...');
         await this.fetchStoresData();
     }
 
     private async fetchStoresData(): Promise<void> {
-        console.log('[StoresDataBackgroundService] Fetching stores data...');
-
         try {
             await store.dispatch(fetchStores({ page: 1, limit: 20, refresh: true }));
-            console.log('[StoresDataBackgroundService] Stores data fetched and cached');
         } catch (error) {
-            console.error('[StoresDataBackgroundService] Failed to fetch stores:', error);
+            // Error captured by Sentry
             throw error;
         }
     }

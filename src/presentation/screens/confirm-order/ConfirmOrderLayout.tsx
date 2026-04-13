@@ -10,7 +10,7 @@ interface ConfirmOrderLayoutProps {
 export function ConfirmOrderLayout({ children }: ConfirmOrderLayoutProps) {
     const BRAND_COLORS = useBrandColors();
     return (
-        <SafeAreaView style={styles.container} edges={['top']}>
+        <SafeAreaView style={[styles.container, { backgroundColor: BRAND_COLORS.screenBg.warm }]} edges={['top']}>
             <View style={styles.content}>{children}</View>
         </SafeAreaView>
     );
@@ -19,7 +19,6 @@ export function ConfirmOrderLayout({ children }: ConfirmOrderLayoutProps) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: BRAND_COLORS.screenBg.warm,
     },
     content: {
         flex: 1,

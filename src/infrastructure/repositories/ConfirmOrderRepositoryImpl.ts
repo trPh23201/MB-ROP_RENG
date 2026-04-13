@@ -1,7 +1,7 @@
 import { AxiosError } from 'axios';
 import { ConfirmOrderResponseDTO } from '../../application/dto/ConfirmOrderDTO';
 import { ConfirmOrderMapper } from '../../application/mappers/ConfirmOrderMapper';
-import { NetworkError } from '../../core/errors/AppErrors';
+import { ApiError, NetworkError } from '../../core/errors/AppErrors';
 import { ConfirmOrder } from '../../domain/entities/ConfirmOrder';
 import { ConfirmOrderParams, ConfirmOrderRepository } from '../../domain/repositories/ConfirmOrderRepository';
 import { CONFIRM_ORDER_ENDPOINTS } from '../api/confirm-order/ConfirmOrderApiConfig';
@@ -36,10 +36,10 @@ export class ConfirmOrderRepositoryImpl implements ConfirmOrderRepository {
                 }
 
                 const message = error.response.data?.message || 'Không thể xác nhận đơn hàng';
-                throw new Error(message);
+                throw new ApiError(message);
             }
 
-            throw new Error('Đã có lỗi xảy ra khi xác nhận đơn hàng');
+            throw new ApiError('Đã có lỗi xảy ra khi xác nhận đơn hàng');
         }
     }
 }

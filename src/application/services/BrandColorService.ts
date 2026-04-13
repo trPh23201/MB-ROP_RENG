@@ -25,7 +25,6 @@ export class BrandColorService {
       synced_at: Date.now(),
     }));
     await this.repo.saveColors(brandId, colorDbItems);
-    console.log(`[BrandColorService] Synced ${colorDbItems.length} colors for brand ${brandId} to DB`);
 
     return brand;
   }
@@ -33,23 +32,19 @@ export class BrandColorService {
   async getColorsFromDb(brandId: number): Promise<Map<string, string> | null> {
     const hasData = await this.repo.hasColors(brandId);
     if (!hasData) {
-      console.log(`[BrandColorService] No colors in DB for brand ${brandId}`);
       return null;
     }
 
     const dbColors = await this.repo.getColorsByBrandId(brandId);
     if (dbColors.length === 0) {
-      console.log(`[BrandColorService] No active colors for brand ${brandId}`);
       return null;
     }
 
     const colorMap = new Map<string, string>();
     for (const color of dbColors) {
       colorMap.set(color.color_name, color.hex_code);
-      console.log(`[BrandColorService] ${color.color_name} → ${color.hex_code}`);
     }
 
-    console.log(`[BrandColorService] Read ${dbColors.length} colors from DB for brand ${brandId}`);
     return colorMap;
   }
 
@@ -58,12 +53,10 @@ export class BrandColorService {
     if (!colorMap) return false;
 
     updateColorStore(colorMap);
-    console.log(`[BrandColorService] Sync complete: ${colorMap.size} colors applied`);
     return true;
   }
 
   resetColors(): void {
     resetColorStore();
-    console.log('[BrandColorService] Reset to original colors');
   }
 }

@@ -20,10 +20,7 @@ export class HomeDataBackgroundService extends BaseBackgroundService {
         const dataFetchedAt = selectDataFetchedAt(state);
         const isStale = !dataFetchedAt || (Date.now() - dataFetchedAt > STALE_THRESHOLD_MS);
         if (isStale) {
-            console.log('[HomeDataBackgroundService] Data stale, refreshing...');
             await this.fetchData();
-        } else {
-            console.log('[HomeDataBackgroundService] Data still fresh, skipping refresh');
         }
     }
 
@@ -33,14 +30,11 @@ export class HomeDataBackgroundService extends BaseBackgroundService {
             throw new Error('Location not available');
         }
 
-        console.log('[HomeDataBackgroundService] Fetching home data...');
-
         await Promise.all([
             store.dispatch(fetchHomeMenu({ lat: location.lat, lng: location.lng, limit: 10, page: 0 })),
             store.dispatch(fetchVouchers({ lat: location.lat, lng: location.lng, limit: 20, page: 0 })),
         ]);
 
         store.dispatch(updateDataTimestamp(Date.now()));
-        console.log('[HomeDataBackgroundService] Home data fetched and cached');
     }
 }

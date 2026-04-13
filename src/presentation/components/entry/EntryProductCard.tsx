@@ -4,6 +4,7 @@ import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from 'react-nati
 import { AppIcon } from '../shared/AppIcon';
 import { useBrandColors } from '../../theme/BrandColorContext';
 import { ENTRY_LAYOUT } from './EntryLayout';
+import { HapticFeedback } from '../../utils/HapticFeedback';
 
 const { width } = Dimensions.get('window');
 const CARD_WIDTH = (width - 48) / 2;
@@ -66,7 +67,7 @@ export function EntryProductCard({ product, onPress }: ProductCardProps) {
           <Text style={[styles.price, { color: BRAND_COLORS.primary.p3 }]}>{formattedPrice}</Text>
           <TouchableOpacity
             style={[styles.addButton, { backgroundColor: BRAND_COLORS.primary.p3 }]}
-            onPress={() => onPress?.(product)}
+            onPress={() => { HapticFeedback.medium(); onPress?.(product); }}
           >
             <AppIcon name="add" size="xs" style={[styles.addIcon, { color: BRAND_COLORS.primary.p1 }]} />
           </TouchableOpacity>

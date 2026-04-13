@@ -9,11 +9,11 @@ import { STORES_LAYOUT } from '../StoresLayout';
 export function StoresHeader() {
   const BRAND_COLORS = useBrandColors();
   const handleVoucherPress = () => {
-    console.log('[StoresHeader] Voucher pressed');
+    // Voucher navigation: not yet implemented
   };
 
   const handleNotificationPress = () => {
-    console.log('[StoresHeader] Notification pressed');
+    // Notification navigation: not yet implemented
   };
 
   return (

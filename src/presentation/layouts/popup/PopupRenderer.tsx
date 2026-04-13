@@ -91,7 +91,7 @@ export function PopupRenderer() {
                 return (
                     <CustomComponent
                         {...customProps}
-                        onResolve={(value: any) => popupService.resolve(id, value)}
+                        onResolve={(value: unknown) => popupService.resolve(id, value)}
                         onDismiss={() => popupService.dismiss(id)}
                     />
                 );
