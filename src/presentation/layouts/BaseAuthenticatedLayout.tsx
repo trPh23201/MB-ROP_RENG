@@ -27,6 +27,7 @@ export function BaseAuthenticatedLayout({
     onMount,
     ...rest
 }: BaseAuthenticatedLayoutProps) {
+    const BRAND_COLORS = useBrandColors();
     const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
     const pathname = usePathname();
 

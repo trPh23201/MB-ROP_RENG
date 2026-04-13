@@ -12,11 +12,12 @@ interface GlobalTextProps extends RNTextProps {
 export function GlobalText({
   variant = 'body',
   weight = 'medium',
-  color = BRAND_COLORS.primary.p3,
+  color,
   style,
   ...props
 }: GlobalTextProps) {
   const BRAND_COLORS = useBrandColors();
+  const resolvedColor = color ?? BRAND_COLORS.primary.p3;
   const getFontFamily = () => {
     switch (variant) {
       case 'heading':
@@ -33,7 +34,7 @@ export function GlobalText({
     <RNText
       style={[
         styles.base,
-        { fontFamily: getFontFamily(), color },
+        { fontFamily: getFontFamily(), color: resolvedColor },
         style
       ]}
       {...props}
