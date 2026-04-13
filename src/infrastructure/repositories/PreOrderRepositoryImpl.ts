@@ -1,7 +1,7 @@
 import { AxiosError } from 'axios';
 import { ConfirmOrderResponseDTO, CreatePreOrderResponseDTO } from '../../application/dto/PreOrderDTO';
 import { PreOrderMapper } from '../../application/mappers/PreOrderMapper';
-import { NetworkError } from '../../core/errors/AppErrors';
+import { ApiError, NetworkError } from '../../core/errors/AppErrors';
 import { PreOrder } from '../../domain/entities/PreOrder';
 import { CreatePreOrderParams, PreOrderRepository } from '../../domain/repositories/PreOrderRepository';
 import { PREORDER_ENDPOINTS } from '../api/preorder/PreOrderApiConfig';
@@ -36,10 +36,10 @@ export class PreOrderRepositoryImpl implements PreOrderRepository {
         }
 
         const message = error.response.data?.message || 'Không thể tính giá đơn hàng';
-        throw new Error(message);
+        throw new ApiError(message);
       }
 
-      throw new Error('Đã có lỗi xảy ra khi tính giá');
+      throw new ApiError('Đã có lỗi xảy ra khi tính giá');
     }
   }
 
@@ -60,10 +60,10 @@ export class PreOrderRepositoryImpl implements PreOrderRepository {
         }
 
         const message = error.response.data?.message || 'Không thể tạo đơn hàng';
-        throw new Error(message);
+        throw new ApiError(message);
       }
 
-      throw new Error('Đã có lỗi xảy ra khi tạo đơn hàng');
+      throw new ApiError('Đã có lỗi xảy ra khi tạo đơn hàng');
     }
   }
 }
