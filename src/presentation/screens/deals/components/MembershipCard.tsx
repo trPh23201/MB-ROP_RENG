@@ -56,7 +56,7 @@ export function MembershipCard({ tier, isSelected, onPress }: MembershipCardProp
           </View> */}
         </View>
         
-        <Text style={[styles.tierName, { color: BRAND_COLORS.ui.heading }]}>{tier.name}</Text>
+        <Text style={[styles.tierName, { color: BRAND_COLORS.ui.heading }]}>{tier.tier_name}</Text>
       </Animated.View>
     </Pressable>
   );
